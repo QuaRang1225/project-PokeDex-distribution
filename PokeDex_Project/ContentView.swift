@@ -15,6 +15,7 @@ struct ContentView: View {
         ScrollView{
             VStack{
                 Group{
+                    Text("도감번호 : " + String(format: "%04d", vm.num))
                     KFImage(URL(string: vm.image))
                         .resizable()
                         .frame(width: 100,height: 100)
@@ -25,20 +26,19 @@ struct ContentView: View {
                     }
                     Text(String(format: "%.1f", Double(vm.weight)*0.1) + "kg")
                     Text(String(format: "%.1f", Double(vm.height)*0.1) + "m")
-                    ForEach(Array(vm.desc.enumerated()),id:\.offset){ index,item in
-                        HStack{
-                            Text("\(index)")
-                            Text(item)
-                        }
-                        
-                    }
                     
-                    ForEach(Array(vm.chrac),id:\.0){ key, value in
-                        HStack{
-                            Text("\(value ? "숨겨진 특성" : "일반 특성")")
-                            Text(key)
-                        }
-                        
+//                    ForEach(Array(vm.chrac),id:\.0){ key, value in
+//                        HStack{
+//                            Text("\(value ? "숨겨진 특성" : "일반 특성")")
+//                            Text(key)
+//                        }
+//
+//                    }
+                    ForEach(vm.chrac,id:\.self){ item in
+                        Text("특성: " + item)
+                    }
+                    ForEach(vm.hiddenChrac,id:\.self){ item in
+                        Text("숨겨진 특성: " + item)
                     }
                     ForEach(Array(vm.stat),id:\.0){ key, value in
                         HStack{
@@ -46,8 +46,20 @@ struct ContentView: View {
                             Text("\(value)")
                         }
                     }
+//                    ForEach(Array(zip(LocationFilter.allCases, vm.desc)),id:\.0){ (loc,des) in
+//
+//                        HStack{
+//                            Text(loc.name)
+//                            Text(des)
+//                        }
+//                    }
+                    ForEach(vm.desc.filter({$0.range(of: "[가-힣]+", options: .regularExpression) != nil}),id:\.self){ item in
+                        Text(item)
+                    }
+                    
+                    
+                    
                 }.padding(.bottom,5)
-                
                 
             }
         }
@@ -63,5 +75,6 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
 
 

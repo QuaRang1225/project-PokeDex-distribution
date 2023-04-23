@@ -10,7 +10,7 @@ import PokemonAPI
 import Combine
 
 class PokemonViewModel:ObservableObject{
-    
+    @Published var dexNum = [Int]()
     @Published var name = String()
     @Published var image = String()
     @Published var type = String()
@@ -18,12 +18,25 @@ class PokemonViewModel:ObservableObject{
     @Published var height = Int()
     @Published var weight = Int()
     @Published var desc = [String]()
-    @Published var chrac = [String:Bool]()
+    @Published var chrac = [String]()
+    @Published var hiddenChrac = [String]()
     @Published var stat = [String:Int]()
+    let num = 300
     var cancelable = Set<AnyCancellable>()
     
-    func call(){
-        PokemonAPI().pokemonService.fetchPokemonSpecies(1) { result in
+    func call() {
+        Task{
+            let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(self.num)
+            if let dexNum = species.pokedexNumbers{
+                for i in dexNum{
+                    DispatchQueue.main.async {
+                        self.dexNum.append(i.entryNumber ?? 0)
+                    }
+                }
+            }
+        }
+
+        PokemonAPI().pokemonService.fetchPokemonSpecies(num) { result in
             switch result {
             case .success(let pokemon):
                 self.name = pokemon.names![2].name ?? "없음"
@@ -32,34 +45,43 @@ class PokemonViewModel:ObservableObject{
                 print(error.localizedDescription)
             }
         }
-        PokemonAPI().pokemonService.fetchPokemonSpecies(1) { result in
+        PokemonAPI().pokemonService.fetchPokemon("bulbasaur") { result in
             switch result {
             case .success(let pokemon):
-                if let description = pokemon.flavorTextEntries{
-                    for i in description.indices{
-                        self.desc.append(pokemon.flavorTextEntries![i].flavorText ?? "")
+                print(pokemon.order)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        PokemonAPI().pokemonService.fetchPokemonSpecies(num) { result in
+            switch result {
+            case .success(let pokemon):
+                if let text = pokemon.flavorTextEntries{
+                    for desc in text{
+                        self.desc.append(desc.flavorText ?? "")
                     }
                 }
                 
-//                for i in 31...34{
-//                    self.desc.append(pokemon.flavorTextEntries![i+8].flavorText ?? "")
-//                }
-                //self.type = pokemon.
+                //                for i in pokemon.flavorTextEntries?{
+                //                    self.desc.append(pokemon.flavorTextEntries?[i.endPoint].flavorText ?? "")
+                //                }
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
-        image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"
-        PokemonAPI().pokemonService.fetchPokemon(1){ result in
+        image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(num).png"
+        PokemonAPI().pokemonService.fetchPokemon(num){ result in
             switch result {
             case .success(let pokemon):
                 self.type = pokemon.types?.first?.type?.name ?? ""
-                self.type2 = pokemon.types?.last?.type?.name ?? ""
+                if pokemon.types?.first?.type?.name != pokemon.types?.last?.type?.name{
+                    self.type2 = pokemon.types?.last?.type?.name ?? ""
+                }
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
-        PokemonAPI().pokemonService.fetchPokemon(1){ result in
+        PokemonAPI().pokemonService.fetchPokemon(num){ result in
             switch result {
             case .success(let pokemon):
                 self.height = pokemon.height!
@@ -68,19 +90,27 @@ class PokemonViewModel:ObservableObject{
                 print(error.localizedDescription)
             }
         }
-        PokemonAPI().pokemonService.fetchPokemon(1){ result in
+        PokemonAPI().pokemonService.fetchPokemon(num){ result in
             switch result {
             case .success(let pokemon):
                 if let ab = pokemon.abilities{
                     for i in ab{
-                        self.chrac[i.ability?.name ?? ""] = i.isHidden
+                        if let hidden = i.isHidden{
+                            if !hidden{
+                                self.chrac.append(i.ability?.name ?? "")
+                            }else{
+                                self.hiddenChrac.append(i.ability?.name ?? "")
+                            }
+                        }
+                        
                     }
                 }
+                
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
-        PokemonAPI().pokemonService.fetchPokemon(1){ result in
+        PokemonAPI().pokemonService.fetchPokemon(num){ result in
             switch result {
             case .success(let pokemon):
                 if let st = pokemon.stats{
