@@ -16,16 +16,64 @@ struct ContentView: View {
             VStack{
                 Group{
                     Text("도감번호 : " + String(format: "%04d", vm.num))
-                    KFImage(URL(string: vm.image))
-                        .resizable()
-                        .frame(width: 100,height: 100)
+                    ForEach(vm.image,id:\.self){ item in
+                        KFImage(URL(string: item))
+                            .resizable()
+                            .frame(width: 100,height: 100)
+                    }
+                    
                     Text(vm.name)
                     HStack{
                         Text(vm.type)
-                        Text(vm.type2)
+                        if vm.type2.last != vm.type  {
+                            Text(" / ")
+                            ForEach(vm.type2,id:\.self){ item in
+                                Text(item)
+                            }
+                        }
+                       
+                        
                     }
-                    Text(String(format: "%.1f", Double(vm.weight)*0.1) + "kg")
-                    Text(String(format: "%.1f", Double(vm.height)*0.1) + "m")
+                    Group{
+                        Text(vm.genera)
+                        Text(String(format: "%.1f", Double(vm.weight)*0.1) + "kg")
+                        Text(String(format: "%.1f", Double(vm.height)*0.1) + "m")
+                        HStack{
+                            Text("알그룹")
+                            ForEach(vm.egg,id:\.self){ item in
+                                Text(item)
+                            }
+                        }
+                    }
+                    Group{
+                        ForEach(Array(vm.baby),id:\.0){ key, value in
+                            HStack{
+                                Text(key)
+                                KFImage(URL(string: value))
+                                    .resizable()
+                                    .frame(width: 100,height: 100)
+                                    
+                            }
+                        }
+                        ForEach(Array(vm.junior),id:\.0){ key, value in
+                            HStack{
+                                Text(key)
+                                KFImage(URL(string: value))
+                                    .resizable()
+                                    .frame(width: 100,height: 100)
+                                    
+                            }
+                        }
+                        ForEach(Array(vm.senior),id:\.0){ key, value in
+                            HStack{
+                                Text(key)
+                                KFImage(URL(string: value))
+                                    .resizable()
+                                    .frame(width: 100,height: 100)
+                                    
+                            }
+                        }
+                    }
                     
 //                    ForEach(Array(vm.chrac),id:\.0){ key, value in
 //                        HStack{
@@ -46,13 +94,7 @@ struct ContentView: View {
                             Text("\(value)")
                         }
                     }
-//                    ForEach(Array(zip(LocationFilter.allCases, vm.desc)),id:\.0){ (loc,des) in
-//
-//                        HStack{
-//                            Text(loc.name)
-//                            Text(des)
-//                        }
-//                    }
+
                     ForEach(vm.desc.filter({$0.range(of: "[가-힣]+", options: .regularExpression) != nil}),id:\.self){ item in
                         Text(item)
                     }
