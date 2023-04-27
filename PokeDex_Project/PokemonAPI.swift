@@ -40,7 +40,8 @@ class PokemonViewModel:ObservableObject{
     
     
     var first = PassthroughSubject<(),Never>()
-    let num = 479
+    let num = 1
+    
     
     
     private func urlToInt(url:String)->Int{
@@ -54,7 +55,10 @@ class PokemonViewModel:ObservableObject{
         let name = try? await PokemonAPI().pokemonService.fetchPokemonSpecies(name)
         return name?.names![2].name ?? ""
     }
-    
+    private func getKoreanType(type:String) async -> String{
+        let type = try? await PokemonAPI().pokemonService.fetchType(type)
+        return type?.names![1].name ?? ""
+    }
     
     func call() {
         Task{   //해당 이름
@@ -137,7 +141,6 @@ class PokemonViewModel:ObservableObject{
         }
         
         
-        
         Task{
             let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
             if let text = species.flavorTextEntries{
@@ -161,7 +164,6 @@ class PokemonViewModel:ObservableObject{
                         if let name = forms.forms{
                             for i in name{
                                 let formName =  try await PokemonAPI().pokemonService.fetchPokemonForm(urlToInt(url: (i.url)!))
-                                
                                 if let korean = formName.formNames,korean.count > 1{
                                     DispatchQueue.main.async {
                                         self.formName.append(korean[1].name ?? "")
@@ -169,6 +171,7 @@ class PokemonViewModel:ObservableObject{
                                 }else{
                                     self.formName.append("일반")
                                 }
+                                
                             }
                         }
                     }
@@ -177,37 +180,22 @@ class PokemonViewModel:ObservableObject{
         }
         Task{
             let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
-            if let types2 = species.varieties{
-                for i in types2{
+            if let vari = species.varieties{
+                for i in vari{
+                    if urlToInt(url: i.pokemon?.url ?? "") != 10093{
                     let typeVari = try await PokemonAPI().pokemonService.fetchPokemon(urlToInt(url: (i.pokemon?.url)!))
-                    if let def = i.isDefault{
-                        if def{
-                            if let types = typeVari.types{
-                                for i in types{
-                                    DispatchQueue.main.async {
-                                        self.type.append(i.type?.name ?? "")
-                                    }
-                                }
-                            }
-                        }else{
-                            if let types2 = typeVari.types{
-                                for i in types2{
-                                    DispatchQueue.main.async {
-                                        self.type2.append(i.type?.name ?? "")
-                                    }
+                        if let types = typeVari.types{
+                            for i in types{
+                                let typeKorean = await self.getKoreanType(type: i.type?.name ?? "")
+                                DispatchQueue.main.async {
+                                    self.type.append(typeKorean)
+                                    self.removeDuplicatesAndShift(&self.type)
                                 }
                             }
                         }
                     }
                 }
             }
-            DispatchQueue.main.async {
-                self.type2 = self.filtering(arr:self.type2)
-                if self.type == self.type2{
-                    self.type2.removeAll()
-                }
-            }
-            
             
         }
         Task{
@@ -258,26 +246,17 @@ class PokemonViewModel:ObservableObject{
             
         }
     }
-    func filtering(arr:[String])->[String]{
-        var filteredArr: [String] = []
-        
-        if arr.count >= 2 {
-            filteredArr.append(arr[0])
-            filteredArr.append(arr[1])
-        }
-        
-        for i in stride(from: 2, to: arr.count, by: 2) {
-            if arr[i] != arr[i-2] {
-                filteredArr.append(arr[i])
-                filteredArr.append(arr[i+1])
+    func removeDuplicatesAndShift<T: Equatable>(_ array: inout [T]) {
+        var i = 0
+        while i < array.count - 1 {
+            if array[i] == array[i + 1] {
+                array.remove(at: i + 1)
+                if i + 2 < array.count {
+                    array.insert(array[i + 2], at: i + 1)
+                }
+            } else {
+                i += 1
             }
         }
-        
-        if arr.count % 2 == 1 {
-            filteredArr.removeLast()
-        }
-        
-        return filteredArr
     }
-    
 }

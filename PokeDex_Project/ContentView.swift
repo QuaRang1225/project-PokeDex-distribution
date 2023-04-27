@@ -26,19 +26,26 @@ struct ContentView: View {
                     }
                     
                     Text(vm.name)
-                    HStack{
-                        ForEach(vm.type,id: \.self){ type in
-                            Text(type)
-                        }
-                        if !vm.type2.isEmpty{
-                            Text("다른폼")
-                            ForEach(vm.type2,id: \.self){ type in
-                                Text(type)
-                            }
-                        }
-                        
-                        
+                    ForEach(vm.type,id:\.self){ type in
+                        Text(type)
                     }
+//                    ForEach(Array(zip(0..<vm.type.count/2, vm.formName)), id: \.0) { (index,form) in
+//                        HStack{
+//                            Text(form)
+//                            HStack {
+//                                Text(vm.type[index*2])
+//                                Text(vm.type[index*2+1])
+//                            }
+//                        }
+//
+//                    }
+//                        if !vm.type2.isEmpty{
+//                            Text("다른폼")
+//                            ForEach(vm.type2,id: \.self){ type in
+//                                Text(type)
+//                            }
+//                        }
+                    
                     Group{
                         Text(vm.genera)
                         Text(String(format: "%.1f", Double(vm.weight)*0.1) + "kg")
@@ -112,28 +119,28 @@ struct ContentView: View {
                                     }
                                 }
                         }
-                        ForEach(vm.junior.keys.sorted(), id: \.self) { key in
-                                VStack(alignment: .leading) {
-                                    Text(key)
-                                        .font(.headline)
-                                    ForEach(vm.junior[key]!, id: \.self) { value in
-                                        KFImage(URL(string: value))
-                                            .resizable()
-                                            .frame(width: 100,height: 100)
-                                    }
-                                }
-                        }
-                        ForEach(vm.senior.keys.sorted(), id: \.self) { key in
-                                VStack(alignment: .leading) {
-                                    Text(key)
-                                        .font(.headline)
-                                    ForEach(vm.senior[key]!, id: \.self) { value in
-                                        KFImage(URL(string: value))
-                                            .resizable()
-                                            .frame(width: 100,height: 100)
-                                    }
-                                }
-                        }
+//                        ForEach(vm.junior.keys.sorted(), id: \.self) { key in
+//                                VStack(alignment: .leading) {
+//                                    Text(key)
+//                                        .font(.headline)
+//                                    ForEach(vm.junior[key]!, id: \.self) { value in
+//                                        KFImage(URL(string: value))
+//                                            .resizable()
+//                                            .frame(width: 100,height: 100)
+//                                    }
+//                                }
+//                        }
+//                        ForEach(vm.senior.keys.sorted(), id: \.self) { key in
+//                                VStack(alignment: .leading) {
+//                                    Text(key)
+//                                        .font(.headline)
+//                                    ForEach(vm.senior[key]!, id: \.self) { value in
+//                                        KFImage(URL(string: value))
+//                                            .resizable()
+//                                            .frame(width: 100,height: 100)
+//                                    }
+//                                }
+//                        }
                     }
                     HStack{
                         Text("특성: ")
