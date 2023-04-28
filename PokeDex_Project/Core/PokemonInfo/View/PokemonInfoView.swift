@@ -20,11 +20,9 @@ struct PokemonInfoView: View {
                 ScrollView{
                     Group{
                         HStack(spacing: 0){
-                            Text("도감번호 ")
-                                .bold()
                             KFImage(URL(string: "https://github.com/PokeAPI/sprites/blob/master/sprites/items/poke-ball.png?raw=true"))
-                            
                             Text("0001")
+                                .bold()
                         }
                         .padding(.top,30)
                         .padding(.bottom,20)
@@ -63,6 +61,7 @@ struct PokemonInfoView: View {
                         .foregroundColor(.white)
                     }
                     .padding(.top,30)
+                    .padding(.bottom,10)
                     
                     HStack{
                         Text("씨앗포켓몬")
@@ -100,6 +99,8 @@ struct PokemonInfoView: View {
                     .background(Color.gray.opacity(0.2).cornerRadius(20))
                     .padding()
                     Text("특성")
+                        .font(.title3)
+                        .bold()
                     VStack{
                         
                         Group{
@@ -127,46 +128,55 @@ struct PokemonInfoView: View {
                     .padding(.horizontal)
                     .padding(.bottom,20)
                     Text("종족값")
+                        .font(.title3)
+                        .bold()
                     HStack{
                         Group{
                             VStack{
                                 Text("HP")
+                                    .bold()
                                 ForEach(vm.hp,id:\.self){ item in
                                     Text("\(item)")
                                 }
                             }
                             VStack{
                                 Text("공격")
+                                    .bold()
                                 ForEach(vm.attack,id:\.self){ item in
                                     Text("\(item)")
                                 }
                             }
                             VStack{
                                 Text("방어")
+                                    .bold()
                                 ForEach(vm.defense,id:\.self){ item in
                                     Text("\(item)")
                                 }
                             }
                             VStack{
                                 Text("특공")
+                                    .bold()
                                 ForEach(vm.spAttack,id:\.self){ item in
                                     Text("\(item)")
                                 }
                             }
                             VStack{
                                 Text("특방")
+                                    .bold()
                                 ForEach(vm.spDefense,id:\.self){ item in
                                     Text("\(item)")
                                 }
                             }
                             VStack{
                                 Text("스피드")
+                                    .bold()
                                 ForEach(vm.speed,id:\.self){ item in
                                     Text("\(item)")
                                 }
                             }
                             VStack{
                                 Text("합계")
+                                    .bold()
                                 ForEach(vm.avr,id:\.self){ item in
                                     Text("\(item)")
                                 }
@@ -181,32 +191,45 @@ struct PokemonInfoView: View {
                     .padding(.horizontal)
                     .padding(.bottom)
                     VStack{
+                        Group{
+                            Text("진화")
+                                .font(.title3)
+                                .bold()
+                            HStack{
+                                ForEach(1...3,id:\.self){ url in
+                                    KFImage(URL(string:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(url).png"))
+                                        .resizable()
+                                        .frame(width: 100,height:100)
+                                    if url < 3{
+                                        Image(systemName: "chevron.right")
+                                    }
+                                    
+                                }
+                            }
+                        }
+                    }.padding(.vertical)
+                   
+                    VStack{
                         Text("도감설명")
+                            .font(.title3)
+                            .bold()
                             .frame(maxWidth:.infinity)
                         VStack(alignment: .leading) {
                             ForEach(Array(Set(vm.desc)).filter({$0.range(of: "[가-힣]+", options: .regularExpression) != nil}),id:\.self){ item in
-                                Text(item.replacingOccurrences(of: "\n", with: " "))
-                                    .padding(.bottom,5)
-                                Divider()
+                                HStack{
+                                    Circle()
+                                        .frame(width:5,height:5)
+                                        .padding(.trailing,5)
+                                    Text(item.replacingOccurrences(of: "\n", with: " "))
+                                        .padding(.bottom,5)
+                                }
+                                
                             }
                         }.padding()
                             .background(RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 2).foregroundColor(.gray.opacity(0.5)))
                             .padding(.horizontal)
                     }
-                    Group{
-                        Text("진화")
-                        HStack{
-                            ForEach(1...3,id:\.self){ url in
-                                KFImage(URL(string:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(url).png"))
-                                    .resizable()
-                                    .frame(width: 100,height:100)
-                                if url < 3{
-                                    Image(systemName: "chevron.right")
-                                }
-                                
-                            }
-                        }
-                    }
+                    
                 }
             }
         }

@@ -9,53 +9,73 @@ import Foundation
 
 enum LocationFilter:CaseIterable{
     
-    case x
-    case y
-    case OR
-    case AS
-    case letsgoPikachu
-    case letsgoEevee
-    case sword
-    case shield
+    case national
+    case kanto
+    case johto
+    case hoenn
+    case sinnoh
+    case unova
+    case kalos_ctl
+//    case kalos_cst
+//    case kalos_mtn
+    case alaola
+    case galar
+    case paldea
     
     var endPoint:Int{
         switch self{
-        case .x:
-            return 23
-        case .y:
+        case .national:
+            return 1
+        case .kanto:
+            return 2
+        case .johto:
+            return 7
+        case .hoenn:
+            return 15
+        case .sinnoh:
+            return 6
+        case .unova:
+            return 9
+        case .kalos_ctl:
+            return 12
+//        case .kalos_cst:
+//            return 13
+//        case .kalos_mtn:
+//            return   14
+        case .alaola:
+            return  21
+        case .galar:
+            return   27
+        case .paldea:
             return 31
-        case .OR:
-            return 39
-        case .AS:
-            return 47
-        case .letsgoPikachu:
-            return 55
-        case .letsgoEevee:
-            return 65
-        case .sword:
-            return 75
-        case .shield:
-            return 85
         }
     }
     var name:String{
         switch self{
-        case .x:
-            return "X"
-        case .y:
-            return "Y"
-        case .OR:
-            return "오메가 루비"
-        case .AS:
-            return "알파 사파이어"
-        case .letsgoPikachu:
-            return "레츠고 피카츄"
-        case .letsgoEevee:
-            return "레츠고 이브이"
-        case .sword:
-            return "소드"
-        case .shield:
-            return "실드"
+        case .national:
+            return "전국도감"
+        case .kanto:
+            return "관동도감"
+        case .johto:
+            return "성도도감"
+        case .hoenn:
+            return "호연도감"
+        case .sinnoh:
+            return "신오도감"
+        case .unova:
+            return "하나도감"
+        case .kalos_ctl:
+            return "칼로스도감"
+//        case .kalos_cst:
+//            return "칼로스 코스트도감"
+//        case .kalos_mtn:
+//            return "칼로스 마운틴도감"
+        case .alaola:
+            return "알로라도감"
+        case .galar:
+            return "가라르도감"
+        case .paldea:
+            return "팔데아도감"
         }
     }
 }
