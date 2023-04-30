@@ -16,8 +16,8 @@ enum LocationFilter:CaseIterable{
     case sinnoh
     case unova
     case kalos_ctl
-//    case kalos_cst
-//    case kalos_mtn
+    case kalos_cst
+    case kalos_mtn
     case alaola
     case galar
     case paldea
@@ -38,10 +38,10 @@ enum LocationFilter:CaseIterable{
             return 9
         case .kalos_ctl:
             return 12
-//        case .kalos_cst:
-//            return 13
-//        case .kalos_mtn:
-//            return   14
+        case .kalos_cst:
+            return 13
+        case .kalos_mtn:
+            return   14
         case .alaola:
             return  21
         case .galar:
@@ -65,11 +65,11 @@ enum LocationFilter:CaseIterable{
         case .unova:
             return "하나도감"
         case .kalos_ctl:
-            return "칼로스도감"
-//        case .kalos_cst:
-//            return "칼로스 코스트도감"
-//        case .kalos_mtn:
-//            return "칼로스 마운틴도감"
+            return "칼로스 센트럴도감"
+        case .kalos_cst:
+            return "칼로스 코스트도감"
+        case .kalos_mtn:
+            return "칼로스 마운틴도감"
         case .alaola:
             return "알로라도감"
         case .galar:

@@ -27,6 +27,7 @@
 		81C15EAD29FBBD1300B29669 /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C15EAC29FBBD1300B29669 /* SearchBarView.swift */; };
 		81C15EB129FBC7BF00B29669 /* PokeDexViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C15EB029FBC7BF00B29669 /* PokeDexViewModel.swift */; };
 		81C15EB529FBF49500B29669 /* Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C15EB429FBF49500B29669 /* Row.swift */; };
+		81C15EB729FD44FD00B29669 /* DexRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C15EB629FD44FD00B29669 /* DexRowView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		81C15EAC29FBBD1300B29669 /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
 		81C15EB029FBC7BF00B29669 /* PokeDexViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeDexViewModel.swift; sourceTree = "<group>"; };
 		81C15EB429FBF49500B29669 /* Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Row.swift; sourceTree = "<group>"; };
+		81C15EB629FD44FD00B29669 /* DexRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DexRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,6 +234,7 @@
 			children = (
 				8123985929F2865A00B7D560 /* ContentView.swift */,
 				81C15EA929FBB63C00B29669 /* MainView.swift */,
+				81C15EB629FD44FD00B29669 /* DexRowView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -397,6 +400,7 @@
 				81C15EAA29FBB63C00B29669 /* MainView.swift in Sources */,
 				8123988D29F5086900B7D560 /* AreaFilter.swift in Sources */,
 				81C15EB129FBC7BF00B29669 /* PokeDexViewModel.swift in Sources */,
+				81C15EB729FD44FD00B29669 /* DexRowView.swift in Sources */,
 				810DC41D29FA710B00AD7B05 /* ColorSet.swift in Sources */,
 				8123985829F2865A00B7D560 /* PokeDex_ProjectApp.swift in Sources */,
 				81C15EAD29FBBD1300B29669 /* SearchBarView.swift in Sources */,

@@ -13,11 +13,11 @@ class PokeDexViewModel:ObservableObject{
     
     @Published var location:LocationFilter = .national
     @Published var dexNum = Array(1...1010)
-    @Published var row = Row(num: 1, image:"", name: "", type: [])
+    @Published var names = String()
+    @Published var types = [String]()
     
-    var dexNumSuccess = PassthroughSubject<[Int],Never>()
     
-
+    
     
     func getLocation()async->[Int]{
         var pokemonNum = [Int]()
@@ -29,12 +29,6 @@ class PokeDexViewModel:ObservableObject{
         }
         return pokemonNum
     }
-    func getRowInfo(num:Int){
-        row.num = num
-        row.image = imageUrl(url: num)
-        //let name = try await PokemonAPI().pokemonService.fetchPokemon(num)
-        
-    }
     
     private func urlToInt(url:String)->Int{ //url 고유아이디로 변환
         let url = Int(String(url.filter({$0.isNumber}).dropFirst()))!
@@ -43,12 +37,33 @@ class PokeDexViewModel:ObservableObject{
     func imageUrl(url:Int)->String{ //이미지 url
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(url).png"
     }
-    private func getKoreanName(name: String) async -> String {  //포켓몬 이름 한글로 변환
-        let name = try? await PokemonAPI().pokemonService.fetchPokemonSpecies(name)
-        return name?.names![2].name ?? ""
+    func getKoreanName(num: Int) async -> String {  //포켓몬 이름/한글로 변환
+        let species = try? await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
+        
+        if let name = species?.names, name.count < 3{
+            if num == 1009{
+                UserDefaults.standard.set("굽이치는 물결",forKey: "name:\(num)")
+                return "굽이치는 물결"
+            }else{
+                UserDefaults.standard.set("무쇠잎새",forKey: "name:\(num)")
+                return "무쇠잎새"
+            }
+        }else{
+            UserDefaults.standard.set(species?.names?[2].name ?? "이름없음",forKey: "name:\(num)")
+            return species?.names?[2].name ?? "이름없음"
+        }
+        
     }
-    private func getKoreanType(type:String) async -> String{    //포켓몬 타입 한글로 변환
-        let type = try? await PokemonAPI().pokemonService.fetchType(type)
-        return type?.names![1].name ?? ""
+    func getKoreanType(num:Int) async -> [String]{    //포켓몬 타입/한글로 변환
+        var koreanType = [String]()
+        let pokemon = try? await PokemonAPI().pokemonService.fetchPokemon(num)
+        if let types = pokemon?.types{
+            for type in types {
+                let type = try? await PokemonAPI().pokemonService.fetchType(urlToInt(url: (type.type?.url)!))
+                koreanType.append(type?.names![1].name ?? "")
+            }
+        }
+        UserDefaults.standard.set(koreanType,forKey: "types:\(num)")
+        return koreanType
     }
 }

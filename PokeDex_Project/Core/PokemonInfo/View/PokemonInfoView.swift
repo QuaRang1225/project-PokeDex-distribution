@@ -10,10 +10,8 @@ import Kingfisher
 
 struct PokemonInfoView: View {
     @StateObject var vm = PokemonViewModel()
+    @Binding var back:Bool
     var body: some View {
-        ZStack{
-            Color.white.ignoresSafeArea()
-            //header
             VStack{
                 header
                 
@@ -232,8 +230,8 @@ struct PokemonInfoView: View {
                     
                 }
             }
-        }
-        .foregroundColor(.black)
+        
+       // .foregroundColor(.black)
         .onAppear{
             vm.call()
         }
@@ -242,7 +240,14 @@ struct PokemonInfoView: View {
     var header:some View{
         ZStack{
             HStack{
-                Image(systemName: "chevron.left")
+                Button {
+                    back = false
+                } label: {
+                    Image(systemName: "chevron.left")
+                }
+                .foregroundColor(.primary)
+
+                
                 Spacer()
                 Image(systemName: "star")
             }
@@ -256,6 +261,6 @@ struct PokemonInfoView: View {
 
 struct PokemonInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInfoView()
+        PokemonInfoView(back: .constant(true))
     }
 }

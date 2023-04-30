@@ -13,46 +13,38 @@ struct MainView: View {
     let columns = [ GridItem(.flexible()), GridItem(.flexible())]
     @State var isSearch = false
     @State var text:String = ""
+    @State var isInfo = false
+    
     @StateObject var vm = PokeDexViewModel()
     var body: some View {
         VStack(alignment: .leading,spacing: 0){
             header
             ScrollView{
                 LazyVGrid(columns: columns) {
-                    ForEach(vm.dexNum,id:\.self){ item in
+                    ForEach(Array(vm.dexNum.enumerated()),id:\.0){ (index,item) in
                         VStack(alignment: .leading,spacing: 0){
                             HStack(spacing: 0){
                                 ball
-                                Text(String(format: "%04d", item))
+                                Text(String(format: "%04d",vm.location == .unova ? index : index+1))
                                     .bold()
                             }
-                            
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(height:200)
-                                .foregroundColor(.primary.opacity(0.1))
-                                .overlay(content: {
-                                    KFImage(URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(item).png"))
-                                        .resizable()
-                                        .placeholder{
-                                            ProgressView()
-                                        }
-                                        .frame(width: 120,height: 120)
-                                        
-                                })
-                                .overlay(alignment:.bottomLeading) {
-                                    Text("이상해씨")
-                                        .bold()
-                                        .padding()
-                                }
-                                .padding(.bottom,5)
+                            Button {
+                                isInfo = true
+                            } label: {
+                                DexRowView(pokemonNum: item)
+                            }
+                            .navigationDestination(isPresented: $isInfo){
+                                PokemonInfoView(back:$isInfo)
+                                    .navigationBarBackButtonHidden()
+                            }
+                            .padding(.bottom,5)
                         }
-                        
                     }
                 }.padding(.horizontal).padding(.top)
             }
-           
+            
         }
-        .onChange(of:vm.location){ newValue in
+        .onChange(of:vm.location){ _ in
             Task{
                 let dexNum = await vm.getLocation()
                 DispatchQueue.main.async {
@@ -72,8 +64,8 @@ struct MainView: View {
                         ForEach(LocationFilter.allCases, id: \.self) {
                             Text($0.name)
                                 .tag($0)
-                           }
-                         } .font(.title2)
+                        }
+                    } .font(.title2)
                         .bold()
                         .foregroundColor(.primary)
                         .onChange(of: vm.location) { newValue in

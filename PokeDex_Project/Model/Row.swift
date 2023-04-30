@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Row{
+struct Row:Hashable{
     var num:Int
     var image:String
     var name:String

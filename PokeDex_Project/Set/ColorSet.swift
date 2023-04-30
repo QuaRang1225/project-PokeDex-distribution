@@ -12,4 +12,5 @@ extension Color{
     static func typeColor(types:String)->Color{
         return Color(types)
     }
+    static let antiPrimary = Color("antiPrimary")
 }
