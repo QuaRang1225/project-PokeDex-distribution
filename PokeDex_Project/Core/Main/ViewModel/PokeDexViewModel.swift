@@ -7,7 +7,6 @@
 
 import Foundation
 import PokemonAPI
-import Combine
 
 class PokeDexViewModel:ObservableObject{
     
@@ -18,8 +17,8 @@ class PokeDexViewModel:ObservableObject{
     
     
     
-    
     func getLocation()async->[Int]{
+        //FireStore.firebas
         var pokemonNum = [Int]()
         let locationNum = try? await PokemonAPI().gameService.fetchPokedex(location.endPoint)
         if let location = locationNum?.pokemonEntries{
@@ -42,16 +41,16 @@ class PokeDexViewModel:ObservableObject{
         
         if let name = species?.names, name.count < 3{
             if num == 1009{
-                UserDefaults.standard.set("굽이치는 물결",forKey: "name:\(num)")
                 return "굽이치는 물결"
             }else{
-                UserDefaults.standard.set("무쇠잎새",forKey: "name:\(num)")
                 return "무쇠잎새"
             }
+        }else if num == 505{
+            return "보르그"
         }else{
-            UserDefaults.standard.set(species?.names?[2].name ?? "이름없음",forKey: "name:\(num)")
             return species?.names?[2].name ?? "이름없음"
         }
+        
         
     }
     func getKoreanType(num:Int) async -> [String]{    //포켓몬 타입/한글로 변환
@@ -60,10 +59,10 @@ class PokeDexViewModel:ObservableObject{
         if let types = pokemon?.types{
             for type in types {
                 let type = try? await PokemonAPI().pokemonService.fetchType(urlToInt(url: (type.type?.url)!))
+                
                 koreanType.append(type?.names![1].name ?? "")
             }
         }
-        UserDefaults.standard.set(koreanType,forKey: "types:\(num)")
         return koreanType
     }
 }

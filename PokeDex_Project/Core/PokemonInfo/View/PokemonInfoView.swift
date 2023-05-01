@@ -7,19 +7,22 @@
 
 import SwiftUI
 import Kingfisher
+import PokemonAPI
 
 struct PokemonInfoView: View {
-    @StateObject var vm = PokemonViewModel()
+    @StateObject var vm = PokemonInfoViewModel()
     @Binding var back:Bool
+    
+    let num:Int
+    
     var body: some View {
             VStack{
                 header
-                
                 ScrollView{
                     Group{
                         HStack(spacing: 0){
                             KFImage(URL(string: "https://github.com/PokeAPI/sprites/blob/master/sprites/items/poke-ball.png?raw=true"))
-                            Text("0001")
+                            Text(String(format: "%04d",num))
                                 .bold()
                         }
                         .padding(.top,30)
@@ -27,46 +30,48 @@ struct PokemonInfoView: View {
                         ZStack{
                             BallImage()
                                 .frame(width: 200,height: 200)
-                            ForEach(vm.image,id:\.self){
-                                KFImage(URL(string: $0))
-                                    .resizable()
-                                    .frame(width: 200,height: 200)
-                            }
+                            KFImage(URL(string: vm.image))
+                                .resizable()
+                                .frame(width: 200,height: 200)
                             
                         }
                     }
                     
                     
                     
-                    HStack{
-                        Group{
-                            RoundedRectangle(cornerRadius: 5)
-                                .foregroundColor(Color.typeColor(types: "grass"))
-                                .frame(width: 70,height: 25)
+                    HStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .frame(width: 75,height: 25)
+                            .foregroundColor(Color.typeColor(types: vm.types.first ?? ""))
+                            .overlay {
+                                Text(vm.types.first ?? "")
+                                    .shadow(color: .black, radius: 2)
+                                    .padding(.horizontal)
+                                    .padding(2)
+                            }
+
+                        if vm.types.count > 1 {
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(width: 75,height: 25)
+                                .foregroundColor(Color.typeColor(types: vm.types.last ?? ""))
                                 .overlay {
-                                    Text("풀")
-                                        .shadow(radius: 10)
-                                }
-                            RoundedRectangle(cornerRadius: 5)
-                                .foregroundColor(Color.typeColor(types: "poison"))
-                                .frame(width: 70,height: 25)
-                                .overlay {
-                                    Text("독")
-                                        .shadow(radius: 10)
+                                    Text(vm.types.last ?? "")
+                                        .shadow(color: .black, radius: 2)
+                                        .padding(.horizontal)
+                                        .padding(2)
                                 }
                         }
-                        .bold()
-                        .foregroundColor(.white)
                     }
-                    .padding(.top,30)
-                    .padding(.bottom,10)
+                    .bold()
+                    .foregroundColor(.white)
+                    .padding(.bottom, 30)
                     
                     HStack{
                         Text("씨앗포켓몬")
                         Spacer()
-                        Text("키 : 0.7m")
+                        Text("키 : " + String(format: "%.1f", Double(vm.height)*0.1) + "m")
                         Spacer()
-                        Text("몸무게 : 6.9kg")
+                        Text("몸무게 : " + String(format: "%.1f", Double(vm.weight)*0.1) + "kg")
                         
                     }
                     .padding(.vertical,5)
@@ -230,10 +235,8 @@ struct PokemonInfoView: View {
                     
                 }
             }
-        
-       // .foregroundColor(.black)
         .onAppear{
-            vm.call()
+            vm.getInfo(num: num)
         }
         
     }
@@ -251,7 +254,7 @@ struct PokemonInfoView: View {
                 Spacer()
                 Image(systemName: "star")
             }
-            Text("이상해씨")
+            Text(vm.name)
                 .bold()
                 .font(.title3)
         }
@@ -261,6 +264,125 @@ struct PokemonInfoView: View {
 
 struct PokemonInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInfoView(back: .constant(true))
+        PokemonInfoView(back: .constant(true),num: 2)
+    }
+}
+
+class PokemonInfoViewModel:ObservableObject{
+    
+    @Published var image = String()
+    @Published var name = String()
+    @Published var title = String()
+    @Published var height = Int()
+    @Published var weight = Int()
+    @Published var eggGroup = [String]()
+    @Published var gender = [String]()
+    @Published var get = Int()
+    @Published var char = [String:String]()
+    @Published var hiddenChar = [String:String]()
+    @Published var types = [String]()
+    
+    @Published var hp = [Int]()
+    @Published var attack = [Int]()
+    @Published var defense = [Int]()
+    @Published var spAttack = [Int]()
+    @Published var spDefense = [Int]()
+    @Published var speed = [Int]()
+    @Published var avr = [Int]()
+    
+    @Published var fist = [String:String]()
+    @Published var second = [String:String]()
+    @Published var third = [String:String]()
+    
+    @Published var desc = [String]()
+    
+    private func urlToInt(url:String)->Int{
+        let url = Int(String(url.filter({$0.isNumber}).dropFirst()))!
+        return url
+    }
+    private func imageUrl(url:Int)->String{
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(url).png"
+    }
+    func getKoreanName(num: Int) async -> String {  //포켓몬 이름/한글로 변환
+        let species = try? await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
+        
+        if let name = species?.names, name.count < 3{
+            if num == 1009{
+                return "굽이치는 물결"
+            }else{
+                return "무쇠잎새"
+            }
+        }else if num == 505{
+            return "보르그"
+        }else{
+            return species?.names?[2].name ?? "이름없음"
+        }
+        
+        
+    }
+    func getKoreanType(num:Int) async -> [String]{    //포켓몬 타입/한글로 변환
+        var koreanType = [String]()
+        let pokemon = try? await PokemonAPI().pokemonService.fetchPokemon(num)
+        if let types = pokemon?.types{
+            for type in types {
+                let type = try? await PokemonAPI().pokemonService.fetchType(urlToInt(url: (type.type?.url)!))
+                
+                koreanType.append(type?.names![1].name ?? "")
+            }
+        }
+        return koreanType
+    }
+    
+    func getInfo(num:Int){
+        
+        image = imageUrl(url: num)
+        Task{
+            let name = await getKoreanName(num: num)
+            let types = await getKoreanType(num: num)
+            
+            DispatchQueue.main.async {
+                self.name = name
+                self.types = types
+            }
+            
+            let pokemon = try await PokemonAPI().pokemonService.fetchPokemon(num)
+            DispatchQueue.main.async {
+                self.height = pokemon.height!
+                self.weight = pokemon.weight!
+            }
+            
+            let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
+            
+            if let sp = species.varieties{
+                for i in sp{
+                    if urlToInt(url: i.pokemon?.url ?? "") != 10093{
+                        let pokemon = try await PokemonAPI().pokemonService.fetchPokemon(urlToInt(url: i.pokemon?.url ?? ""))
+                        if let st = pokemon.stats{
+                            DispatchQueue.main.async {
+                                self.hp.append(st.first?.baseStat ?? 0)
+                                self.attack.append(st[1].baseStat ?? 0)
+                                self.defense.append(st[2].baseStat ?? 0)
+                                self.spAttack.append(st[3].baseStat ?? 0)
+                                self.spDefense.append(st[4].baseStat ?? 0)
+                                self.speed.append(st.last?.baseStat ?? 0)
+                                self.avr.append((st.first?.baseStat)! + st[1].baseStat! + st[2].baseStat! + st[3].baseStat! + st[4].baseStat! + (st.last?.baseStat)!)
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        }
+        Task{
+            let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
+            if let text = species.flavorTextEntries{
+                for desc in text{
+                    DispatchQueue.main.async {
+                        self.desc.append(desc.flavorText ?? "")
+                    }
+                }
+            }
+        }
+        
     }
 }

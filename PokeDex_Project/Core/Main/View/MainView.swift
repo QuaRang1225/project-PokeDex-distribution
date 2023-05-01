@@ -14,34 +14,46 @@ struct MainView: View {
     @State var isSearch = false
     @State var text:String = ""
     @State var isInfo = false
+    @State var num = 0
     
     @StateObject var vm = PokeDexViewModel()
+    var filteredItems: [Int] {
+        if text.isEmpty {
+            return vm.dexNum
+            } else {
+                return vm.dexNum.filter { String($0).contains(text) }
+            }
+        }
     var body: some View {
         VStack(alignment: .leading,spacing: 0){
             header
             ScrollView{
                 LazyVGrid(columns: columns) {
-                    ForEach(Array(vm.dexNum.enumerated()),id:\.0){ (index,item) in
+                    ForEach(Array(filteredItems.enumerated()),id:\.0){ (index,item) in
                         VStack(alignment: .leading,spacing: 0){
                             HStack(spacing: 0){
                                 ball
-                                Text(String(format: "%04d",vm.location == .unova ? index : index+1))
+                                Text(String(format: "%04d",/*vm.location == .unova ? index : index+1*/item))
                                     .bold()
                             }
                             Button {
+                                print("\(item)")
+                                num = item
                                 isInfo = true
                             } label: {
                                 DexRowView(pokemonNum: item)
                             }
                             .navigationDestination(isPresented: $isInfo){
-                                PokemonInfoView(back:$isInfo)
+                                PokemonInfoView(back: $isInfo,num: num)
                                     .navigationBarBackButtonHidden()
                             }
                             .padding(.bottom,5)
                         }
                     }
                 }.padding(.horizontal).padding(.top)
-            }
+            }.onTapGesture {
+                isSearch = false
+            }.refreshable {}
             
         }
         .onChange(of:vm.location){ _ in
@@ -51,9 +63,6 @@ struct MainView: View {
                     vm.dexNum = dexNum
                 }
             }
-        }
-        .onTapGesture {
-            isSearch = false
         }
     }
     var header:some View{
@@ -96,6 +105,7 @@ struct MainView: View {
                     .padding()
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(15)
+                    .padding(.top)
             }
         }.padding(.horizontal,20)
             .padding(.bottom)
@@ -109,6 +119,8 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView()
+        NavigationStack{
+            MainView()
+        }
     }
 }

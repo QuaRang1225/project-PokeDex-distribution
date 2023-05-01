@@ -11,7 +11,7 @@ import Kingfisher
 struct DexRowView: View {
     let pokemonNum: Int
     @ObservedObject var vm = PokeDexViewModel()
-
+    //@State var text = ""
     var body: some View {
         RoundedRectangle(cornerRadius: 10)
             .frame(height: 200)
@@ -64,32 +64,12 @@ struct DexRowView: View {
                 .padding(.bottom, 5)
             }
             .task {
-                if let savedData = UserDefaults.standard.data(forKey: "name:\(pokemonNum)"){
-                    print("name:\(pokemonNum)")
-                    //DispatchQueue.main.async {
-                        if let name = String(data: savedData, encoding: .utf8){
-                            vm.names = name
-                        }
-                   // }
-                }else{
-                    let name = await vm.getKoreanName(num: pokemonNum)
-                    DispatchQueue.main.async {
-                        vm.names = name
-                    }
+                let name = await vm.getKoreanName(num: pokemonNum)
+                let type = await vm.getKoreanType(num: pokemonNum)
+                DispatchQueue.main.async {
+                    vm.names = name
+                    vm.types = type
                 }
-                if let savedData = UserDefaults.standard.data(forKey: "type:\(pokemonNum)"),let type = try? JSONDecoder().decode([String].self, from: savedData){
-                    print("type:\(pokemonNum)")
-                   // DispatchQueue.main.async {
-                            vm.types = type
-                   // }
-                }else{
-                    let type = await vm.getKoreanType(num: pokemonNum)
-                    DispatchQueue.main.async {
-                        vm.types = type
-                    }
-                }
-                
-                
             }
     }
 }
@@ -99,8 +79,8 @@ struct DexRowView: View {
 struct DexRowView_Previews: PreviewProvider {
     static var previews: some View {
         HStack{
-            DexRowView(pokemonNum: 65)
-            DexRowView(pokemonNum: 62)
+            DexRowView(pokemonNum: 23)
+            DexRowView(pokemonNum: 21)
         }
         .padding()
     }
