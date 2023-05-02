@@ -79,7 +79,7 @@ struct DexRowView: View {
 struct DexRowView_Previews: PreviewProvider {
     static var previews: some View {
         HStack{
-            DexRowView(pokemonNum: 23)
+            DexRowView(pokemonNum: 13)
             DexRowView(pokemonNum: 21)
         }
         .padding()

@@ -17,10 +17,10 @@ class PokeDexViewModel:ObservableObject{
     
     
     
-    func getLocation()async->[Int]{
+    func getLocation(locNum:Int)async->[Int]{
         //FireStore.firebas
         var pokemonNum = [Int]()
-        let locationNum = try? await PokemonAPI().gameService.fetchPokedex(location.endPoint)
+        let locationNum = try? await PokemonAPI().gameService.fetchPokedex(locNum)
         if let location = locationNum?.pokemonEntries{
             for num in location{
                 pokemonNum.append(self.urlToInt(url: num.pokemonSpecies?.url ?? ""))

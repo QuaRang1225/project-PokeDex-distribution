@@ -7,27 +7,41 @@
 import SwiftUI
 
 struct TestView: View {
-    @State private var searchText = ""
-    @State private var searchResults = [String]()
+    @State private var arr  = [Int]()
+    @State private var one = Array(0...100)
+    @State private var two = Array(101...200)
+    @State private var three = Array(201...300)
 
     var body: some View {
         VStack {
-            TextField("Search", text: $searchText, onEditingChanged: { _ in
-                // 포커스가 맞춰졌을 때 호출
-                search()
-            })
-            .textFieldStyle(.roundedBorder)
-            .padding()
+            ScrollView{
+                HStack{
+                    Button {
+                        arr = one
+                    } label: {
+                        Circle()
+                            .frame(width: 100)
+                    }
+                    Button {
+                        arr = two
+                    } label: {
+                        Circle()
+                            .frame(width: 100)
+                    }
+                    Button {
+                        arr = three
+                    } label: {
+                        Circle()
+                            .frame(width: 100)
+                    }
 
-            List(searchResults, id: \.self) { result in
-                Text(result)
+                }
+                ForEach(arr, id: \.self) { result in
+                    Text("\(result)")
+                }
             }
+            
         }
-    }
-
-    private func search() {
-        searchResults = ["Apple", "Banana", "Cherry", "Durian", "Elderberry", "Fig"]
-            .filter { searchText.isEmpty ? true : $0.lowercased().contains(searchText.lowercased()) }
     }
     
 }

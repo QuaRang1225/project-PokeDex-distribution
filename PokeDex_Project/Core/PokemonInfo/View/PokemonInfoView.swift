@@ -67,7 +67,7 @@ struct PokemonInfoView: View {
                     .padding(.bottom, 30)
                     
                     HStack{
-                        Text("씨앗포켓몬")
+                        Text(vm.genera)
                         Spacer()
                         Text("키 : " + String(format: "%.1f", Double(vm.height)*0.1) + "m")
                         Spacer()
@@ -89,12 +89,25 @@ struct PokemonInfoView: View {
                         .padding(.bottom,5)
                         HStack{
                             Group{
-                                Text("괴수  식물")
-                                VStack{
-                                    Text("수컷 : 87.5%")
-                                    Text("암컷 : 12.5%")
+                                HStack(spacing:0){
+                                    ForEach(vm.eggGroup,id:\.self){
+                                        Text($0)
+                                        if vm.eggGroup.count > 1,$0 != vm.eggGroup.last{
+                                            Text("  ")
+                                        }
+                                        
+                                    }
                                 }
-                                Text("45")
+                                VStack{
+                                    if vm.gender.contains(1){
+                                        Text("성별 없음")
+                                    }else{
+                                        Text("수컷 : \(String(format: "%.1f", vm.gender.first ?? 0)) %")
+                                        Text("암컷 : \(String(format: "%.1f", vm.gender.last ?? 0))%")
+                                    }
+                                    
+                                }
+                                Text("\(vm.get)")
                             }.frame(maxWidth: .infinity)
                         }
                     }
@@ -107,23 +120,29 @@ struct PokemonInfoView: View {
                     VStack{
                         
                         Group{
-                            HStack(spacing: 0){
-                                Text("심록")
-                                    .padding(.trailing)
-                                    .bold()
-                                Text("HP가 ⅓ 이하일 때 풀 타입 기술의 위력이 1.5배가 된다.")
+                            VStack(alignment:.leading, spacing:0){
+                                ForEach(Array(vm.char),id:\.0){ (key,value) in
+                                    HStack(spacing: 0){
+                                        Text(key)
+                                            .padding(.trailing)
+                                            .bold()
+                                        Text(value.replacingOccurrences(of: "\n", with: " "))
+                                    }
+                                }.padding(.bottom)
+                                if !vm.hiddenChar.keys.contains("no"){
+                                    ForEach(Array(vm.hiddenChar),id:\.0){ (key,value) in
+                                        HStack(spacing: 0){
+                                            Text(key).bold()
+                                            Image(systemName:"questionmark.circle.fill")
+                                                .padding(.trailing)
+                                            Text(value.replacingOccurrences(of: "\n", with: " "))
+                                        }
+                                    }
+                                }
+                                
                             }
-                            .padding(.bottom)
-                            HStack(spacing: 0){
-                                Text("엽록소")
-                                    .bold()
-                                Image(systemName: "questionmark.circle.fill")
-                                    .padding(.trailing)
-                                Text("날씨가 쾌청 상태일 때 스피드가 2배가 된다.")
-                            }
+                        
                         }.frame(maxWidth: .infinity,alignment:.leading)
-                        
-                        
                     }
                     
                     .padding()
@@ -140,6 +159,8 @@ struct PokemonInfoView: View {
                                     .bold()
                                 ForEach(vm.hp,id:\.self){ item in
                                     Text("\(item)")
+                                        .foregroundColor(item > 150 ? .red : .primary)
+                                        .bold()
                                 }
                             }
                             VStack{
@@ -147,6 +168,8 @@ struct PokemonInfoView: View {
                                     .bold()
                                 ForEach(vm.attack,id:\.self){ item in
                                     Text("\(item)")
+                                        .foregroundColor(item > 150 ? .red : .primary)
+                                        .bold()
                                 }
                             }
                             VStack{
@@ -154,6 +177,8 @@ struct PokemonInfoView: View {
                                     .bold()
                                 ForEach(vm.defense,id:\.self){ item in
                                     Text("\(item)")
+                                        .foregroundColor(item > 150 ? .red : .primary)
+                                        .bold()
                                 }
                             }
                             VStack{
@@ -161,6 +186,8 @@ struct PokemonInfoView: View {
                                     .bold()
                                 ForEach(vm.spAttack,id:\.self){ item in
                                     Text("\(item)")
+                                        .foregroundColor(item > 150 ? .red : .primary)
+                                        .bold()
                                 }
                             }
                             VStack{
@@ -168,6 +195,8 @@ struct PokemonInfoView: View {
                                     .bold()
                                 ForEach(vm.spDefense,id:\.self){ item in
                                     Text("\(item)")
+                                        .foregroundColor(item > 150 ? .red : .primary)
+                                        .bold()
                                 }
                             }
                             VStack{
@@ -175,6 +204,8 @@ struct PokemonInfoView: View {
                                     .bold()
                                 ForEach(vm.speed,id:\.self){ item in
                                     Text("\(item)")
+                                        .foregroundColor(item > 150 ? .red : .primary)
+                                        .bold()
                                 }
                             }
                             VStack{
@@ -182,6 +213,8 @@ struct PokemonInfoView: View {
                                     .bold()
                                 ForEach(vm.avr,id:\.self){ item in
                                     Text("\(item)")
+                                        .foregroundColor(item > 600 ? .red : .primary)
+                                        .bold()
                                 }
                             }
                         }
@@ -264,7 +297,7 @@ struct PokemonInfoView: View {
 
 struct PokemonInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInfoView(back: .constant(true),num: 2)
+        PokemonInfoView(back: .constant(true),num: 493)
     }
 }
 
@@ -272,14 +305,14 @@ class PokemonInfoViewModel:ObservableObject{
     
     @Published var image = String()
     @Published var name = String()
-    @Published var title = String()
+    @Published var genera = String()
     @Published var height = Int()
     @Published var weight = Int()
     @Published var eggGroup = [String]()
-    @Published var gender = [String]()
+    @Published var gender = [Double]()
     @Published var get = Int()
     @Published var char = [String:String]()
-    @Published var hiddenChar = [String:String]()
+    @Published var hiddenChar = ["no":"no"]
     @Published var types = [String]()
     
     @Published var hp = [Int]()
@@ -340,49 +373,93 @@ class PokemonInfoViewModel:ObservableObject{
             let name = await getKoreanName(num: num)
             let types = await getKoreanType(num: num)
             
-            DispatchQueue.main.async {
+            let pokemon = try await PokemonAPI().pokemonService.fetchPokemon(num)
+            let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
+            
+            DispatchQueue.main.async {  //이름,타입
+                
                 self.name = name
                 self.types = types
             }
             
-            let pokemon = try await PokemonAPI().pokemonService.fetchPokemon(num)
-            DispatchQueue.main.async {
+            
+            DispatchQueue.main.async {  //키,몸무게
                 self.height = pokemon.height!
                 self.weight = pokemon.weight!
             }
             
-            let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
-            
-            if let sp = species.varieties{
-                for i in sp{
-                    if urlToInt(url: i.pokemon?.url ?? "") != 10093{
-                        let pokemon = try await PokemonAPI().pokemonService.fetchPokemon(urlToInt(url: i.pokemon?.url ?? ""))
-                        if let st = pokemon.stats{
-                            DispatchQueue.main.async {
-                                self.hp.append(st.first?.baseStat ?? 0)
-                                self.attack.append(st[1].baseStat ?? 0)
-                                self.defense.append(st[2].baseStat ?? 0)
-                                self.spAttack.append(st[3].baseStat ?? 0)
-                                self.spDefense.append(st[4].baseStat ?? 0)
-                                self.speed.append(st.last?.baseStat ?? 0)
-                                self.avr.append((st.first?.baseStat)! + st[1].baseStat! + st[2].baseStat! + st[3].baseStat! + st[4].baseStat! + (st.last?.baseStat)!)
-                            }
-                        }
-                    }
-                    
+            if let stat = pokemon.stats{    //스탯
+                DispatchQueue.main.async {
+                    self.hp.append(stat.first?.baseStat ?? 0)
+                    self.attack.append(stat[1].baseStat ?? 0)
+                    self.defense.append(stat[2].baseStat ?? 0)
+                    self.spAttack.append(stat[3].baseStat ?? 0)
+                    self.spDefense.append(stat[4].baseStat ?? 0)
+                    self.speed.append(stat.last?.baseStat ?? 0)
+                    self.avr.append((stat.first?.baseStat)! + stat[1].baseStat! + stat[2].baseStat! + stat[3].baseStat! + stat[4].baseStat! + (stat.last?.baseStat)!)
                 }
             }
-        }
-        Task{
-            let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
-            if let text = species.flavorTextEntries{
+            if let text = species.flavorTextEntries{    // 도감설명
                 for desc in text{
                     DispatchQueue.main.async {
                         self.desc.append(desc.flavorText ?? "")
                     }
                 }
             }
+            if let genera = species.genera{ //타이틀
+                DispatchQueue.main.async {
+                    self.genera = genera[1].genus ?? ""
+                }
+            }
+            if let gender = species.genderRate{
+                DispatchQueue.main.async {
+                    if gender != -1{
+                        self.gender.append((1-Double(gender)/8.0) * 100)
+                        self.gender.append(Double(gender)/8.0 * 100)
+                    }else{
+                        self.gender.append(1.0)
+                    }
+                }
+            }
+            if let eggGroup = species.eggGroups{    //알그룹
+                for egg in eggGroup{
+                    let getKoreanEgg = try await PokemonAPI().pokemonService.fetchEggGroup(urlToInt(url: egg.url!))
+                    DispatchQueue.main.async {
+                        self.eggGroup.append(getKoreanEgg.names?[1].name ?? "")
+                    }
+                }
+            }
+            if let rate = species.captureRate{  //포획률
+                DispatchQueue.main.async {
+                    self.get = rate
+                }
+            }
+            if let ability = pokemon.abilities{
+                for ab in ability{
+                    if let hidden = ab.isHidden{
+                        if hidden{
+                            let getKoreanAbility = try await PokemonAPI().pokemonService.fetchAbility(urlToInt(url: ab.ability?.url ?? ""))
+                            if let getKor = getKoreanAbility.flavorTextEntries{
+                                for i in getKor{
+                                    if i.language?.name == "ko"{
+                                        self.hiddenChar.removeValue(forKey: "no")
+                                        self.hiddenChar[getKoreanAbility.names?[1].name ?? ""] = i.flavorText
+                                    }
+                                }
+                            }
+                        }else{
+                            let getKoreanAbility = try await PokemonAPI().pokemonService.fetchAbility(urlToInt(url: ab.ability?.url ?? ""))
+                            if let getKor = getKoreanAbility.flavorTextEntries{
+                                for i in getKor{
+                                    if i.language?.name == "ko"{
+                                        self.char[getKoreanAbility.names?[1].name ?? ""] = i.flavorText
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
-        
     }
 }

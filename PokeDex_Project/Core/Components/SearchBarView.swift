@@ -18,7 +18,7 @@ struct SearchBarView: View {
                 TextField("", text: $text)
                     .bold()
                     .background(alignment:.leading){
-                        Text("포켓몬 이름이나 번호를 입력해 주세요 ..").foregroundColor(.primary.opacity(text != "" ? 0.0:0.8))
+                        Text("전국도감 번호를 입력해 주세요 ..").foregroundColor(.primary.opacity(text != "" ? 0.0:0.8))
                     }
                 if text != ""{
                     Button {

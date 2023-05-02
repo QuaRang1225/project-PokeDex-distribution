@@ -15,6 +15,8 @@ struct MainView: View {
     @State var text:String = ""
     @State var isInfo = false
     @State var num = 0
+    @State var selectLocation = false
+    @State var dexName = "전국도감"
     
     @StateObject var vm = PokeDexViewModel()
     var filteredItems: [Int] {
@@ -25,69 +27,113 @@ struct MainView: View {
             }
         }
     var body: some View {
-        VStack(alignment: .leading,spacing: 0){
-            header
-            ScrollView{
-                LazyVGrid(columns: columns) {
-                    ForEach(Array(filteredItems.enumerated()),id:\.0){ (index,item) in
-                        VStack(alignment: .leading,spacing: 0){
-                            HStack(spacing: 0){
-                                ball
-                                Text(String(format: "%04d",/*vm.location == .unova ? index : index+1*/item))
-                                    .bold()
+        ZStack{
+            VStack(alignment: .leading,spacing: 0){
+                header
+                ScrollView{
+                    LazyVGrid(columns: columns) {
+                        ForEach(Array(filteredItems.enumerated()),id:\.0){ (index,item) in
+                            VStack(alignment: .leading,spacing: 0){
+                                HStack(spacing: 0){
+                                    ball
+                                    Text(String(format: "%04d",/*vm.location == .unova ? index : index+1*/item))
+                                        .bold()
+                                }
+                                Button {
+                                    num = item
+                                    
+                                } label: {
+                                    DexRowView(pokemonNum: item)
+                                }
+                                .onChange(of: num, perform: { _ in
+                                    isInfo = true
+                                })
+                                .navigationDestination(isPresented: $isInfo){
+                                    PokemonInfoView(back: $isInfo,num: num)
+                                        .navigationBarBackButtonHidden()
+                                }
+                                .padding(.bottom,5)
                             }
-                            Button {
-                                print("\(item)")
-                                num = item
-                                isInfo = true
-                            } label: {
-                                DexRowView(pokemonNum: item)
-                            }
-                            .navigationDestination(isPresented: $isInfo){
-                                PokemonInfoView(back: $isInfo,num: num)
-                                    .navigationBarBackButtonHidden()
-                            }
-                            .padding(.bottom,5)
                         }
+                    }.padding(.horizontal).padding(.top)
+                }.onTapGesture {
+                    isSearch = false
+                }.refreshable {}
+                
+            }
+            if selectLocation{
+                Color.clear.ignoresSafeArea()
+                    .background(.regularMaterial)
+                VStack(spacing:30){
+                    ForEach(LocationFilter.allCases,id:\.self){ loc in
+                        Button {
+                            Task{
+                                let dexNum = await vm.getLocation(locNum: loc.endPoint)
+                                DispatchQueue.main.async {
+                                    vm.dexNum = dexNum
+                                }
+                            }
+                            dexName = loc.name
+                            selectLocation = false
+                        } label: {
+                            Text(loc.name)
+                                .bold()
+                                .foregroundColor(.primary)
+                        }
+                        
                     }
-                }.padding(.horizontal).padding(.top)
-            }.onTapGesture {
-                isSearch = false
-            }.refreshable {}
-            
-        }
-        .onChange(of:vm.location){ _ in
-            Task{
-                let dexNum = await vm.getLocation()
-                DispatchQueue.main.async {
-                    vm.dexNum = dexNum
+                    Button {
+                        selectLocation = false
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.primary)
+                            .font(.largeTitle)
+                    }
+
                 }
             }
         }
+//        .onChange(of:vm.location){ _ in
+//            Task{
+//                let dexNum = await vm.getLocation()
+//                DispatchQueue.main.async {
+//                    vm.dexNum = dexNum
+//                }
+//            }
+//        }
     }
     var header:some View{
         VStack{
             HStack(spacing: 0){
-                Menu {
-                    Picker("", selection: $vm.location) {
-                        ForEach(LocationFilter.allCases, id: \.self) {
-                            Text($0.name)
-                                .tag($0)
-                        }
-                    } .font(.title2)
+//                Menu {
+//                    Picker("", selection: $vm.location) {
+//                        ForEach(LocationFilter.allCases, id: \.self) {
+//                            Text($0.name)
+//                                .tag($0)
+//                        }
+//                    } .font(.title2)
+//                        .bold()
+//                        .foregroundColor(.primary)
+//                        .onChange(of: vm.location) { newValue in
+//                            vm.location = newValue
+//                        }
+//                } label: {
+//                    HStack{
+//                        Text(vm.location.name)
+//                            .font(.title)
+//                            .bold()
+//                        Image(systemName: "chevron.down")
+//                    }.foregroundColor(.primary)
+//                }
+                Button {
+                    selectLocation = true
+                } label: {
+                    Text(dexName)
+                        .font(.title)
                         .bold()
                         .foregroundColor(.primary)
-                        .onChange(of: vm.location) { newValue in
-                            vm.location = newValue
-                        }
-                } label: {
-                    HStack{
-                        Text(vm.location.name)
-                            .font(.title)
-                            .bold()
-                        Image(systemName: "chevron.down")
-                    }.foregroundColor(.primary)
                 }
+                
                 Spacer()
                 Button {
                     withAnimation(.linear(duration: 0.1)){
