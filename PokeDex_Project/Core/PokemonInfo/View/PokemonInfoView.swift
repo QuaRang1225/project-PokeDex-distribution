@@ -12,9 +12,8 @@ import PokemonAPI
 struct PokemonInfoView: View {
     @StateObject var vm = PokemonInfoViewModel()
     @Binding var back:Bool
-    
+    let coloumn = [GridItem(.flexible()),GridItem(.flexible()),GridItem(.flexible())]
     let num:Int
-    
     var body: some View {
             VStack{
                 header
@@ -231,17 +230,37 @@ struct PokemonInfoView: View {
                             Text("진화")
                                 .font(.title3)
                                 .bold()
-                            HStack{
-                                ForEach(1...3,id:\.self){ url in
-                                    KFImage(URL(string:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(url).png"))
-                                        .resizable()
-                                        .frame(width: 100,height:100)
-                                    if url < 3{
-                                        Image(systemName: "chevron.right")
+                            VStack{
+                                ForEach(Array(vm.frist),id:\.0){ (key,value) in
+                                    VStack{
+                                        KFImage(URL(string: value)!)
+                                            .resizable()
+                                            .frame(width: 100,height:100)
+                                        Text(key)
                                     }
-                                    
+                                    .background(BallImage())
                                 }
-                            }
+                                LazyVGrid(columns: coloumn,alignment:.center) {
+                                    ForEach(Array(vm.second),id:\.0){ (key,value) in
+                                        VStack{
+                                            KFImage(URL(string: value)!)
+                                                .resizable()
+                                                .frame(width: 100,height:100)
+                                            Text(key)
+                                        }
+                                        .background(BallImage())
+                                    }
+                                }
+                                ForEach(Array(vm.third),id:\.0){ (key,value) in
+                                    VStack{
+                                        KFImage(URL(string: value)!)
+                                            .resizable()
+                                            .frame(width: 100,height:100)
+                                        Text(key)
+                                    }
+                                    .background(BallImage())
+                                }
+                            }.padding()
                         }
                     }.padding(.vertical)
                    
@@ -297,7 +316,7 @@ struct PokemonInfoView: View {
 
 struct PokemonInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInfoView(back: .constant(true),num: 493)
+        PokemonInfoView(back: .constant(true),num: 182)
     }
 }
 
@@ -323,7 +342,7 @@ class PokemonInfoViewModel:ObservableObject{
     @Published var speed = [Int]()
     @Published var avr = [Int]()
     
-    @Published var fist = [String:String]()
+    @Published var frist = [String:String]()
     @Published var second = [String:String]()
     @Published var third = [String:String]()
     
@@ -434,7 +453,7 @@ class PokemonInfoViewModel:ObservableObject{
                     self.get = rate
                 }
             }
-            if let ability = pokemon.abilities{
+            if let ability = pokemon.abilities{ //특성
                 for ab in ability{
                     if let hidden = ab.isHidden{
                         if hidden{
@@ -442,8 +461,10 @@ class PokemonInfoViewModel:ObservableObject{
                             if let getKor = getKoreanAbility.flavorTextEntries{
                                 for i in getKor{
                                     if i.language?.name == "ko"{
-                                        self.hiddenChar.removeValue(forKey: "no")
-                                        self.hiddenChar[getKoreanAbility.names?[1].name ?? ""] = i.flavorText
+                                        DispatchQueue.main.async {
+                                            self.hiddenChar.removeValue(forKey: "no")
+                                            self.hiddenChar[getKoreanAbility.names?[1].name ?? ""] = i.flavorText
+                                        }
                                     }
                                 }
                             }
@@ -452,9 +473,53 @@ class PokemonInfoViewModel:ObservableObject{
                             if let getKor = getKoreanAbility.flavorTextEntries{
                                 for i in getKor{
                                     if i.language?.name == "ko"{
-                                        self.char[getKoreanAbility.names?[1].name ?? ""] = i.flavorText
+                                        DispatchQueue.main.async {
+                                            self.char[getKoreanAbility.names?[1].name ?? ""] = i.flavorText
+                                        }
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+            if let chain = species.evolutionChain?.url{     //진화트리
+                let evolChain = try await PokemonAPI().evolutionService.fetchEvolutionChain(urlToInt(url: chain))   //체인
+                let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(urlToInt(url: evolChain.chain?.species?.url ?? ""))
+                if let name = species.names{
+                    for kor in name{
+                        if let korName =  kor.language?.name,korName == "ko"{
+                            DispatchQueue.main.async {
+                                self.frist[kor.name ?? ""] = self.imageUrl(url: self.urlToInt(url: evolChain.chain?.species?.url ?? ""))
+                            }
+                        }
+                    }
+                }
+                if let secondEvo = evolChain.chain?.evolvesTo{
+                    for second in secondEvo{
+                        let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(urlToInt(url: second.species?.url ?? ""))
+                        if let name = species.names{
+                            for kor in name{
+                                if let korName =  kor.language?.name,korName == "ko"{
+                                    DispatchQueue.main.async {
+                                        self.second[kor.name ?? ""] = self.imageUrl(url: self.urlToInt(url: second.species?.url ?? ""))
+                                    }
+                                }
+                            }
+                        }
+                        if let thirdEvo = second.evolvesTo{
+                            for third in thirdEvo{
+                                let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(urlToInt(url: third.species?.url ?? ""))
+                                if let name = species.names{
+                                    for kor in name{
+                                        if let korName =  kor.language?.name,korName == "ko"{
+                                            DispatchQueue.main.async {
+                                                self.third[kor.name ?? ""] = self.imageUrl(url: self.urlToInt(url: third.species?.url ?? ""))
+                                            }
+                                        }
+                                    }
+                                }
+                                
                             }
                         }
                     }

@@ -93,38 +93,10 @@ struct MainView: View {
                 }
             }
         }
-//        .onChange(of:vm.location){ _ in
-//            Task{
-//                let dexNum = await vm.getLocation()
-//                DispatchQueue.main.async {
-//                    vm.dexNum = dexNum
-//                }
-//            }
-//        }
     }
     var header:some View{
         VStack{
             HStack(spacing: 0){
-//                Menu {
-//                    Picker("", selection: $vm.location) {
-//                        ForEach(LocationFilter.allCases, id: \.self) {
-//                            Text($0.name)
-//                                .tag($0)
-//                        }
-//                    } .font(.title2)
-//                        .bold()
-//                        .foregroundColor(.primary)
-//                        .onChange(of: vm.location) { newValue in
-//                            vm.location = newValue
-//                        }
-//                } label: {
-//                    HStack{
-//                        Text(vm.location.name)
-//                            .font(.title)
-//                            .bold()
-//                        Image(systemName: "chevron.down")
-//                    }.foregroundColor(.primary)
-//                }
                 Button {
                     selectLocation = true
                 } label: {
