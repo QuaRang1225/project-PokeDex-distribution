@@ -19,11 +19,11 @@ struct MainView: View {
     @State var dexName = "전국도감"
     
     @StateObject var vm = PokeDexViewModel()
-    var filteredItems: [Int] {
+    var filteredItems: [Row] {
         if text.isEmpty {
-            return vm.dexNum
+            return vm.model
             } else {
-                return vm.dexNum.filter { String($0).contains(text) }
+                return vm.model.filter { String($0.name).contains(text) }
             }
         }
     var body: some View {
@@ -32,18 +32,18 @@ struct MainView: View {
                 header
                 ScrollView{
                     LazyVGrid(columns: columns) {
-                        ForEach(Array(filteredItems.enumerated()),id:\.0){ (index,item) in
+                        ForEach(filteredItems,id:\.self){ item in
                             VStack(alignment: .leading,spacing: 0){
                                 HStack(spacing: 0){
                                     ball
-                                    Text(String(format: "%04d",/*vm.location == .unova ? index : index+1*/item))
+                                    Text(String(format: "%04d",item.num))
                                         .bold()
                                 }
                                 Button {
-                                    num = item
+                                    num = item.num
                                     
                                 } label: {
-                                    DexRowView(pokemonNum: item)
+                                    DexRowView(row: item)
                                 }
                                 .onChange(of: num, perform: { _ in
                                     isInfo = true
@@ -67,13 +67,8 @@ struct MainView: View {
                 VStack(spacing:30){
                     ForEach(LocationFilter.allCases,id:\.self){ loc in
                         Button {
-                            Task{
-                                let dexNum = await vm.getLocation(locNum: loc.endPoint)
-                                DispatchQueue.main.async {
-                                    vm.dexNum = dexNum
-                                }
-                            }
                             dexName = loc.name
+                            vm.location = loc
                             selectLocation = false
                         } label: {
                             Text(loc.name)
@@ -91,6 +86,16 @@ struct MainView: View {
                     }
 
                 }
+            }
+        }
+        .onAppear{
+            vm.get()
+        }
+        .onChange(of: vm.location) { _ in
+            vm.cancelTask()
+            if ((vm.taskHandle?.isCancelled) != nil){
+                vm.model.removeAll()
+                vm.get()
             }
         }
     }

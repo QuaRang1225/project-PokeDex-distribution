@@ -5,42 +5,45 @@
 //  Created by 유영웅 on 2023/04/26.
 //
 import SwiftUI
+import PokemonAPI
 
 struct TestView: View {
-    @State private var arr  = [Int]()
-    @State private var one = Array(0...100)
-    @State private var two = Array(101...200)
-    @State private var three = Array(201...300)
-
+    @StateObject var vm = ViewModel()
     var body: some View {
         VStack {
             ScrollView{
                 HStack{
                     Button {
-                        arr = one
+                        vm.location = .hoenn
                     } label: {
-                        Circle()
-                            .frame(width: 100)
+                        Text("호연")
                     }
                     Button {
-                        arr = two
+                        vm.location = .alaola
                     } label: {
-                        Circle()
-                            .frame(width: 100)
+                        Text("알로라")
                     }
-                    Button {
-                        arr = three
-                    } label: {
-                        Circle()
-                            .frame(width: 100)
-                    }
-
                 }
-                ForEach(arr, id: \.self) { result in
-                    Text("\(result)")
+                ForEach(vm.model, id: \.self) { result in
+                    VStack{
+                        Text("\(result.name)")
+                        Text("\(result.num)")
+                        Text("\(result.image)")
+                        ForEach(result.type,id:\.self){ item in
+                            Text("\(item)")
+                        }
+                        
+                    }
                 }
             }
-            
+        }.onAppear{
+            vm.get()
+        }.onChange(of: vm.location) { _ in
+            vm.cancelTask()
+            if ((vm.taskHandle?.isCancelled) != nil){
+                vm.model.removeAll()
+                vm.get()
+            }
         }
     }
     
@@ -58,16 +61,58 @@ struct Model:Codable{
 }
 
 class ViewModel:ObservableObject{
-    @Published var model = Model(a: "", b: 0)
-
+    @Published var model:[Row] = []
+    @Published var location:LocationFilter = .national
+    var taskHandle: Task<Void, Error>?
+    
     func get(){
-        DispatchQueue.global(qos: .background).async {
-            //Firestore
-            UserDefaults.standard.setValue("Heo, World!", forKey: "myStringData")
-            if let myStringData = UserDefaults.standard.string(forKey: "myStringData") {
-                self.model.a = myStringData
-            }
-            self.model.b = 2
+        taskHandle = Task{
+            while true {
+                
+                let dex = try await PokemonAPI().gameService.fetchPokedex(location.endPoint)
+                if let dexEnt =  dex.pokemonEntries{
+                    for i in dexEnt{
+                       let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies((i.pokemonSpecies?.name)!)
+                        if let names = species.names{
+                            for lang in names{
+                                if lang.language?.name == "ko"{
+                                    let types = await getKoreanType(num: species.id!)
+                                    if Task.isCancelled {
+                                        print("도감정보 바뀜")
+                                        break
+                                    }
+                                    model.append(Row(num: i.entryNumber ?? 0, image: imageUrl(url: species.id!), name: lang.name!, type: types))
+                                }
+                            }
+                        }
+                        
+                        
+                    }
+                }
+                }
+            
         }
+    }
+    func cancelTask() {
+        taskHandle?.cancel()
+        
+    }
+    func getKoreanType(num:Int) async -> [String]{    //포켓몬 타입/한글로 변환
+        var koreanType = [String]()
+        let pokemon = try? await PokemonAPI().pokemonService.fetchPokemon(num)
+        if let types = pokemon?.types{
+            for type in types {
+                let type = try? await PokemonAPI().pokemonService.fetchType(urlToInt(url: (type.type?.url)!))
+                koreanType.append(type?.names![1].name ?? "")
+            }
+        }
+        return koreanType
+    }
+    private func urlToInt(url:String)->Int{
+        let url = Int(String(url.filter({$0.isNumber}).dropFirst()))!
+        return url
+    }
+    private func imageUrl(url:Int)->String{ //이미지 url
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(url).png"
     }
 }

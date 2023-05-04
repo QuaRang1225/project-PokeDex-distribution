@@ -378,7 +378,6 @@ class PokemonInfoViewModel:ObservableObject{
         if let types = pokemon?.types{
             for type in types {
                 let type = try? await PokemonAPI().pokemonService.fetchType(urlToInt(url: (type.type?.url)!))
-                
                 koreanType.append(type?.names![1].name ?? "")
             }
         }

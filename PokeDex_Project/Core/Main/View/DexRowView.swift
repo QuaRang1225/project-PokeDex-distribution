@@ -9,15 +9,14 @@ import SwiftUI
 import Kingfisher
 
 struct DexRowView: View {
-    let pokemonNum: Int
-    @ObservedObject var vm = PokeDexViewModel()
-    //@State var text = ""
+    let row: Row
+    
     var body: some View {
         RoundedRectangle(cornerRadius: 10)
             .frame(height: 200)
             .foregroundColor(.primary.opacity(0.1))
             .overlay(alignment: .top) {
-                Text(vm.names)
+                Text(row.name)
                     .foregroundColor(.primary)
                     .bold()
                     .padding()
@@ -27,7 +26,7 @@ struct DexRowView: View {
                     .frame(width: 100, height: 100)
             }
             .overlay(content: {
-                KFImage(URL(string:vm.imageUrl(url: pokemonNum)))
+                KFImage(URL(string:row.image))
                     .resizable()
                     .placeholder {
                         ProgressView()
@@ -38,20 +37,20 @@ struct DexRowView: View {
                 HStack {
                     RoundedRectangle(cornerRadius: 10)
                         .frame(width: 65,height: 20)
-                        .foregroundColor(Color.typeColor(types: vm.types.first ?? ""))
+                        .foregroundColor(Color.typeColor(types: row.type.first ?? ""))
                         .overlay {
-                            Text(vm.types.first ?? "")
+                            Text(row.type.first ?? "")
                                 .shadow(color: .black, radius: 2)
                                 .padding(.horizontal)
                                 .padding(2)
                         }
 
-                    if vm.types.count > 1 {
+                    if row.type.count > 1 {
                         RoundedRectangle(cornerRadius: 10)
                             .frame(width: 65,height: 20)
-                            .foregroundColor(Color.typeColor(types: vm.types.last ?? ""))
+                            .foregroundColor(Color.typeColor(types: row.type.last ?? ""))
                             .overlay {
-                                Text(vm.types.last ?? "")
+                                Text(row.type.last ?? "")
                                     .shadow(color: .black, radius: 2)
                                     .padding(.horizontal)
                                     .padding(2)
@@ -63,14 +62,7 @@ struct DexRowView: View {
                 .foregroundColor(.white)
                 .padding(.bottom, 5)
             }
-            .task {
-                let name = await vm.getKoreanName(num: pokemonNum)
-                let type = await vm.getKoreanType(num: pokemonNum)
-                DispatchQueue.main.async {
-                    vm.names = name
-                    vm.types = type
-                }
-            }
+
     }
 }
 
@@ -79,8 +71,7 @@ struct DexRowView: View {
 struct DexRowView_Previews: PreviewProvider {
     static var previews: some View {
         HStack{
-            DexRowView(pokemonNum: 13)
-            DexRowView(pokemonNum: 21)
+            DexRowView(row: Row(num: 1, image: "", name: "이상해씨", type: ["풀","독"]))
         }
         .padding()
     }
