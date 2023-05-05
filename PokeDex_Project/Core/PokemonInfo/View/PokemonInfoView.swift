@@ -230,36 +230,54 @@ struct PokemonInfoView: View {
                             Text("진화")
                                 .font(.title3)
                                 .bold()
-                            VStack{
-                                ForEach(Array(vm.frist),id:\.0){ (key,value) in
+                            HStack{
+                                ForEach(Array(zip(vm.first,vm.firstName)),id:\.0){ (image,name) in
                                     VStack{
-                                        KFImage(URL(string: value)!)
+                                        KFImage(URL(string: image)!)
                                             .resizable()
                                             .frame(width: 100,height:100)
-                                        Text(key)
+                                        Text(name)
                                     }
                                     .background(BallImage())
                                 }
-                                LazyVGrid(columns: coloumn,alignment:.center) {
-                                    ForEach(Array(vm.second),id:\.0){ (key,value) in
-                                        VStack{
-                                            KFImage(URL(string: value)!)
-                                                .resizable()
-                                                .frame(width: 100,height:100)
-                                            Text(key)
-                                        }
-                                        .background(BallImage())
-                                    }
-                                }
-                                ForEach(Array(vm.third),id:\.0){ (key,value) in
+                                ForEach(Array(zip(vm.second,vm.secondName)),id:\.0){ (image,name) in
                                     VStack{
-                                        KFImage(URL(string: value)!)
+                                        KFImage(URL(string: image)!)
                                             .resizable()
                                             .frame(width: 100,height:100)
-                                        Text(key)
+                                        Text(name)
                                     }
                                     .background(BallImage())
                                 }
+                                ForEach(Array(zip(vm.third,vm.thirdName)),id:\.0){ (image,name) in
+                                    VStack{
+                                        KFImage(URL(string: image)!)
+                                            .resizable()
+                                            .frame(width: 100,height:100)
+                                        Text(name)
+                                    }
+                                    .background(BallImage())
+                                }
+//                                LazyVGrid(columns: coloumn,alignment:.center) {
+//                                    ForEach(Array(vm.second),id:\.0){ (key,value) in
+//                                        VStack{
+//                                            KFImage(URL(string: value)!)
+//                                                .resizable()
+//                                                .frame(width: 100,height:100)
+//                                            Text(key)
+//                                        }
+//                                        .background(BallImage())
+//                                    }
+//                                }
+//                                ForEach(Array(vm.third),id:\.0){ (key,value) in
+//                                    VStack{
+//                                        KFImage(URL(string: value)!)
+//                                            .resizable()
+//                                            .frame(width: 100,height:100)
+//                                        Text(key)
+//                                    }
+//                                    .background(BallImage())
+//                                }
                             }.padding()
                         }
                     }.padding(.vertical)
@@ -342,9 +360,13 @@ class PokemonInfoViewModel:ObservableObject{
     @Published var speed = [Int]()
     @Published var avr = [Int]()
     
-    @Published var frist = [String:String]()
-    @Published var second = [String:String]()
-    @Published var third = [String:String]()
+    @Published var first = [String]()
+    @Published var second = [String]()
+    @Published var third = [String]()
+    
+    @Published var firstName = [String]()
+    @Published var secondName = [String]()
+    @Published var thirdName = [String]()
     
     @Published var desc = [String]()
     
@@ -489,7 +511,8 @@ class PokemonInfoViewModel:ObservableObject{
                     for kor in name{
                         if let korName =  kor.language?.name,korName == "ko"{
                             DispatchQueue.main.async {
-                                self.frist[kor.name ?? ""] = self.imageUrl(url: self.urlToInt(url: evolChain.chain?.species?.url ?? ""))
+                                self.firstName.append(kor.name ?? "")
+                                self.first.append(self.imageUrl(url: self.urlToInt(url: evolChain.chain?.species?.url ?? "")))
                             }
                         }
                     }
@@ -501,7 +524,8 @@ class PokemonInfoViewModel:ObservableObject{
                             for kor in name{
                                 if let korName =  kor.language?.name,korName == "ko"{
                                     DispatchQueue.main.async {
-                                        self.second[kor.name ?? ""] = self.imageUrl(url: self.urlToInt(url: second.species?.url ?? ""))
+                                        self.secondName.append(kor.name ?? "")
+                                        self.second.append(self.imageUrl(url: self.urlToInt(url: second.species?.url ?? "")))
                                     }
                                 }
                             }
@@ -513,7 +537,8 @@ class PokemonInfoViewModel:ObservableObject{
                                     for kor in name{
                                         if let korName =  kor.language?.name,korName == "ko"{
                                             DispatchQueue.main.async {
-                                                self.third[kor.name ?? ""] = self.imageUrl(url: self.urlToInt(url: third.species?.url ?? ""))
+                                                self.thirdName.append(kor.name ?? "")
+                                                self.third.append(self.imageUrl(url: self.urlToInt(url: third.species?.url ?? "")))
                                             }
                                         }
                                     }
