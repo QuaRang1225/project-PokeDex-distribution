@@ -20,6 +20,8 @@
 		8123988829F29F4600B7D560 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8123988729F29F4600B7D560 /* Kingfisher */; };
 		8123988B29F4D18B00B7D560 /* LocationFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123988A29F4D18B00B7D560 /* LocationFilter.swift */; };
 		8123988D29F5086900B7D560 /* AreaFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123988C29F5086900B7D560 /* AreaFilter.swift */; };
+		813C4D882A0A62F800EFEE33 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 813C4D872A0A62F800EFEE33 /* Realm */; };
+		813C4D8A2A0A62F800EFEE33 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 813C4D892A0A62F800EFEE33 /* RealmSwift */; };
 		81454F162A010A0C0031D9A6 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81454F152A010A0C0031D9A6 /* StartView.swift */; };
 		818A482C29F90F4300B3C7FF /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818A482B29F90F4300B3C7FF /* TestView.swift */; };
 		818A483129FA2D8900B3C7FF /* PokemonInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818A483029FA2D8900B3C7FF /* PokemonInfoView.swift */; };
@@ -81,6 +83,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				813C4D8A2A0A62F800EFEE33 /* RealmSwift in Frameworks */,
+				813C4D882A0A62F800EFEE33 /* Realm in Frameworks */,
 				8123988829F29F4600B7D560 /* Kingfisher in Frameworks */,
 				8123988529F286EC00B7D560 /* PokemonAPI in Frameworks */,
 			);
@@ -280,6 +284,8 @@
 			packageProductDependencies = (
 				8123988429F286EC00B7D560 /* PokemonAPI */,
 				8123988729F29F4600B7D560 /* Kingfisher */,
+				813C4D872A0A62F800EFEE33 /* Realm */,
+				813C4D892A0A62F800EFEE33 /* RealmSwift */,
 			);
 			productName = PokeDex_Project;
 			productReference = 8123985429F2865A00B7D560 /* PokeDex_Project.app */;
@@ -356,6 +362,7 @@
 			packageReferences = (
 				8123988329F286EC00B7D560 /* XCRemoteSwiftPackageReference "PokemonAPI" */,
 				8123988629F29F4600B7D560 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				813C4D862A0A62F800EFEE33 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = 8123985529F2865A00B7D560 /* Products */;
 			projectDirPath = "";
@@ -759,6 +766,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		813C4D862A0A62F800EFEE33 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -771,6 +786,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8123988629F29F4600B7D560 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		813C4D872A0A62F800EFEE33 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 813C4D862A0A62F800EFEE33 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		813C4D892A0A62F800EFEE33 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 813C4D862A0A62F800EFEE33 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
