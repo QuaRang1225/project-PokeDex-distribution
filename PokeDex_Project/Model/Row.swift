@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 struct Row:Hashable{
     var num:Int
@@ -13,3 +14,5 @@ struct Row:Hashable{
     var name:String
     var type:[String]
 }
+
+
