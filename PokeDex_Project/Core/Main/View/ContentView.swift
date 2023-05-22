@@ -1,5 +1,6 @@
 
 import SwiftUI
+import RealmSwift
 
 struct ContentView:View{
     @State var start = false
@@ -17,6 +18,9 @@ struct ContentView:View{
                     start = true
                 }
             }
+            
+        } .onAppear{
+            print(Realm.Configuration.defaultConfiguration.fileURL!)
         }
     }
 }
