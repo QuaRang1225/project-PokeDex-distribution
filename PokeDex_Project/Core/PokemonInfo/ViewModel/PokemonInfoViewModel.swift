@@ -7,8 +7,54 @@
 
 import Foundation
 import PokemonAPI
-
+import RealmSwift
+class Save:Object,Identifiable{
+    
+    
+    @Persisted(primaryKey: true)var id:ObjectId
+    
+    @Persisted var image:String
+    @Persisted var name:String
+    @Persisted var genera:String
+    @Persisted var height:Int
+    @Persisted var weight:Int
+    @Persisted var eggGroup:List<String>
+    @Persisted var gender:Double
+    @Persisted var get:Int
+    @Persisted var char:List<String>
+    @Persisted var charDesc:List<String>
+    @Persisted var hiddenChar:List<String>
+    @Persisted var hiddenCharDesc:List<String>
+    @Persisted var types:List<String>
+    
+    @Persisted var hp :List<Int>
+    @Persisted var attack :List<Int>
+    @Persisted var defense:List<Int>
+    @Persisted var spAttack:List<Int>
+    @Persisted var spDefense :List<Int>
+    @Persisted var speed:List<Int>
+    @Persisted var avr:List<Int>
+    
+    @Persisted var first:List<String>
+    @Persisted var second:List<String>
+    @Persisted var third:List<String>
+    @Persisted var forth:List<String>
+    
+    @Persisted var firstName:List<String>
+    @Persisted var secondName:List<String>
+    @Persisted var thirdName:List<String>
+    @Persisted var forthName:List<String>
+    
+    @Persisted var desc:List<String>
+    
+    override class func primaryKey() -> String? {
+        "id"
+    }
+}
 class PokemonInfoViewModel:ObservableObject{
+    
+    @ObservedResults(Save.self) var info
+    let saveInfo = Save()
     
     @Published var image = String()
     @Published var name = String()
@@ -18,8 +64,10 @@ class PokemonInfoViewModel:ObservableObject{
     @Published var eggGroup = [String]()
     @Published var gender = [Double]()
     @Published var get = Int()
-    @Published var char = [String:String]()
-    @Published var hiddenChar = ["no":"no"]
+    @Published var char = [String]()
+    @Published var charDesc = [String]()
+    @Published var hiddenChar = [String]()
+    @Published var hiddenCharDesc = [String]()
     @Published var types = [String]()
     
     @Published var hp = [Int]()
@@ -42,7 +90,7 @@ class PokemonInfoViewModel:ObservableObject{
     
     @Published var desc = [String]()
     
-    @Published var form = [String]()
+    //@Published var form = [String]()
     
     private func urlToInt(url:String)->Int{
         let url = Int(String(url.filter({$0.isNumber}).dropFirst()))!
@@ -90,6 +138,8 @@ class PokemonInfoViewModel:ObservableObject{
         Task{
             let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
 //            for i in species.varieties
+            saveInfo.image = image
+            
             
             image = imageUrl(url: num)
             let name = await getKoreanName(num: num)
@@ -101,6 +151,9 @@ class PokemonInfoViewModel:ObservableObject{
             DispatchQueue.main.async {  //이름,타입
                 self.name = name
                 self.types = types
+                self.saveInfo.name = name
+                self.saveInfo.types.append(objectsIn: types)
+                
             }
             
             
@@ -164,8 +217,9 @@ class PokemonInfoViewModel:ObservableObject{
                                 for i in getKor{
                                     if i.language?.name == "ko"{
                                         DispatchQueue.main.async {
-                                            self.hiddenChar.removeValue(forKey: "no")
-                                            self.hiddenChar[getKoreanAbility.names?[1].name ?? ""] = i.flavorText
+                                           
+                                            self.hiddenChar.append(getKoreanAbility.names?[1].name ?? "")
+                                            self.hiddenCharDesc.append(i.flavorText ?? "")
                                         }
                                     }
                                 }
@@ -176,10 +230,16 @@ class PokemonInfoViewModel:ObservableObject{
                                 for i in getKor{
                                     if i.language?.name == "ko"{
                                         DispatchQueue.main.async {
-                                            self.char[getKoreanAbility.names?[1].name ?? ""] = i.flavorText
+                                            self.char.append(getKoreanAbility.names?[1].name ?? "")
+                                            self.charDesc.append(i.flavorText ?? "")
+                                            
+                                            
                                         }
                                     }
                                 }
+                                self.saveInfo.char.append(objectsIn: self.charDesc)
+                                self.saveInfo.charDesc.append(objectsIn: self.charDesc)
+                                self.$info.append(self.saveInfo)
                             }
                         }
                     }
@@ -315,5 +375,6 @@ class PokemonInfoViewModel:ObservableObject{
                 }
             }
         }
+        //self.$info.append(self.saveInfo)
     }
 }

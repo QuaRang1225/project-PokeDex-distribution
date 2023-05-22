@@ -120,24 +120,24 @@ struct PokemonInfoView: View {
                         
                         Group{
                             VStack(alignment:.leading, spacing:0){
-                                ForEach(Array(vm.char),id:\.0){ (key,value) in
+                                ForEach(Array(zip(vm.char,vm.charDesc)),id:\.0){ (char,desc) in
                                     HStack(spacing: 0){
-                                        Text(key)
+                                        Text(char)
                                             .padding(.trailing)
                                             .bold()
-                                        Text(value.replacingOccurrences(of: "\n", with: " "))
+                                        Text(desc.replacingOccurrences(of: "\n", with: " "))
                                     }
                                 }.padding(.bottom)
-                                if !vm.hiddenChar.keys.contains("no"){
-                                    ForEach(Array(vm.hiddenChar),id:\.0){ (key,value) in
+                               // if !vm.hiddenChar.keys.contains("no"){
+                                    ForEach(Array(zip(vm.hiddenChar,vm.hiddenCharDesc)),id:\.0){ (char,desc) in
                                         HStack(spacing: 0){
-                                            Text(key).bold()
+                                            Text(char).bold()
                                             Image(systemName:"questionmark.circle.fill")
                                                 .padding(.trailing)
-                                            Text(value.replacingOccurrences(of: "\n", with: " "))
+                                            Text(desc.replacingOccurrences(of: "\n", with: " "))
                                         }
                                     }
-                                }
+                               // }
                                 
                             }
                         
