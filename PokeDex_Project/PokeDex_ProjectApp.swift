@@ -11,11 +11,8 @@ import SwiftUI
 struct PokeDex_ProjectApp: App {
     var body: some Scene {
         WindowGroup {
-         
             NavigationStack{
-                
                 ContentView()
-                
             }
         }
     }

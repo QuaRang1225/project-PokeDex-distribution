@@ -19,20 +19,20 @@ struct MainView: View {
     @State var dexName = "전국도감"
     
     @StateObject var vm = PokeDexViewModel()
-    var filteredItems: [Row] {
-        if text.isEmpty {
-            return vm.model
-            } else {
-                return vm.model.filter { String($0.name).contains(text) }
-            }
-        }
+//    var filteredItems: [Row] {
+//        if text.isEmpty {
+//            return vm.model
+//            } else {
+//                return vm.model.filter { String($0.name).contains(text) }
+//            }
+//        }
     var body: some View {
         ZStack{
             VStack(alignment: .leading,spacing: 0){
                 header
                 ScrollView{
                     LazyVGrid(columns: columns) {
-                        ForEach(filteredItems,id:\.self){ item in
+                        ForEach(vm.model,id:\.self){ item in
                             VStack(alignment: .leading,spacing: 0){
                                 HStack(spacing: 0){
                                     ball
@@ -41,20 +41,20 @@ struct MainView: View {
                                 }
                                 Button {
                                     num = item.num
-                                    
+                                    print(item)
+                                    isInfo = true
                                 } label: {
                                     DexRowView(row: item)
+                                    
                                 }
-                                .onChange(of: num, perform: { _ in
-                                    isInfo = true
-                                })
                                 .navigationDestination(isPresented: $isInfo){
-                                    PokemonInfoView(back: $isInfo,num: num)
+                                    PokemonInfoView(num: num)
                                         .navigationBarBackButtonHidden()
                                 }
                                 .padding(.bottom,5)
                             }
                         }
+
                     }.padding(.horizontal).padding(.top)
                 }.onTapGesture {
                     isSearch = false
