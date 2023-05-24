@@ -18,21 +18,23 @@ struct MainView: View {
     @State var selectLocation = false
     @State var dexName = "전국도감"
     
-    @StateObject var vm = PokeDexViewModel()
-//    var filteredItems: [Row] {
-//        if text.isEmpty {
-//            return vm.model
-//            } else {
-//                return vm.model.filter { String($0.name).contains(text) }
-//            }
-//        }
+    @EnvironmentObject var vm:PokeDexViewModel
+    
+    var filteredItems: [PokeDex] {
+        if text.isEmpty {
+            return vm.model
+            } else {
+                return vm.model.filter { String($0.name).contains(text) }
+            }
+        }
+    
     var body: some View {
         ZStack{
             VStack(alignment: .leading,spacing: 0){
                 header
                 ScrollView{
                     LazyVGrid(columns: columns) {
-                        ForEach(vm.model,id:\.self){ item in
+                        ForEach(filteredItems,id:\.self){ item in
                             VStack(alignment: .leading,spacing: 0){
                                 HStack(spacing: 0){
                                     ball
@@ -41,16 +43,19 @@ struct MainView: View {
                                 }
                                 Button {
                                     num = item.num
-                                    print(item)
-                                    isInfo = true
                                 } label: {
                                     DexRowView(row: item)
-                                    
                                 }
                                 .navigationDestination(isPresented: $isInfo){
                                     PokemonInfoView(num: num)
+                                        .onDisappear{
+                                            isInfo = false
+                                        }
                                         .navigationBarBackButtonHidden()
                                 }
+                                .onChange(of: num, perform: { _ in
+                                    isInfo = true
+                                })
                                 .padding(.bottom,5)
                             }
                         }
@@ -59,7 +64,6 @@ struct MainView: View {
                 }.onTapGesture {
                     isSearch = false
                 }.refreshable {}
-                
             }
             if selectLocation{
                 Color.clear.ignoresSafeArea()
@@ -89,15 +93,17 @@ struct MainView: View {
             }
         }
         .onAppear{
-            vm.get()
+            vm.model = Array(PokeDex.findAll())
+            vm.model.sort(by: {$0.num < $1.num})
+            //vm.get()
         }
-        .onChange(of: vm.location) { _ in
-            vm.cancelTask()
-            if ((vm.taskHandle?.isCancelled) != nil){
-                vm.model.removeAll()
-                vm.get()
-            }
-        }
+//        .onChange(of: vm.location) { _ in
+//            vm.cancelTask()
+//            if ((vm.taskHandle?.isCancelled) != nil){
+//                vm.model.removeAll()
+//                vm.get()
+//            }
+//        }
     }
     var header:some View{
         VStack{
@@ -112,6 +118,24 @@ struct MainView: View {
                 }
                 
                 Spacer()
+//                Button {
+//                    //vm.get()
+//                } label: {
+//                    Image(systemName:"arrow.triangle.2.circlepath")
+//                        .bold()
+//                        .font(.title3)
+//                        .foregroundColor(.primary)
+//                }
+//                .padding(.trailing)
+//                Button {
+//                    PokeDex.deleteAll()
+//                } label: {
+//                    Image(systemName:"trash")
+//                        .bold()
+//                        .font(.title3)
+//                        .foregroundColor(.primary)
+//                }
+//                .padding(.trailing)
                 Button {
                     withAnimation(.linear(duration: 0.1)){
                         isSearch.toggle()
@@ -144,6 +168,7 @@ struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack{
             MainView()
+                .environmentObject(PokeDexViewModel())
         }
     }
 }

@@ -20,10 +20,14 @@ class PokemonInfoViewModel:ObservableObject{
     @Published var eggGroup = [String]()    //알그룹
     @Published var gender = [Double]()  //성비
     @Published var get = Int()  //포획률
-    @Published var char = [String]()    //특성
-    @Published var charDesc = [String]()    //특성 설명
-    @Published var hiddenChar = [String]()  //숨겨진 특성
-    @Published var hiddenCharDesc = [String]()  //숨겨진특성 설명
+    
+    @Published var firstChar = String()   //특성
+    @Published var firstCharDesc = String()    //특성 설명
+    @Published var secondChar = String()   //특성
+    @Published var secondCharDesc = String()    //특성 설명
+    @Published var hiddenChar = String()  //숨겨진 특성
+    @Published var hiddenCharDesc = String() //숨겨진특성 설명
+    
     @Published var types = [String]()   //타입
     
     //스탯
@@ -59,6 +63,7 @@ class PokemonInfoViewModel:ObservableObject{
     private func imageUrl(url:Int)->String{ //이미지 url저장
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(url).png"
     }
+    
     func getKoreanName(num: Int) async -> String {  //포켓몬 코드 -> 한글명(이름)
         let species = try? await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
         guard let names = species?.names else { return "" }
@@ -84,14 +89,8 @@ class PokemonInfoViewModel:ObservableObject{
     }
     
     @MainActor
-    func getSpecies(num:Int){  //포켓몬 정보 요청
+    func getEvol(num:Int){
         
-        
-        self.name.removeAll()
-        self.desc.removeAll()
-        self.genera.removeAll()
-        self.gender.removeAll()
-        self.eggGroup.removeAll()
         self.first.removeAll()
         self.firstName.removeAll()
         self.second.removeAll()
@@ -101,56 +100,6 @@ class PokemonInfoViewModel:ObservableObject{
         
         Task{
             let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
-            
-            let name = await getKoreanName(num: num)
-            
-          
-            
-            self.name = name    //이름
-            
- 
-            if let text = species.flavorTextEntries,!text.isEmpty{    // 도감설명
-                for desc in text{
-                    self.desc.append(desc.flavorText ?? "")
-                }
-            }else{
-                self.desc.append("도감 설명이 존재하지 않습니다.")
-            }
-            
-            if let genera = species.genera{         //타이틀 - 이상해씨:씨앗포켓몬
-                for gen in genera{
-                    if gen.language?.name == "kor"{
-                        self.genera = gen.genus ?? ""
-                    }else if gen.language?.name == "en"{
-                        if gen.genus == "Paradox Pokémon"{
-                            self.genera = "패러독스 포켓몬"
-                        }
-                        
-                    }
-                }
-            }
-            
-            if let gender = species.genderRate{     //성비
-                if gender != -1{
-                    self.gender.append((1-Double(gender)/8.0) * 100)
-                    self.gender.append(Double(gender)/8.0 * 100)
-                }else{
-                    self.gender.append(1.0)
-                }
-            }
-            
-            if let eggGroup = species.eggGroups{    //알그룹
-                for egg in eggGroup{
-                    let getKoreanEgg = try await PokemonAPI().pokemonService.fetchEggGroup(urlToInt(url: egg.url!))
-                    self.eggGroup.append(getKoreanEgg.names?[1].name ?? "")
-                }
-            }
-            
-            if let rate = species.captureRate{  //포획률
-                self.get = rate
-            }
-            
-            
             if let chain = species.evolutionChain?.url{     //진화트리
                 let evolChain = try await PokemonAPI().evolutionService.fetchEvolutionChain(urlToInt(url: chain))   //체인
                 let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(urlToInt(url: evolChain.chain?.species?.url ?? ""))
@@ -164,12 +113,8 @@ class PokemonInfoViewModel:ObservableObject{
                             if let vari = species.varieties{
                                 for pokemon in vari{
                                     DispatchQueue.main.async {
-                                        if let name = pokemon.pokemon?.name,name.hasSuffix("galar") || name.hasSuffix("alola") || name.contains("mega"){
-                                            if name.hasSuffix("galar"){
-                                                self.firstName.append(kor.name! + "(가라르)")
-                                            }else if name.hasSuffix("alola"){
-                                                self.firstName.append(kor.name! + "(알로라)" )
-                                            }else if name.contains("mega"){
+                                        if let name = pokemon.pokemon?.name,name.contains("mega"){
+                                            if name.contains("mega"){
                                                 if name.hasSuffix("mega-y"){
                                                     self.forthName.append("메가" + kor.name! + "Y")
                                                 }
@@ -181,8 +126,6 @@ class PokemonInfoViewModel:ObservableObject{
                                                 self.forthName = self.forthName.uniqued()
                                                 self.forth.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
                                             }
-                                            self.first.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
-                                            self.firstName = self.firstName.uniqued()
                                         }
                                     }
                                 }
@@ -205,12 +148,8 @@ class PokemonInfoViewModel:ObservableObject{
                                     if let vari = species.varieties{
                                         for pokemon in vari{
                                             DispatchQueue.main.async{
-                                                if let name = pokemon.pokemon?.name,name.hasSuffix("galar") || name.hasSuffix("alola") || name.contains("mega"){
-                                                    if name.hasSuffix("galar"){
-                                                        self.secondName.append(kor.name! + "(가라르)")
-                                                    }else if name.hasSuffix("alola"){
-                                                        self.secondName.append(kor.name! + "(알로라)" )
-                                                    }else if name.contains("mega"){
+                                                if let name = pokemon.pokemon?.name,name.contains("mega"){
+                                                   if name.contains("mega"){
                                                         if name.hasSuffix("mega-y"){
                                                             self.forthName.append("메가" + kor.name! + "Y")
                                                         }
@@ -223,8 +162,6 @@ class PokemonInfoViewModel:ObservableObject{
                                                         self.forthName = self.forthName.uniqued()
                                                         self.forth.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
                                                     }
-                                                    self.second.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
-                                                    self.secondName = self.secondName.uniqued()
                                                 }
                                                 
                                             }
@@ -248,12 +185,8 @@ class PokemonInfoViewModel:ObservableObject{
                                             if let vari = species.varieties{
                                                 for pokemon in vari{
                                                     DispatchQueue.main.async {
-                                                        if let name = pokemon.pokemon?.name,name.hasSuffix("galar") || name.hasSuffix("alola") || name.contains("mega"){
-                                                            if name.hasSuffix("galar"){
-                                                                self.thirdName.append(kor.name! + "(가라르)")
-                                                            }else if name.hasSuffix("alola"){
-                                                                self.thirdName.append(kor.name! + "(알로라)" )
-                                                            }else if name.contains("mega"){
+                                                        if let name = pokemon.pokemon?.name,name.contains("mega"){
+                                                           if name.contains("mega"){
                                                                 if name.hasSuffix("mega-y"){
                                                                     self.forthName.append("메가" + kor.name! + "Y")
                                                                 }
@@ -265,8 +198,6 @@ class PokemonInfoViewModel:ObservableObject{
                                                                 self.forthName = self.forthName.uniqued()
                                                                 self.forth.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
                                                             }
-                                                            self.third.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
-                                                            self.thirdName = self.thirdName.uniqued()
                                                         }
                                                     }
                                                     
@@ -283,7 +214,77 @@ class PokemonInfoViewModel:ObservableObject{
         }
     }
     @MainActor
+    func getSpecies(num:Int){  //포켓몬 정보 요청
+        
+        
+        self.name.removeAll()
+        self.desc.removeAll()
+        self.genera.removeAll()
+        self.gender.removeAll()
+        self.eggGroup.removeAll()
+        
+        
+        Task{
+            let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
+            let name = await getKoreanName(num: num)
+            self.name = name    //이름
+           
+            
+ 
+            if let text = species.flavorTextEntries{    // 도감설명
+                for desc in text{
+                    if desc.language?.name == "ko"{
+                        self.desc.append(desc.flavorText ?? "")
+                    }else{
+                        self.desc.append("한국어 도감 설명이 존재하지 않습니다.")
+                    }
+                }
+            }else{
+                self.desc.append("도감 설명이 존재하지 않습니다.")
+            }
+            
+            if let genera = species.genera{         //타이틀 - 이상해씨:씨앗포켓몬
+                for gen in genera{
+                    if gen.language?.name == "ko"{
+                        self.genera = gen.genus ?? ""
+                    }
+//                    else if gen.language?.name == "en"{
+//                        if gen.genus == "Paradox Pokémon"{
+//                            self.genera = "패러독스포켓몬"
+//                        }
+//                        else if gen.genus == "Coin Entity Pokémon"{
+//                            self.genera = "보물생명체포켓몬"
+//                        }
+//
+//                    }
+                }
+            }
+            
+            if let gender = species.genderRate{     //성비
+                if gender != -1{
+                    self.gender.append((1-Double(gender)/8.0) * 100)
+                    self.gender.append(Double(gender)/8.0 * 100)
+                }else{
+                    self.gender.append(1.0)
+                }
+            }
+            
+            if let eggGroup = species.eggGroups{    //알그룹
+                for egg in eggGroup{
+                    let getKoreanEgg = try await PokemonAPI().pokemonService.fetchEggGroup(urlToInt(url: egg.url!))
+                    self.eggGroup.append(getKoreanEgg.names?[1].name ?? "")
+                }
+            }
+            
+            if let rate = species.captureRate{  //포획률
+                self.get = rate
+            }
+            
+        }
+    }
+    @MainActor
     func getPokeon(num:Int){
+        
         
         self.hp.removeAll()
         self.attack.removeAll()
@@ -293,16 +294,20 @@ class PokemonInfoViewModel:ObservableObject{
         self.speed.removeAll()
         self.avr.removeAll()
         
-        self.char.removeAll()
+        self.firstChar.removeAll()
+        self.secondChar.removeAll()
         self.hiddenChar.removeAll()
-        self.charDesc.removeAll()
+        self.firstCharDesc.removeAll()
+        self.secondCharDesc.removeAll()
         self.hiddenCharDesc.removeAll()
         
         image = imageUrl(url: num)
         
         Task{
+            
             let types = await getKoreanType(num: num)
             self.types = types  //타입
+            
             let pokemon = try await PokemonAPI().pokemonService.fetchPokemon(num)
             self.height = pokemon.height!   //키
             self.weight = pokemon.weight!   //몸무게
@@ -325,46 +330,108 @@ class PokemonInfoViewModel:ObservableObject{
                             if let names = getKoreanAbility.names{
                                 for name in names{
                                     if name.language?.name == "ko"{
-                                        self.hiddenChar.append(name.name ?? "")
+                                        self.hiddenChar = name.name ?? ""
                                     }
                                 }
                             }
                             if let getKor = getKoreanAbility.flavorTextEntries{
                                 for i in getKor{
                                     if i.language?.name == "ko"{
-                                        self.hiddenCharDesc.append(i.flavorText ?? "")
+                                        self.hiddenCharDesc = i.flavorText ?? ""
                                         
                                     }
                                 }
                             }
                         }else{
-                            let getKoreanAbility = try await PokemonAPI().pokemonService.fetchAbility(urlToInt(url: ab.ability?.url ?? ""))
-                            if  let names = getKoreanAbility.names{
-                                for name in names{
-                                    if name.language?.name == "ko"{
-                                        self.char.append(name.name ?? "")
-                                        
-                                    }else{
-                                        if name.name == "Quark Drive"{
-                                            self.char.append("쿼크차지")
+                            if ab.slot == 1{
+                                let getKoreanAbility = try await PokemonAPI().pokemonService.fetchAbility(urlToInt(url: ab.ability?.url ?? ""))
+                               
+                                if  let names = getKoreanAbility.names{
+                                    for name in names{
+                                        if name.language?.name == "ko"{
+                                            self.firstChar = name.name ?? ""
+                                            
                                         }
                                     }
                                 }
-                            }
-                            if let getKor = getKoreanAbility.flavorTextEntries,!getKor.isEmpty{
-                                for i in getKor{
-                                    if i.language?.name == "ko"{
-                                        self.charDesc.append(i.flavorText ?? "")
+                                if let getKor = getKoreanAbility.flavorTextEntries{
+                                    for i in getKor{
+                                        if i.language?.name == "ko"{
+                                            self.firstCharDesc = i.flavorText ?? ""
+                                            print(firstCharDesc)
+                                        }else{
+//                                            if getKoreanAbility.name == "Quark Drive"{
+//                                                self.firstCharDesc = "부스트에너지를 지니고 있거나 일렉트릭필드일 때 가장 높은 능력이 올라간다."
+//                                               // print(charDesc)
+//                                            }else if getKoreanAbility.name == "good-as-gold"{
+//                                                self.firstCharDesc = "상대가 사용하는 변화 기술의 영향을 받지 않는다."
+//
+//                                            }
+                                        }
                                     }
                                 }
+//                                if getKoreanAbility.name == "quark-drive"{
+//                                    self.firstChar = "쿼크차지"
+//                                   // print(char)
+//                                }else if getKoreanAbility.name == "good-as-gold"{
+//                                    self.firstChar = "황금몸"
+//                                }
+//
+//                                if getKoreanAbility.name == "quark-drive"{
+//                                    self.firstCharDesc = "부스트에너지를 지니고 있거나 일렉트릭필드일 때 가장 높은 능력이 올라간다."
+//                                   // print(charDesc)
+//                                }else if getKoreanAbility.name == "good-as-gold"{
+//                                    self.firstCharDesc = "상대가 사용하는 변화 기술의 영향을 받지 않는다."
+//
+//                                }
                             }else{
-                                self.charDesc.append("부스트에너지를 지니고 있거나 일렉트릭필드일 때 가장 높은 능력이 올라간다.")
+                                let getKoreanAbility = try await PokemonAPI().pokemonService.fetchAbility(urlToInt(url: ab.ability?.url ?? ""))
+                               
+                                if  let names = getKoreanAbility.names{
+                                    for name in names{
+                                        if name.language?.name == "ko"{
+                                            self.secondChar = name.name ?? ""
+                                            
+                                        }
+                                    }
+                                }
+                                if let getKor = getKoreanAbility.flavorTextEntries{
+                                    for i in getKor{
+                                        if i.language?.name == "ko"{
+                                            self.secondCharDesc = i.flavorText ?? ""
+                                            print(secondCharDesc)
+                                        }else{
+//                                            if getKoreanAbility.name == "Quark Drive"{
+//                                                self.secondCharDesc = "부스트에너지를 지니고 있거나 일렉트릭필드일 때 가장 높은 능력이 올라간다."
+//                                               // print(charDesc)
+//                                            }else if getKoreanAbility.name == "good-as-gold"{
+//                                                self.secondCharDesc = "상대가 사용하는 변화 기술의 영향을 받지 않는다."
+//
+//                                            }
+                                        }
+                                    }
+                                }
+//                                if getKoreanAbility.name == "quark-drive"{
+//                                    self.secondChar = "쿼크차지"
+//                                   // print(char)
+//                                }else if getKoreanAbility.name == "good-as-gold"{
+//                                    self.secondChar = "황금몸"
+//                                }
+//
+//                                if getKoreanAbility.name == "quark-drive"{
+//                                    self.secondCharDesc = "부스트에너지를 지니고 있거나 일렉트릭필드일 때 가장 높은 능력이 올라간다."
+//                                   // print(charDesc)
+//                                }else if getKoreanAbility.name == "good-as-gold"{
+//                                    self.secondCharDesc = "상대가 사용하는 변화 기술의 영향을 받지 않는다."
+//
+//                                }
                             }
-                            
-//                            print(char)
-//                            print(charDesc)
-                        }
-                        hiddenChar.removeAll{char.contains($0)}
+                            }
+//                        if hiddenChar == firstChar{
+//                            hid
+//                        }else if hiddenChar == secondChar{
+//
+//                        }
                     }
                 }
             }
@@ -373,6 +440,8 @@ class PokemonInfoViewModel:ObservableObject{
     }
     @MainActor
     func getregional(num:Int){
+        isRegion.removeAll()
+        isRegionName.removeAll()
         Task{
             let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
             if let vari = species.varieties{
@@ -392,9 +461,7 @@ class PokemonInfoViewModel:ObservableObject{
                                     if i.language?.name == "ko"{
                                         self.isRegionName.append(i.name ?? "")
                                     }
-                                    
                                 }
-                                
                                 if pokemonForm.formName == "rock-star"{
                                     self.isRegionName.append("하드록")
                                 }else if pokemonForm.formName == "starter"{

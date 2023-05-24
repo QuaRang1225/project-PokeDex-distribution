@@ -3,24 +3,33 @@ import SwiftUI
 import RealmSwift
 
 struct ContentView:View{
+    @StateObject var vm = PokeDexViewModel()
     @State var start = false
     var body: some View{
         ZStack{
             if start{
-                MainView()
+                MainView().environmentObject(vm)
             }else{
-                StartView()
+                StartView().environmentObject(vm)
             }
-        }
-        .onAppear{
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                withAnimation(.easeInOut(duration: 1.0)){
-                    start = true
+        }.onAppear{
+            
+            if vm.pokeDexCount != 1010{
+                PokeDex.deleteAll()
+                vm.get()
+                
+            }else{
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    withAnimation(.easeInOut(duration: 1.0)){
+                        start = true
+                    }
                 }
             }
-            
-        } .onAppear{
             print(Realm.Configuration.defaultConfiguration.fileURL!)
+        }.onChange(of: vm.successDownload){ newValue in
+            withAnimation(.easeInOut(duration: 1.0)){
+                start = newValue
+            }
         }
     }
 }
