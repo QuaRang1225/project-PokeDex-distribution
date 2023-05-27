@@ -13,7 +13,6 @@ struct PokemonInfoView: View {
     
     @State var form = false
     @State var formName = ""
-    @State var isForm = false
     
     @StateObject var vm = PokemonInfoViewModel()
     @Environment(\.dismiss) var dismiss
@@ -30,7 +29,7 @@ struct PokemonInfoView: View {
                 evolution
                 description
             }.overlay(alignment: .topTrailing) {
-                if vm.isRegion.count > 1{
+                if vm.isRegion.count > 1 || vm.isForm.count > 1{
                     isRegion
                 }
             }
@@ -43,13 +42,15 @@ struct PokemonInfoView: View {
             vm.getSpecies(num: num)
             vm.getPokeon(num: num)
             vm.getregional(num: num)
+            vm.getform(num: num)
+           
         }
     }
 }
 
 struct PokemonInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInfoView(num: 6)
+        PokemonInfoView(num: 422)
     }
 }
 extension PokemonInfoView{
@@ -60,12 +61,12 @@ extension PokemonInfoView{
         ZStack{
             HStack{
                 Button {
+//                    back = false
                     dismiss()
                 } label: {
                     Image(systemName: "chevron.left")
                 }
                 .foregroundColor(.primary)
-                
                 
                 Spacer()
                 Image(systemName: "star")
@@ -324,6 +325,7 @@ extension PokemonInfoView{
                                 vm.getSpecies(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 vm.getregional(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
+                                vm.getform(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                             }
                             
                         }
@@ -348,6 +350,7 @@ extension PokemonInfoView{
                                         vm.getSpecies(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                         vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                         vm.getregional(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
+                                        vm.getform(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                     }
                                     
                                 }
@@ -370,6 +373,7 @@ extension PokemonInfoView{
                                     vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                     vm.getregional(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                     vm.getSpecies(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
+                                    vm.getform(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 }
                                 
                             }
@@ -394,23 +398,7 @@ extension PokemonInfoView{
                                 vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 vm.getregional(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 vm.getSpecies(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
-                            }
-                            
-                        }
-                    }
-                    HStack(spacing: 30){
-                        ForEach(Array(zip(vm.forth,vm.forthName)),id:\.0){ (image,name) in
-                            VStack{
-                                if vm.forth.count != 0{
-                                    Image(systemName: "chevron.down")
-                                        .bold()
-                                        .padding()
-                                }
-                                KFImage(URL(string: image)!)
-                                    .resizable()
-                                    .frame(width: 100,height:100)
-                                    .background(BallImage())
-                                Text(name)
+                                vm.getform(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                             }
                             
                         }
@@ -465,34 +453,66 @@ extension PokemonInfoView{
             if form{
                 ScrollView(showsIndicators: false){
                     VStack{
-                        ForEach(Array(zip(vm.isRegion,vm.isRegionName)),id:\.0){ (image,name) in
-                            ZStack{
-                                Circle().frame(width: 70,height: 70).foregroundColor(.antiPrimary)
-                                Circle().frame(width: 70,height: 70).foregroundColor(.secondary).opacity(0.3)
-                            }.overlay{
-                                VStack(spacing: 0){
-                                    KFImage(URL(string: getImage(num: image))!)
-                                        .resizable()
-                                        .placeholder{
-                                            KFImage(URL(string: getImage(num: vm.isRegion.first!)))
-                                                .resizable()
-                                        }
-                                        .scaledToFill()
-                                        .frame(width: 50,height: 50)
-                                        .onTapGesture {
-                                            vm.getPokeon(num: image)
-                                            formName = ""
-                                            if name != vm.isRegionName.first!{
-                                                formName = "(\(name))"
+                        if !vm.isRegion.isEmpty{
+                            ForEach(Array(zip(vm.isRegion,vm.isRegionName)),id:\.0){ (image,name) in
+                                ZStack{
+                                    Circle().frame(width: 70,height: 70).foregroundColor(.antiPrimary)
+                                    Circle().frame(width: 70,height: 70).foregroundColor(.secondary).opacity(0.3)
+                                }.overlay{
+                                    VStack(spacing: 0){
+                                        KFImage(URL(string: getImage(num: image))!)
+                                            .resizable()
+                                            .placeholder{
+                                                KFImage(URL(string: getImage(num: vm.isRegion.first!)))
+                                                    .resizable()
                                             }
-                                        }
-                                    Text(name).font(.caption2)
-                                        .padding(.bottom,5)
+                                            .scaledToFill()
+                                            .frame(width: 50,height: 50)
+                                            .onTapGesture {
+                                                vm.getPokeon(num: image)
+                                                formName = ""
+                                                if name != vm.isRegionName.first!{
+                                                    formName = "(\(name))"
+                                                }
+                                            }
+                                        Text(name).font(.caption2)
+                                            .padding(.bottom,5)
+                                    }
+                                   
                                 }
                                
                             }
-                           
+                        }else{
+                            ForEach(Array(zip(vm.isForm,vm.isFormname)),id:\.0){ (image,name) in
+                                ZStack{
+                                    Circle().frame(width: 70,height: 70).foregroundColor(.antiPrimary)
+                                    Circle().frame(width: 70,height: 70).foregroundColor(.secondary).opacity(0.3)
+                                }.overlay{
+                                    VStack(spacing: 0){
+                                        KFImage(URL(string: image)!)
+                                            .resizable()
+                                            .placeholder{
+                                                KFImage(URL(string: vm.isForm.first!))
+                                                    .resizable()
+                                            }
+                                            .scaledToFill()
+                                            .frame(width: 50,height: 50)
+                                            .onTapGesture {
+                                                vm.image = image
+                                                formName = ""
+                                                if name != vm.isFormname.first!{
+                                                    formName = "(\(name))"
+                                                }
+                                            }
+                                        Text(name).font(.caption2)
+                                            .padding(.bottom,5)
+                                    }
+                                   
+                                }
+                               
+                            }
                         }
+                        
                     }
                     
                 }

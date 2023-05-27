@@ -89,7 +89,8 @@ class PokeDexViewModel:ObservableObject{
     @Published var pokeDexCount: Int = 0
     @Published var location:LocationFilter = .national
     
-   // var taskHandle: Task<Void, Error>?
+    var taskHandle: Task<Void, Error>?
+    
     init(){
         fetchData()
         observeChanges()
@@ -121,7 +122,7 @@ class PokeDexViewModel:ObservableObject{
     }
 
     func get() {
-        Task {
+       taskHandle =  Task {
             let dex = try await PokemonAPI().gameService.fetchPokedex(location.endPoint)
             if let dexEnt = dex.pokemonEntries {
                 await withTaskGroup(of: Void.self) { group in
@@ -152,7 +153,6 @@ class PokeDexViewModel:ObservableObject{
                             }
                         }
                     }
-                    
                     for await _ in group {
                         // 작업이 완료될 때까지 대기
                     }
@@ -160,6 +160,9 @@ class PokeDexViewModel:ObservableObject{
             }
         }
     }
+//    func cancalTask(){
+//        taskHandle?.cancel()
+//    }
 
     func getKoreanType(num:Int) async -> [String]{    //포켓몬 타입/한글로 변환
         var koreanType = [String]()

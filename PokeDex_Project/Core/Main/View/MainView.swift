@@ -13,8 +13,6 @@ struct MainView: View {
     let columns = [ GridItem(.flexible()), GridItem(.flexible())]
     @State var isSearch = false
     @State var text:String = ""
-    @State var isInfo = false
-    @State var num = 0
     @State var selectLocation = false
     @State var dexName = "전국도감"
     
@@ -29,69 +27,64 @@ struct MainView: View {
         }
     
     var body: some View {
-        ZStack{
-            VStack(alignment: .leading,spacing: 0){
-                header
-                ScrollView{
-                    LazyVGrid(columns: columns) {
-                        ForEach(filteredItems,id:\.self){ item in
-                            VStack(alignment: .leading,spacing: 0){
-                                HStack(spacing: 0){
-                                    ball
-                                    Text(String(format: "%04d",item.num))
-                                        .bold()
+        NavigationView {
+            ZStack{
+                VStack(alignment: .leading,spacing: 0){
+                    header
+                    ScrollView{
+                        LazyVGrid(columns: columns) {
+                            ForEach(filteredItems,id:\.self){ item in
+                                VStack(alignment: .leading,spacing: 0){
+                                    HStack(spacing: 0){
+                                        ball
+                                        Text(String(format: "%04d",item.num))
+                                            .bold()
+                                    }
+                                    NavigationLink {
+                                        PokemonInfoView(num: item.num)
+                                            .navigationBarBackButtonHidden()
+                                    } label: {
+                                        DexRowView(row: item)
+                                    }
+                                    .padding(.bottom,5)
                                 }
-                                Button {
-                                    num = item.num
-                                } label: {
-                                    DexRowView(row: item)
-                                }
-                                .navigationDestination(isPresented: $isInfo){
-                                    PokemonInfoView(num: num)
-                                        .onDisappear{
-                                            isInfo = false
-                                        }
-                                        .navigationBarBackButtonHidden()
-                                }
-                                .onChange(of: num, perform: { _ in
-                                    isInfo = true
-                                })
-                                .padding(.bottom,5)
                             }
-                        }
 
-                    }.padding(.horizontal).padding(.top)
-                }.onTapGesture {
-                    isSearch = false
-                }.refreshable {}
-            }
-            if selectLocation{
-                Color.clear.ignoresSafeArea()
-                    .background(.regularMaterial)
-                VStack(spacing:30){
-                    ForEach(LocationFilter.allCases,id:\.self){ loc in
+                        }.padding(.horizontal).padding(.top)
+                    }.onTapGesture {
+                        isSearch = false
+                    }.refreshable {}
+                }
+                if selectLocation{
+                    Color.clear.ignoresSafeArea()
+                        .background(.regularMaterial)
+                    VStack(spacing:30){
+                        ForEach(LocationFilter.allCases,id:\.self){ loc in
+                            Button {
+                                dexName = loc.name
+                                vm.location = loc
+                                selectLocation = false
+                            } label: {
+                                Text(loc.name)
+                                    .bold()
+                                    .foregroundColor(.primary)
+                            }
+                            
+                        }
                         Button {
-                            dexName = loc.name
-                            vm.location = loc
                             selectLocation = false
                         } label: {
-                            Text(loc.name)
-                                .bold()
+                            Image(systemName: "xmark.circle.fill")
                                 .foregroundColor(.primary)
+                                .font(.largeTitle)
                         }
-                        
-                    }
-                    Button {
-                        selectLocation = false
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.primary)
-                            .font(.largeTitle)
-                    }
 
+                    }
                 }
             }
         }
+        
+        
         .onAppear{
             vm.model = Array(PokeDex.findAll())
             vm.model.sort(by: {$0.num < $1.num})
@@ -166,9 +159,8 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationStack{
             MainView()
                 .environmentObject(PokeDexViewModel())
-        }
+        
     }
 }

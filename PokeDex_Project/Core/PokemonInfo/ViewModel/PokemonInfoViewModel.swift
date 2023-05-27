@@ -11,7 +11,7 @@ import PokemonAPI
 class PokemonInfoViewModel:ObservableObject{
     
     
-    
+    @Published var dexNum = Int()
     @Published var image = String() //이미지
     @Published var name = String()  //이름
     @Published var genera = String()    //타이틀
@@ -43,17 +43,19 @@ class PokemonInfoViewModel:ObservableObject{
     @Published var first = [String]()
     @Published var second = [String]()
     @Published var third = [String]()
-    @Published var forth = [String]()
     //진화트리 - 포켓몬 이름
     @Published var firstName = [String]()
     @Published var secondName = [String]()
     @Published var thirdName = [String]()
-    @Published var forthName = [String]()
     
     @Published var desc = [String]()    //도감설명
     
     @Published var isRegion = [Int]()
     @Published var isRegionName = [String]()
+    
+    @Published var isForm = [String]()
+    @Published var isFormname = [String]()
+    
     @Published var mega = [String]()
     
     func urlToInt(url:String)->Int{ //포켓몬 이미지를 얻기 위한 url에서 코드 추출
@@ -63,7 +65,7 @@ class PokemonInfoViewModel:ObservableObject{
     private func imageUrl(url:Int)->String{ //이미지 url저장
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(url).png"
     }
-    
+//
     func getKoreanName(num: Int) async -> String {  //포켓몬 코드 -> 한글명(이름)
         let species = try? await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
         guard let names = species?.names else { return "" }
@@ -106,30 +108,30 @@ class PokemonInfoViewModel:ObservableObject{
                 if let name = species.names{
                     for kor in name{
                         if let korName =  kor.language?.name,korName == "ko"{
-                            DispatchQueue.main.async {
+                         
                                 self.firstName.append(kor.name ?? "")
                                 self.first.append(self.imageUrl(url: self.urlToInt(url: evolChain.chain?.species?.url ?? "")))
-                            }
-                            if let vari = species.varieties{
-                                for pokemon in vari{
-                                    DispatchQueue.main.async {
-                                        if let name = pokemon.pokemon?.name,name.contains("mega"){
-                                            if name.contains("mega"){
-                                                if name.hasSuffix("mega-y"){
-                                                    self.forthName.append("메가" + kor.name! + "Y")
-                                                }
-                                                if name.hasSuffix("mega-x"){
-                                                    self.forthName.append("메가" + kor.name! + "X")
-                                                }else{
-                                                    self.forthName.append("메가" + kor.name!)
-                                                }
-                                                self.forthName = self.forthName.uniqued()
-                                                self.forth.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            
+//                            if let vari = species.varieties{
+//                                for pokemon in vari{
+//                                    DispatchQueue.main.async {
+//                                        if let name = pokemon.pokemon?.name,name.contains("mega"){
+//                                            if name.contains("mega"){
+//                                                if name.hasSuffix("mega-y"){
+//                                                    self.forthName.append("메가" + kor.name! + "Y")
+//                                                }
+//                                                if name.hasSuffix("mega-x"){
+//                                                    self.forthName.append("메가" + kor.name! + "X")
+//                                                }else{
+//                                                    self.forthName.append("메가" + kor.name!)
+//                                                }
+//                                                self.forthName = self.forthName.uniqued()
+//                                                self.forth.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
                             
                         }
                     }
@@ -145,28 +147,28 @@ class PokemonInfoViewModel:ObservableObject{
                                         self.secondName.append(kor.name ?? "")
                                         self.second.append(self.imageUrl(url: self.urlToInt(url: second.species?.url ?? "")))
                                     }
-                                    if let vari = species.varieties{
-                                        for pokemon in vari{
-                                            DispatchQueue.main.async{
-                                                if let name = pokemon.pokemon?.name,name.contains("mega"){
-                                                   if name.contains("mega"){
-                                                        if name.hasSuffix("mega-y"){
-                                                            self.forthName.append("메가" + kor.name! + "Y")
-                                                        }
-                                                        if name.hasSuffix("mega-x"){
-                                                            self.forthName.append("메가" + kor.name! + "X")
-                                                        }else{
-                                                            self.forthName.append("메가" + kor.name!)
-                                                            
-                                                        }
-                                                        self.forthName = self.forthName.uniqued()
-                                                        self.forth.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
-                                                    }
-                                                }
-                                                
-                                            }
-                                        }
-                                    }
+//                                    if let vari = species.varieties{
+//                                        for pokemon in vari{
+//                                            DispatchQueue.main.async{
+//                                                if let name = pokemon.pokemon?.name,name.contains("mega"){
+//                                                   if name.contains("mega"){
+//                                                        if name.hasSuffix("mega-y"){
+//                                                            self.forthName.append("메가" + kor.name! + "Y")
+//                                                        }
+//                                                        if name.hasSuffix("mega-x"){
+//                                                            self.forthName.append("메가" + kor.name! + "X")
+//                                                        }else{
+//                                                            self.forthName.append("메가" + kor.name!)
+//
+//                                                        }
+//                                                        self.forthName = self.forthName.uniqued()
+//                                                        self.forth.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
+//                                                    }
+//                                                }
+//
+//                                            }
+//                                        }
+//                                    }
                                     
                                 }
                             }
@@ -182,27 +184,27 @@ class PokemonInfoViewModel:ObservableObject{
                                                 self.thirdName.append(kor.name ?? "")
                                                 self.third.append(self.imageUrl(url: self.urlToInt(url: third.species?.url ?? "")))
                                             }
-                                            if let vari = species.varieties{
-                                                for pokemon in vari{
-                                                    DispatchQueue.main.async {
-                                                        if let name = pokemon.pokemon?.name,name.contains("mega"){
-                                                           if name.contains("mega"){
-                                                                if name.hasSuffix("mega-y"){
-                                                                    self.forthName.append("메가" + kor.name! + "Y")
-                                                                }
-                                                                if name.hasSuffix("mega-x"){
-                                                                    self.forthName.append("메가" + kor.name! + "X")
-                                                                }else{
-                                                                    self.forthName.append("메가" + kor.name!)
-                                                                }
-                                                                self.forthName = self.forthName.uniqued()
-                                                                self.forth.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
-                                                            }
-                                                        }
-                                                    }
-                                                    
-                                                }
-                                            }
+//                                            if let vari = species.varieties{
+//                                                for pokemon in vari{
+//                                                    DispatchQueue.main.async {
+//                                                        if let name = pokemon.pokemon?.name,name.contains("mega"){
+//                                                           if name.contains("mega"){
+//                                                                if name.hasSuffix("mega-y"){
+//                                                                    self.forthName.append("메가" + kor.name! + "Y")
+//                                                                }
+//                                                                if name.hasSuffix("mega-x"){
+//                                                                    self.forthName.append("메가" + kor.name! + "X")
+//                                                                }else{
+//                                                                    self.forthName.append("메가" + kor.name!)
+//                                                                }
+//                                                                self.forthName = self.forthName.uniqued()
+//                                                                self.forth.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
+//                                                            }
+//                                                        }
+//                                                    }
+//
+//                                                }
+//                                            }
                                         }
                                     }
                                 }
@@ -216,7 +218,7 @@ class PokemonInfoViewModel:ObservableObject{
     @MainActor
     func getSpecies(num:Int){  //포켓몬 정보 요청
         
-        
+
         self.name.removeAll()
         self.desc.removeAll()
         self.genera.removeAll()
@@ -227,6 +229,7 @@ class PokemonInfoViewModel:ObservableObject{
         Task{
             let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
             let name = await getKoreanName(num: num)
+            self.dexNum = num
             self.name = name    //이름
            
             
@@ -235,12 +238,10 @@ class PokemonInfoViewModel:ObservableObject{
                 for desc in text{
                     if desc.language?.name == "ko"{
                         self.desc.append(desc.flavorText ?? "")
-                    }else{
-                        self.desc.append("한국어 도감 설명이 존재하지 않습니다.")
                     }
                 }
             }else{
-                self.desc.append("도감 설명이 존재하지 않습니다.")
+                self.desc.append("한국어 도감 설명이 존재하지 않습니다.")
             }
             
             if let genera = species.genera{         //타이틀 - 이상해씨:씨앗포켓몬
@@ -358,7 +359,6 @@ class PokemonInfoViewModel:ObservableObject{
                                     for i in getKor{
                                         if i.language?.name == "ko"{
                                             self.firstCharDesc = i.flavorText ?? ""
-                                            print(firstCharDesc)
                                         }else{
 //                                            if getKoreanAbility.name == "Quark Drive"{
 //                                                self.firstCharDesc = "부스트에너지를 지니고 있거나 일렉트릭필드일 때 가장 높은 능력이 올라간다."
@@ -399,7 +399,6 @@ class PokemonInfoViewModel:ObservableObject{
                                     for i in getKor{
                                         if i.language?.name == "ko"{
                                             self.secondCharDesc = i.flavorText ?? ""
-                                            print(secondCharDesc)
                                         }else{
 //                                            if getKoreanAbility.name == "Quark Drive"{
 //                                                self.secondCharDesc = "부스트에너지를 지니고 있거나 일렉트릭필드일 때 가장 높은 능력이 올라간다."
@@ -439,11 +438,43 @@ class PokemonInfoViewModel:ObservableObject{
         
     }
     @MainActor
+    func getform(num:Int){
+        isForm.removeAll()
+        isFormname.removeAll()
+        Task{
+            let pokemon = try await PokemonAPI().pokemonService.fetchPokemon(num)
+            
+            if let forms = pokemon.forms{
+                for form in forms {
+                    let vari = try await PokemonAPI().pokemonService.fetchPokemonForm(urlToInt(url: form.url ?? ""))
+                    if let sp = vari.sprites{
+                        if let pokemonForms = vari.formNames{
+                            for formName in pokemonForms{
+                                if formName.language?.name == "ko"{
+                                    self.isFormname.append(formName.name ?? "")
+                                }
+                            }
+                        }
+                        if sp.frontDefault != nil{   //나메일 414,10269,10270
+                            if let sprites = vari.sprites{
+                                self.isForm.append(sprites.frontDefault ?? "")
+                                print("폼 맞아?\(isForm)")
+                            }
+                        }
+                    }
+                    
+                    
+                }
+            }
+        }
+    }
+    @MainActor
     func getregional(num:Int){
         isRegion.removeAll()
         isRegionName.removeAll()
         Task{
             let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
+            
             if let vari = species.varieties{
                 guard vari.count > 1 else { return }
                 for isRegion in vari{
@@ -484,6 +515,8 @@ class PokemonInfoViewModel:ObservableObject{
                                 }
                                 else if pokemonForm.formName == "gmax"{
                                     self.isRegionName.append("거다이맥스")
+                                }else if pokemonForm.formName == "hisui"{
+                                    self.isRegionName.append("히스이")
                                 }
 //                                print(self.isRegion)
 //                                print(self.isRegionName)
@@ -492,6 +525,7 @@ class PokemonInfoViewModel:ObservableObject{
                     }
                 }
             }
+            
         }
     }
 }

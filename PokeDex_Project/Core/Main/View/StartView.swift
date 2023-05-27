@@ -8,9 +8,6 @@
 import SwiftUI
 
 struct StartView: View {
-    @State var count = 0
-    @State private var downloadAmount = 0.0
-    let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     @EnvironmentObject var vm:PokeDexViewModel
     var body: some View {
         ZStack{
@@ -18,13 +15,11 @@ struct StartView: View {
                 Image("logo")
                     .resizable()
                     .frame(width: 80,height: 80)
-//                if vm.pokeDexCount != 1010{
-////                    ProgressView("다운로드중...", value: Double(vm.pokeDexCount) / 1010, total: 1.0)
-////                        .padding()
-//                    Text("\(vm.pokeDexCount)")
-//
-//
-//                }
+                if vm.pokeDexCount != 1010{
+                    
+                    CircleProgressView().padding(.top,100)
+
+                }
             }
         }
     }

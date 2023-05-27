@@ -8,44 +8,27 @@ import SwiftUI
 import PokemonAPI
 
 struct TestView: View {
-    @StateObject var vm = ViewModel()
-    var body: some View {
-        VStack {
-            ScrollView{
-                HStack{
-                    Button {
-                        vm.location = .hoenn
-                    } label: {
-                        Text("호연")
-                    }
-                    Button {
-                        vm.location = .alaola
-                    } label: {
-                        Text("알로라")
-                    }
-                }
-                ForEach(vm.model, id: \.self) { result in
-                    VStack{
-                        Text("\(result.name)")
-                        Text("\(result.num)")
-                        Text("\(result.image)")
-                        ForEach(result.type,id:\.self){ item in
-                            Text("\(item)")
-                        }
-                        
-                    }
-                }
-            }
-        }.onAppear{
-            vm.get()
-        }.onChange(of: vm.location) { _ in
-            vm.cancelTask()
-            if ((vm.taskHandle?.isCancelled) != nil){
-                vm.model.removeAll()
-                vm.get()
-            }
-        }
-    }
+    @State private var rotation = 0.0
+       
+       var body: some View {
+           Circle()
+                      .stroke(
+                          AngularGradient(
+                              gradient: Gradient(colors: [Color.white, Color.red]),
+                              center: .center,
+                              startAngle: .zero,
+                              endAngle: .degrees(360)
+                          ),
+                          lineWidth: 10
+                      )
+                      .frame(width: 100, height: 100)
+                      .rotationEffect(Angle(degrees: rotation))
+                      .onAppear {
+                          withAnimation(Animation.linear(duration: 2).repeatForever(autoreverses: false)) {
+                              rotation = 360
+                          }
+                      }
+       }
     
 }
 
