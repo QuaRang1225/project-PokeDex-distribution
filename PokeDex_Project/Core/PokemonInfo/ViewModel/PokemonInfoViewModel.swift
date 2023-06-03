@@ -234,7 +234,7 @@ class PokemonInfoViewModel:ObservableObject{
            
             
  
-            if let text = species.flavorTextEntries{    // 도감설명
+            if let text = species.flavorTextEntries,!text.isEmpty{    // 도감설명
                 for desc in text{
                     if desc.language?.name == "ko"{
                         self.desc.append(desc.flavorText ?? "")
@@ -245,20 +245,20 @@ class PokemonInfoViewModel:ObservableObject{
             }
             
             if let genera = species.genera{         //타이틀 - 이상해씨:씨앗포켓몬
-                for gen in genera{
-                    if gen.language?.name == "ko"{
-                        self.genera = gen.genus ?? ""
+                if genera.contains(where: {$0.language?.name == "ko"}){
+                    for gen in genera{
+                        if gen.language?.name == "ko"{
+                            self.genera = gen.genus ?? ""
+                        }
                     }
-//                    else if gen.language?.name == "en"{
-//                        if gen.genus == "Paradox Pokémon"{
-//                            self.genera = "패러독스포켓몬"
-//                        }
-//                        else if gen.genus == "Coin Entity Pokémon"{
-//                            self.genera = "보물생명체포켓몬"
-//                        }
-//
-//                    }
+                }else{
+                    for gen in genera{
+                        if gen.language?.name == "en"{
+                            self.genera = gen.genus ?? ""
+                        }
+                    }
                 }
+                
             }
             
             if let gender = species.genderRate{     //성비
@@ -302,7 +302,12 @@ class PokemonInfoViewModel:ObservableObject{
         self.secondCharDesc.removeAll()
         self.hiddenCharDesc.removeAll()
         
-        image = imageUrl(url: num)
+        if num == 10143{
+            image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/10143.png"
+        }else{
+            image = imageUrl(url: num)
+        }
+        
         
         Task{
             
@@ -311,7 +316,13 @@ class PokemonInfoViewModel:ObservableObject{
             
             let pokemon = try await PokemonAPI().pokemonService.fetchPokemon(num)
             self.height = pokemon.height!   //키
-            self.weight = pokemon.weight!   //몸무게
+            
+            
+            if num == 10190{
+                self.weight =  4780
+            }else{
+                self.weight = pokemon.weight!   //몸무게
+            }
             
             
             if let stat = pokemon.stats{    //스탯
@@ -329,17 +340,37 @@ class PokemonInfoViewModel:ObservableObject{
                         if hidden{
                             let getKoreanAbility = try await PokemonAPI().pokemonService.fetchAbility(urlToInt(url: ab.ability?.url ?? ""))
                             if let names = getKoreanAbility.names{
-                                for name in names{
-                                    if name.language?.name == "ko"{
-                                        self.hiddenChar = name.name ?? ""
+                                if names.contains(where: {$0.language?.name == "ko"}){
+                                    for name in names{
+                                        if name.language?.name == "ko"{
+                                            self.hiddenChar = name.name ?? ""
+                                        }
+                                    }
+                                }else{
+                                    for name in names{
+                                        if name.language?.name == "en"{
+                                            self.hiddenChar = name.name ?? ""
+                                        }
                                     }
                                 }
+                                
                             }
                             if let getKor = getKoreanAbility.flavorTextEntries{
-                                for i in getKor{
-                                    if i.language?.name == "ko"{
-                                        self.hiddenCharDesc = i.flavorText ?? ""
-                                        
+                                if getKor.isEmpty{
+                                    self.hiddenCharDesc = "...연구결과 손실..."
+                                }else{
+                                    if getKor.contains(where: {$0.language?.name == "ko"}){
+                                        for name in getKor{
+                                            if name.language?.name == "ko"{
+                                                self.hiddenCharDesc = name.flavorText ?? ""
+                                            }
+                                        }
+                                    }else{
+                                        for name in getKor{
+                                            if name.language?.name == "en"{
+                                                self.hiddenCharDesc = name.flavorText ?? ""
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -348,33 +379,48 @@ class PokemonInfoViewModel:ObservableObject{
                                 let getKoreanAbility = try await PokemonAPI().pokemonService.fetchAbility(urlToInt(url: ab.ability?.url ?? ""))
                                
                                 if  let names = getKoreanAbility.names{
-                                    for name in names{
-                                        if name.language?.name == "ko"{
-                                            self.firstChar = name.name ?? ""
-                                            
+                                    if names.contains(where: {$0.language?.name == "ko"}){
+                                        for name in names{
+                                            if name.language?.name == "ko"{
+                                                self.firstChar = name.name ?? ""
+                                            }
+                                        }
+                                    }else{
+                                        for name in names{
+                                            if name.language?.name == "en"{
+                                                self.firstChar = name.name ?? ""
+                                            }
                                         }
                                     }
                                 }
                                 if let getKor = getKoreanAbility.flavorTextEntries{
-                                    for i in getKor{
-                                        if i.language?.name == "ko"{
-                                            self.firstCharDesc = i.flavorText ?? ""
+                                    if getKor.isEmpty{
+                                        self.firstCharDesc = "...연구결과 손실..."
+                                    }else{
+                                        if getKor.contains(where: {$0.language?.name == "ko"}){
+                                            for name in getKor{
+                                                if name.language?.name == "ko"{
+                                                    self.firstCharDesc = name.flavorText ?? ""
+                                                }
+                                            }
                                         }else{
-//                                            if getKoreanAbility.name == "Quark Drive"{
-//                                                self.firstCharDesc = "부스트에너지를 지니고 있거나 일렉트릭필드일 때 가장 높은 능력이 올라간다."
-//                                               // print(charDesc)
-//                                            }else if getKoreanAbility.name == "good-as-gold"{
-//                                                self.firstCharDesc = "상대가 사용하는 변화 기술의 영향을 받지 않는다."
-//
-//                                            }
+                                            for name in getKor{
+                                                if name.language?.name == "en"{
+                                                    self.firstCharDesc = name.flavorText ?? ""
+                                                }
+                                            }
                                         }
                                     }
+                                    
                                 }
 //                                if getKoreanAbility.name == "quark-drive"{
 //                                    self.firstChar = "쿼크차지"
 //                                   // print(char)
 //                                }else if getKoreanAbility.name == "good-as-gold"{
 //                                    self.firstChar = "황금몸"
+//                                }
+//                                else if getKoreanAbility.name == "lingering-aroma"{
+//                                    self.firstChar = "가시지않는 향기"
 //                                }
 //
 //                                if getKoreanAbility.name == "quark-drive"{
@@ -384,29 +430,44 @@ class PokemonInfoViewModel:ObservableObject{
 //                                    self.firstCharDesc = "상대가 사용하는 변화 기술의 영향을 받지 않는다."
 //
 //                                }
+//                                else if getKoreanAbility.name == "lingering-aroma"{
+//                                    self.firstCharDesc = "상대가 접촉하면 가시지 않는 향기가 상대에게 배어 버린다."
+//
+//                                }
                             }else{
                                 let getKoreanAbility = try await PokemonAPI().pokemonService.fetchAbility(urlToInt(url: ab.ability?.url ?? ""))
                                
                                 if  let names = getKoreanAbility.names{
-                                    for name in names{
-                                        if name.language?.name == "ko"{
-                                            self.secondChar = name.name ?? ""
-                                            
+                                    if names.contains(where: {$0.language?.name == "ko"}){
+                                        for name in names{
+                                            if name.language?.name == "ko"{
+                                                self.secondChar = name.name ?? ""
+                                            }
+                                        }
+                                    }else{
+                                        for name in names{
+                                            if name.language?.name == "en"{
+                                                self.secondChar = name.name ?? ""
+                                            }
                                         }
                                     }
                                 }
                                 if let getKor = getKoreanAbility.flavorTextEntries{
-                                    for i in getKor{
-                                        if i.language?.name == "ko"{
-                                            self.secondCharDesc = i.flavorText ?? ""
+                                    if getKor.isEmpty{
+                                        self.secondCharDesc = "...연구결과 손실..."
+                                    }else{
+                                        if getKor.contains(where: {$0.language?.name == "ko"}){
+                                            for name in getKor{
+                                                if name.language?.name == "ko"{
+                                                    self.secondCharDesc = name.flavorText ?? ""
+                                                }
+                                            }
                                         }else{
-//                                            if getKoreanAbility.name == "Quark Drive"{
-//                                                self.secondCharDesc = "부스트에너지를 지니고 있거나 일렉트릭필드일 때 가장 높은 능력이 올라간다."
-//                                               // print(charDesc)
-//                                            }else if getKoreanAbility.name == "good-as-gold"{
-//                                                self.secondCharDesc = "상대가 사용하는 변화 기술의 영향을 받지 않는다."
-//
-//                                            }
+                                            for name in getKor{
+                                                if name.language?.name == "en"{
+                                                    self.secondCharDesc = name.flavorText ?? ""
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -425,12 +486,12 @@ class PokemonInfoViewModel:ObservableObject{
 //
 //                                }
                             }
-                            }
-//                        if hiddenChar == firstChar{
-//                            hid
-//                        }else if hiddenChar == secondChar{
-//
-//                        }
+                        }
+                        if hiddenChar == firstChar || hiddenChar == secondChar{
+                            hiddenChar = ""
+                            hiddenCharDesc = ""
+                        }
+                        
                     }
                 }
             }
@@ -447,18 +508,86 @@ class PokemonInfoViewModel:ObservableObject{
             if let forms = pokemon.forms{
                 for form in forms {
                     let vari = try await PokemonAPI().pokemonService.fetchPokemonForm(urlToInt(url: form.url ?? ""))
+                    if let formsname = vari.formNames{
+                        if vari.formName == "" && vari.formName != "own-tempo" &&  !formsname.contains(where: {$0.language?.name == "ko"}){
+                            self.isFormname.append("기본")
+                        }
+                    }
                     if let sp = vari.sprites{
                         if let pokemonForms = vari.formNames{
                             for formName in pokemonForms{
                                 if formName.language?.name == "ko"{
-                                    self.isFormname.append(formName.name ?? "")
+                                    if self.dexNum != 773{
+                                        self.isFormname.append(formName.name ?? "")
+                                    }
                                 }
                             }
+                                if pokemonForms.contains(where: {$0.language?.name != "ko"}){
+                                    if vari.formName == "bug"{
+                                        self.isFormname.append("벌레")
+                                    }
+                                    else if vari.formName == "normal"{
+                                        self.isFormname.append("노말")
+                                    }
+                                    else if vari.formName == "fairy"{
+                                        self.isFormname.append("페어리")
+                                    }
+                                    else if vari.formName == "dark"{
+                                        self.isFormname.append("악")
+                                    }
+                                    else if vari.formName == "flying"{
+                                        self.isFormname.append("비행")
+                                    }
+                                    else if vari.formName == "dragon"{
+                                        self.isFormname.append("드래곤")
+                                    }
+                                    else if vari.formName == "electric"{
+                                        self.isFormname.append("전기")
+                                    }
+                                    else if vari.formName == "fighting"{
+                                        self.isFormname.append("격투")
+                                    }
+                                    else if vari.formName == "fire"{
+                                        self.isFormname.append("불꽃")
+                                    }
+                                    else if vari.formName == "ghost"{
+                                        self.isFormname.append("고스트")
+                                    }
+                                    else if vari.formName == "grass"{
+                                        self.isFormname.append("풀")
+                                    }
+                                    else if vari.formName == "ground"{
+                                        self.isFormname.append("땅")
+                                    }
+                                    else if vari.formName == "ice"{
+                                        self.isFormname.append("얼음")
+                                    }
+                                    else if vari.formName == "poison"{
+                                        self.isFormname.append("독")
+                                    }
+                                    else if vari.formName == "psychic"{
+                                        self.isFormname.append("에스퍼")
+                                    }
+                                    else if vari.formName == "rock"{
+                                        self.isFormname.append("바위")
+                                    }
+                                    else if vari.formName == "steel"{
+                                        self.isFormname.append("강철")
+                                    }
+                                    else if vari.formName == "water"{
+                                        self.isFormname.append("물")
+                                    }
+                                    else if vari.formName == "unknown"{
+                                        self.isFormname.append("???")
+                                    }
+                                }
+                            
                         }
+                        
                         if sp.frontDefault != nil{   //나메일 414,10269,10270
                             if let sprites = vari.sprites{
                                 self.isForm.append(sprites.frontDefault ?? "")
-                                print("폼 맞아?\(isForm)")
+                                
                             }
                         }
                     }
@@ -466,6 +595,7 @@ class PokemonInfoViewModel:ObservableObject{
                     
                 }
             }
+            
         }
     }
     @MainActor
@@ -474,55 +604,153 @@ class PokemonInfoViewModel:ObservableObject{
         isRegionName.removeAll()
         Task{
             let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
-            
+            if num == 1007 || num == 1008{
+                print("asdasd")
+                return
+            }
             if let vari = species.varieties{
+                
                 guard vari.count > 1 else { return }
                 for isRegion in vari{
-                   
-                    self.isRegion.append(urlToInt(url: isRegion.pokemon?.url ?? ""))
                     let another = try await PokemonAPI().pokemonService.fetchPokemon(urlToInt(url: isRegion.pokemon?.url ?? ""))
-                    if let forms = another.forms{
-                        for form in forms{
-                            let pokemonForm = try await PokemonAPI().pokemonService.fetchPokemonForm(urlToInt(url: form.url ?? ""))
-                            if pokemonForm.formName == ""{
-                                self.isRegionName.append("기본")
-                            }
-                            if let names = pokemonForm.formNames{
-                                for i in names{
-                                    if i.language?.name == "ko"{
-                                        self.isRegionName.append(i.name ?? "")
+                    if another.id != 670{
+                        self.isRegion.append(urlToInt(url: isRegion.pokemon?.url ?? ""))
+                        if let forms = another.forms{
+                            for form in forms{
+                                let pokemonForm = try await PokemonAPI().pokemonService.fetchPokemonForm(urlToInt(url: form.url ?? ""))
+                                if let formsname = pokemonForm.formNames{
+                                    if pokemonForm.formName == "" &&  !formsname.contains(where: {$0.language?.name == "ko"}){
+                                        self.isRegionName.append("기본")
                                     }
                                 }
-                                if pokemonForm.formName == "rock-star"{
-                                    self.isRegionName.append("하드록")
-                                }else if pokemonForm.formName == "starter"{
-                                    self.isRegionName.append("스타터")
+                                if let names = pokemonForm.formNames{
+                                    for i in names{
+                                        if i.language?.name == "ko"{
+                                            self.isRegionName.append(i.name ?? "")
+                                        }
+                                    }
+                                    if pokemonForm.formName == "rock-star"{
+                                        self.isRegionName.append("하드록")
+                                    }else if pokemonForm.formName == "starter"{
+                                        self.isRegionName.append("스타터")
+                                    }
+                                    else if pokemonForm.formName == "belle"{
+                                        self.isRegionName.append("마담")
+                                    }
+                                    else if pokemonForm.formName == "pop-star"{
+                                        self.isRegionName.append("아이돌")
+                                    }
+                                    else if pokemonForm.formName == "phd"{
+                                        self.isRegionName.append("닥터")
+                                    }
+                                    else if pokemonForm.formName == "libre"{
+                                        self.isRegionName.append("마스크드")
+                                    }
+                                    else if pokemonForm.formName == "cosplay"{
+                                        self.isRegionName.append("코스튬플레이")
+                                    }
+                                    else if pokemonForm.formName == "gmax"{
+                                        self.isRegionName.append("거다이맥스")
+                                    }else if pokemonForm.formName == "hisui"{
+                                        self.isRegionName.append("히스이")
+                                    }
+                                    else if pokemonForm.formName == "totem"{
+                                        self.isRegionName.append("토템")
+                                    }
+                                    else if pokemonForm.formName == "paldea"{
+                                        self.isRegionName.append("팔데아")
+                                    }
+                                    else if pokemonForm.formName == "origin"{
+                                        if pokemonForm.id == 10414 || pokemonForm.id == 10415{
+                                            self.isRegionName.append("오리진폼")
+                                        }
+                                    }
+                                    else if pokemonForm.formName == "white-striped"{
+                                        self.isRegionName.append("백색근의 모습")
+                                    }
+                                    else if pokemonForm.formName == "female"{
+                                        if pokemonForm.id == 10417 || pokemonForm.id == 10423{
+                                            self.isRegionName.append("암컷의 모습")
+                                        }
+                                    }
+                                    else if pokemonForm.formName == "male"{
+                                        if pokemonForm.id == 902 || pokemonForm.id == 916{
+                                            self.isRegionName.append("수컷의 모습")
+                                        }
+                                    }
+                                    else if pokemonForm.formName == "incarnate"{
+                                        if pokemonForm.id == 905{
+                                            self.isRegionName.append("화신폼")
+                                        }
+                                    }
+                                    else if pokemonForm.formName == "therian"{
+                                        if pokemonForm.id == 10418{
+                                            self.isRegionName.append("영물폼")
+                                        }
+                                    }
+                                    else if pokemonForm.formName == "paldea-combat-breed"{
+                                        self.isRegionName.append("팔데아 컴뱃")
+                                    }
+                                    else if pokemonForm.formName == "paldea-blaze-breed"{
+                                        self.isRegionName.append("팔데아 블레이즈")
+                                    }
+                                    else if pokemonForm.formName == "paldea-aqua-breed"{
+                                        self.isRegionName.append("팔데아 워터")
+                                    }
+                                    else if pokemonForm.formName == "two-segment"{
+                                        self.isRegionName.append("두마디폼")
+                                    }
+                                    else if pokemonForm.formName == "three-segment"{
+                                        self.isRegionName.append("세마디폼")
+                                    }
+                                    else if pokemonForm.formName == "zero"{
+                                        if pokemonForm.id == 964{
+                                            self.isRegionName.append("나이브폼")
+                                        }
+                                    }
+                                    else if pokemonForm.formName == "hero"{
+                                        self.isRegionName.append("마이티폼")
+                                    }
+                                    else if pokemonForm.formName == "family-of-four"{
+                                        self.isRegionName.append("네식구")
+                                    }
+                                    else if pokemonForm.formName == "family-of-three"{
+                                        self.isRegionName.append("세식구")
+                                    }
+                                    
+                                    else if pokemonForm.formName == "curly"{
+                                        self.isRegionName.append("젖힌모습")
+                                    }
+                                    else if pokemonForm.formName == "droopy"{
+                                        self.isRegionName.append("늘어진모습")
+                                    }
+                                    else if pokemonForm.formName == "stretchy"{
+                                        self.isRegionName.append("뻗은모습")
+                                    }
+                                    else if pokemonForm.formName == "blue-plumage"{
+                                        self.isRegionName.append("파랑깃털")
+                                    }
+                                    else if pokemonForm.formName == "yellow-plumage"{
+                                        self.isRegionName.append("노랑깃털")
+                                    }
+                                    else if pokemonForm.formName == "white-plumage"{
+                                        self.isRegionName.append("하얀깃털")
+                                    }
+                                    else if pokemonForm.formName == "green-plumage"{
+                                        self.isRegionName.append("초록깃털")
+                                    }
+                                    else if pokemonForm.formName == "chest"{
+                                        self.isRegionName.append("상자폼")
+                                    }
+                                    else if pokemonForm.formName == "roaming"{
+                                        self.isRegionName.append("도보폼")
+                                    }
+                                   
                                 }
-                                else if pokemonForm.formName == "belle"{
-                                    self.isRegionName.append("마담")
-                                }
-                                else if pokemonForm.formName == "pop-star"{
-                                    self.isRegionName.append("아이돌")
-                                }
-                                else if pokemonForm.formName == "phd"{
-                                    self.isRegionName.append("닥터")
-                                }
-                                else if pokemonForm.formName == "libre"{
-                                    self.isRegionName.append("마스크드")
-                                }
-                                else if pokemonForm.formName == "cosplay"{
-                                    self.isRegionName.append("코스튬플레이")
-                                }
-                                else if pokemonForm.formName == "gmax"{
-                                    self.isRegionName.append("거다이맥스")
-                                }else if pokemonForm.formName == "hisui"{
-                                    self.isRegionName.append("히스이")
-                                }
-//                                print(self.isRegion)
-//                                print(self.isRegionName)
                             }
                         }
                     }
+                    
                 }
             }
             

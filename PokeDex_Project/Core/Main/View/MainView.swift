@@ -21,10 +21,10 @@ struct MainView: View {
     var filteredItems: [PokeDex] {
         if text.isEmpty {
             return vm.model
-            } else {
-                return vm.model.filter { String($0.name).contains(text) }
-            }
+        } else {
+            return vm.model.filter { String($0.name).contains(text) || String($0.num).contains(text)}
         }
+    }
     
     var body: some View {
         NavigationView {

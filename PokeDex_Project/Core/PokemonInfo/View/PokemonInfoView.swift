@@ -13,11 +13,12 @@ struct PokemonInfoView: View {
     
     @State var form = false
     @State var formName = ""
-    
+    @State var basic = ""
     @StateObject var vm = PokemonInfoViewModel()
     @Environment(\.dismiss) var dismiss
     let coloumn = [GridItem(.flexible()),GridItem(.flexible()),GridItem(.flexible())]
     let num:Int
+    
     var body: some View {
         VStack{
             header
@@ -43,14 +44,14 @@ struct PokemonInfoView: View {
             vm.getPokeon(num: num)
             vm.getregional(num: num)
             vm.getform(num: num)
-           
+            basic = vm.image
         }
     }
 }
 
 struct PokemonInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInfoView(num: 422)
+        PokemonInfoView(num: 916)
     }
 }
 extension PokemonInfoView{
@@ -81,7 +82,7 @@ extension PokemonInfoView{
         VStack{
             HStack(spacing: 0){
                 KFImage(URL(string: "https://github.com/PokeAPI/sprites/blob/master/sprites/items/poke-ball.png?raw=true"))
-                Text(String(format: "%04d",num))
+                Text(String(format: "%04d",vm.dexNum))
                     .bold()
             }
             .padding(.top,30)
@@ -189,32 +190,40 @@ extension PokemonInfoView{
                                 Text(vm.firstChar)
                                     .padding(.trailing)
                                     .bold()
+                                Divider().padding(.horizontal)
                                 Text(vm.firstCharDesc.replacingOccurrences(of: "\n", with: " "))
+                                    .lineLimit(nil).fixedSize(horizontal: false, vertical: true)
                                 
                             }
                         }
+                        
                         if !vm.secondChar.isEmpty{
+                            Divider()
                             HStack(spacing: 0){
                                 Text(vm.secondChar)
                                     .padding(.trailing)
                                     .bold()
+                                Divider().padding(.horizontal)
                                 Text(vm.secondCharDesc.replacingOccurrences(of: "\n", with: " "))
+                                    .lineLimit(nil).fixedSize(horizontal: false, vertical: true)
                                 
                             }
                         }
                         if !vm.hiddenChar.isEmpty{
+                            Divider()
                             HStack(spacing: 0){
                                 Text(vm.hiddenChar)
                                     .bold()
-                                    Image(systemName: "questionmark.circle")
+                                Image(systemName: "questionmark.circle")
                                         .padding(.trailing)
                                         .bold()
-                                Text(vm.hiddenCharDesc.replacingOccurrences(of: "\n", with: " "))
-                                    
+                                Divider().padding(.horizontal)
+                                Text(vm.hiddenCharDesc.replacingOccurrences(of: "\n", with: " ")).lineLimit(nil).fixedSize(horizontal: false, vertical: true)
+                                
                             }
                         }
                         
-                    }
+                    }.font(.subheadline)
                     
                 }.frame(maxWidth: .infinity,alignment:.leading)
             }
@@ -454,6 +463,50 @@ extension PokemonInfoView{
                 ScrollView(showsIndicators: false){
                     VStack{
                         if !vm.isRegion.isEmpty{
+                            if vm.dexNum == 670{
+                                ForEach(Array(zip(vm.isForm, vm.isFormname)).indices, id: \.self) { index in
+                                    let (image, name) = (vm.isForm[index], vm.isFormname[index])
+                                    // 첫 번째 인덱스 사용
+                                    ZStack{
+                                        Circle().frame(width: 70,height: 70).foregroundColor(.antiPrimary)
+                                        Circle().frame(width: 70,height: 70).foregroundColor(.secondary).opacity(0.3)
+                                    }.overlay{
+                                        VStack(spacing: 0){
+                                            KFImage(URL(string: image)!)
+                                                .resizable()
+                                                .placeholder{
+                                                    KFImage(URL(string: vm.isForm.first!))
+                                                        .resizable()
+                                                }
+                                                .scaledToFill()
+                                                .frame(width: 50,height: 50)
+                                                .onTapGesture {
+                                                    if index == 0 {
+                                                        // 원하는 작업 수행
+                                                        vm.image = basic
+                                                        vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
+                                                    }else if index == 5{
+                                                        vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
+                                                    }else{
+                                                        
+                                                        vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
+                                                        vm.image = image
+                                                    }
+                                                    
+                                                    formName = ""
+                                                    if name != vm.isFormname.first!{
+                                                        formName = "(\(name))"
+                                                    }
+                                                    
+                                                }
+                                            Text(name).font(.caption2)
+                                                .padding(.bottom,5)
+                                        }
+                                       
+                                    }
+                                    
+                                }
+                            }
                             ForEach(Array(zip(vm.isRegion,vm.isRegionName)),id:\.0){ (image,name) in
                                 ZStack{
                                     Circle().frame(width: 70,height: 70).foregroundColor(.antiPrimary)
@@ -482,8 +535,12 @@ extension PokemonInfoView{
                                 }
                                
                             }
+                            
                         }else{
-                            ForEach(Array(zip(vm.isForm,vm.isFormname)),id:\.0){ (image,name) in
+                            
+                            ForEach(Array(zip(vm.isForm, vm.isFormname)).indices, id: \.self) { index in
+                                let (image, name) = (vm.isForm[index], vm.isFormname[index])
+                                // 첫 번째 인덱스 사용
                                 ZStack{
                                     Circle().frame(width: 70,height: 70).foregroundColor(.antiPrimary)
                                     Circle().frame(width: 70,height: 70).foregroundColor(.secondary).opacity(0.3)
@@ -498,10 +555,20 @@ extension PokemonInfoView{
                                             .scaledToFill()
                                             .frame(width: 50,height: 50)
                                             .onTapGesture {
-                                                vm.image = image
+                                                if index == 0 {
+                                                    // 원하는 작업 수행
+                                                    vm.image = basic
+                                                }else{
+                                                    vm.image = image
+                                                }
+                                                
                                                 formName = ""
                                                 if name != vm.isFormname.first!{
                                                     formName = "(\(name))"
+                                                }
+                                                if num == 493 || num == 773{
+                                                    vm.types.removeAll()
+                                                    vm.types.append(name)
                                                 }
                                             }
                                         Text(name).font(.caption2)
@@ -509,8 +576,12 @@ extension PokemonInfoView{
                                     }
                                    
                                 }
-                               
+                                
                             }
+//                            ForEach(Array(zip(vm.isForm,vm.isFormname)),id:\.0){ (image,name) in
+//
+//
+//                            }
                         }
                         
                     }
