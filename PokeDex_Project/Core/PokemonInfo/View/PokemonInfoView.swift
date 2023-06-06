@@ -219,10 +219,8 @@ extension PokemonInfoView{
                                         .bold()
                                 Divider().padding(.horizontal)
                                 Text(vm.hiddenCharDesc.replacingOccurrences(of: "\n", with: " ")).lineLimit(nil).fixedSize(horizontal: false, vertical: true)
-                                
                             }
                         }
-                        
                     }.font(.subheadline)
                     
                 }.frame(maxWidth: .infinity,alignment:.leading)

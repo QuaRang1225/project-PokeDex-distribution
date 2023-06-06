@@ -15,12 +15,14 @@ struct StartView: View {
                 Image("logo")
                     .resizable()
                     .frame(width: 80,height: 80)
-                if vm.pokeDexCount != 1010{
-                    
+                if !UserDefaults.standard.bool(forKey: "ver 1.0.0"){
                     CircleProgressView().padding(.top,100)
-
                 }
             }
+            Text("버전 1.0.0").frame(maxWidth: .infinity,alignment: .trailing)
+                .frame(maxHeight: .infinity,alignment: .bottom)
+                .padding()
+                .font(.caption)
         }
     }
 }

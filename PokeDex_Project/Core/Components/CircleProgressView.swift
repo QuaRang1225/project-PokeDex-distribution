@@ -13,11 +13,11 @@ struct CircleProgressView: View {
     let dot = [".",".."]
     
     var body: some View {
-        VStack(spacing:20){
+        VStack(spacing:0){
             Circle()
                 .stroke(
                     AngularGradient(
-                        gradient: Gradient(colors: [Color.white, Color.red]),
+                        gradient: Gradient(colors: [Color.clear, Color.red]),
                         center: .center,
                         startAngle: .zero,
                         endAngle: .degrees(360)
@@ -26,14 +26,18 @@ struct CircleProgressView: View {
                 )
                 .frame(width: 50, height: 50)
                 .rotationEffect(Angle(degrees: rotation))
+                .padding(.bottom,30)
             HStack{
                 Text("도감정보 다운로드 중")
                 Text(dot[num])
             }
+            Text("도감정보는 최대 30초까지 걸릴 수 있습니다.")
+               
             
         }
-       
+        .font(.caption)
         .onAppear {
+            
             withAnimation(Animation.linear(duration: 2).repeatForever(autoreverses: false)) {
                 rotation = 360
             }

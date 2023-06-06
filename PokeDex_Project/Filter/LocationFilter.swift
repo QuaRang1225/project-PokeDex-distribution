@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum LocationFilter:CaseIterable{
+enum LocationFilter:String,CaseIterable{
     
     case national
     case kanto
@@ -76,6 +76,34 @@ enum LocationFilter:CaseIterable{
             return "가라르도감"
         case .paldea:
             return "팔데아도감"
+        }
+    }
+    var apiName:String{
+        switch self{
+        case .national:
+            return "national"
+        case .kanto:
+            return "kanto"
+        case .johto:
+            return "updated-johto"
+        case .hoenn:
+            return "updated-hoenn"
+        case .sinnoh:
+            return "extended-sinnoh"
+        case .unova:
+            return "updated-unova"
+        case .kalos_ctl:
+            return "kalos-central"
+        case .kalos_cst:
+            return "kalos-coastal"
+        case .kalos_mtn:
+            return "kalos-mountain"
+        case .alaola:
+            return "updated-alola"
+        case .galar:
+            return "galar"
+        case .paldea:
+            return "paldea"
         }
     }
 }

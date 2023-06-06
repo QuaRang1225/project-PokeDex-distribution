@@ -120,15 +120,16 @@ struct MainView: View {
 //                        .foregroundColor(.primary)
 //                }
 //                .padding(.trailing)
-//                Button {
+                Button {
 //                    PokeDex.deleteAll()
-//                } label: {
-//                    Image(systemName:"trash")
-//                        .bold()
-//                        .font(.title3)
-//                        .foregroundColor(.primary)
-//                }
-//                .padding(.trailing)
+                    UserDefaults.standard.set(false, forKey: "ver 1.0.0")
+                } label: {
+                    Image(systemName:"trash")
+                        .bold()
+                        .font(.title3)
+                        .foregroundColor(.primary)
+                }
+                .padding(.trailing)
                 Button {
                     withAnimation(.linear(duration: 0.1)){
                         isSearch.toggle()

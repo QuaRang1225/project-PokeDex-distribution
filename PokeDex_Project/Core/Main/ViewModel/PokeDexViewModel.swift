@@ -16,90 +16,75 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 }
 
-class PokeDex:Object,Identifiable{
-    @Persisted(primaryKey: true)var id:ObjectId
-    
-    @Persisted var num:Int
-    @Persisted var image:String
-    @Persisted var name:String
-    @Persisted var types:List<String>
-    
+class PokeDex: Object, Identifiable {
+    @Persisted(primaryKey: true) var id: ObjectId
+    @Persisted var num: Int
+    @Persisted var image: String
+    @Persisted var name: String
+    @Persisted var types: List<String>
+//    @Persisted var dex: List<String>
+
     private static var realm = try! Realm()
     static var currentPokeDex: Results<PokeDex>?
-    
+
     static func findAll() -> Results<PokeDex> {
         if let currentPokeDex = currentPokeDex {
             return currentPokeDex
         }
         return realm.objects(PokeDex.self)
     }
-    
-    // realm객체에 값을 추가
+
+    // realm 객체에 값을 추가
     static func addMemo(_ memo: PokeDex) {
-            try! realm.write {
-                realm.add(memo)
-                currentPokeDex = nil
-            }
+        try! realm.write {
+            realm.add(memo)
+            currentPokeDex = nil
         }
-    
-    // realm객체의 값을 삭제
-    static func delMemo(_ memo: PokeDex) {
-            try! realm.write {
-                realm.delete(memo)
-                currentPokeDex = nil
-            }
-        }
+    }
+
+//    static func editMemo(memo: PokeDex, location: String, num: Int) {
+//        try! realm.write {
+//            memo.dex.append("\(location) : \(num)")
+//        }
+//    }
+
     static func applicationWillTerminate() {
-            currentPokeDex = realm.objects(PokeDex.self)
-        }
+        currentPokeDex = realm.objects(PokeDex.self)
+    }
+
     static func deleteAll() {
+        let objectsToDelete = realm.objects(PokeDex.self)
+
         do {
             try realm.write {
-                realm.deleteAll()
+                realm.delete(objectsToDelete)
             }
             currentPokeDex = nil
         } catch {
             print("Error deleting all objects: \(error)")
-            // 예외 처리를 진행하거나 로그를 남기는 등의 작업을 수행할 수 있습니다.
         }
     }
 
-    
-    
-//     realm객체의 값을 업데이트
-//            static func editMemo(memo: PokeDex, title: String, text: String) {
-//                try! realm.write {
-//    //                memo.title = title
-//    //                memo.text = text
-//    //                memo.postedDate = Date.now
-//                }
-//            }
     override class func primaryKey() -> String? {
         "id"
     }
 }
-class PokeDexViewModel:ObservableObject{
-    
+
+class PokeDexViewModel: ObservableObject {
     //@ObservedResults(PokeDex.self) var info
     private var notificationToken: NotificationToken?
-    
     @Published var model: [PokeDex] = Array(PokeDex.findAll())
-    // @Published var model:[Row] = []
     @Published var successDownload = false
     @Published var pokeDexCount: Int = 0
-    @Published var location:LocationFilter = .national
-    
+    @Published var location: LocationFilter = .national
+
     var taskHandle: Task<Void, Error>?
-    
-    init(){
+
+    init() {
         fetchData()
         observeChanges()
     }
 
-//    deinit {
-//        notificationToken?.invalidate()
-//    }
-//
     private func fetchData() {
         let pokeDex = PokeDex.findAll()
         pokeDexCount = pokeDex.count
@@ -107,10 +92,8 @@ class PokeDexViewModel:ObservableObject{
             successDownload = true
             print(successDownload)
         }
-        //print(pokeDexCount)
     }
 
-//
     private func observeChanges() {
         let pokeDex = PokeDex.findAll()
         notificationToken = pokeDex.observe { [weak self] _ in
@@ -122,7 +105,7 @@ class PokeDexViewModel:ObservableObject{
     }
 
     func get() {
-       taskHandle =  Task {
+        taskHandle = Task {
             let dex = try await PokemonAPI().gameService.fetchPokedex(location.endPoint)
             if let dexEnt = dex.pokemonEntries {
                 await withTaskGroup(of: Void.self) { group in
@@ -131,22 +114,35 @@ class PokeDexViewModel:ObservableObject{
                             do {
                                 let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(i.pokemonSpecies!.name!)
                                 if let names = species.names {
+                                    let info = PokeDex()
+
                                     for lang in names {
                                         if lang.language?.name == "ko" {
                                             let types = await self.getKoreanType(num: species.id!)
-                                            let info = PokeDex()
                                             info.image = self.imageUrl(url: species.id ?? 0)
                                             info.name = lang.name ?? ""
                                             info.num = i.entryNumber ?? 0
                                             info.types.append(objectsIn: types)
+//                                            info.dex.append(objectsIn: types)
                                             DispatchQueue.main.async {
                                                 PokeDex.addMemo(info)
-//                                                let pokeDex = PokeDex.findAll()
-//                                                self.pokeDexCount = pokeDex.count
-//                                                print(self.pokeDexCount)
                                             }
                                         }
                                     }
+
+//                                    if let dexNum = species.pokedexNumbers {
+//                                        for num in dexNum {
+//                                            for i in LocationFilter.allCases {
+//                                                if num.name?.name == i.apiName {
+//                                                    info.dex.append("\(i.apiName) : \(num.entryNumber ?? 0)")
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//                                    DispatchQueue.main.async {
+//                                        PokeDex.addMemo(info)
+////                                        PokeDex.editMemo(memo: info, location: i.apiName, num: num.entryNumber ?? 0)
+//                                    }
                                 }
                             } catch {
                                 // 에러 처리
@@ -160,14 +156,11 @@ class PokeDexViewModel:ObservableObject{
             }
         }
     }
-//    func cancalTask(){
-//        taskHandle?.cancel()
-//    }
 
-    func getKoreanType(num:Int) async -> [String]{    //포켓몬 타입/한글로 변환
+    func getKoreanType(num: Int) async -> [String] {    // 포켓몬 타입/한글로 변환
         var koreanType = [String]()
         let pokemon = try? await PokemonAPI().pokemonService.fetchPokemon(num)
-        if let types = pokemon?.types{
+        if let types = pokemon?.types {
             for type in types {
                 let type = try? await PokemonAPI().pokemonService.fetchType(urlToInt(url: (type.type?.url)!))
                 koreanType.append(type?.names![1].name ?? "")
@@ -175,11 +168,13 @@ class PokeDexViewModel:ObservableObject{
         }
         return koreanType
     }
-    private func urlToInt(url:String)->Int{
-        let url = Int(String(url.filter({$0.isNumber}).dropFirst()))!
+
+    private func urlToInt(url: String) -> Int {
+        let url = Int(String(url.filter({ $0.isNumber }).dropFirst()))!
         return url
     }
-    private func imageUrl(url:Int)->String{ //이미지 url
+
+    private func imageUrl(url: Int) -> String { // 이미지 URL
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(url).png"
     }
 }
