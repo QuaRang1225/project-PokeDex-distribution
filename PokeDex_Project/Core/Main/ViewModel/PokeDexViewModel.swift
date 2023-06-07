@@ -18,11 +18,26 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 class PokeDex: Object, Identifiable {
     @Persisted(primaryKey: true) var id: ObjectId
-    @Persisted var num: Int
+    
+    
     @Persisted var image: String
     @Persisted var name: String
     @Persisted var types: List<String>
-//    @Persisted var dex: List<String>
+    
+    @Persisted var national: Int
+    @Persisted var kanto:Int?
+    @Persisted var johto:Int?
+    @Persisted var hoenn:Int?
+    @Persisted var sinnoh:Int?
+    @Persisted var unova:Int?
+    @Persisted var kalos_ctl:Int?
+    @Persisted var kalos_cst:Int?
+    @Persisted var kalos_mtn:Int?
+    @Persisted var alaola:Int?
+    @Persisted var galar:Int?
+    @Persisted var paldea:Int?
+    
+    
 
     private static var realm = try! Realm()
     static var currentPokeDex: Results<PokeDex>?
@@ -41,12 +56,6 @@ class PokeDex: Object, Identifiable {
             currentPokeDex = nil
         }
     }
-
-//    static func editMemo(memo: PokeDex, location: String, num: Int) {
-//        try! realm.write {
-//            memo.dex.append("\(location) : \(num)")
-//        }
-//    }
 
     static func applicationWillTerminate() {
         currentPokeDex = realm.objects(PokeDex.self)
@@ -71,12 +80,15 @@ class PokeDex: Object, Identifiable {
 }
 
 class PokeDexViewModel: ObservableObject {
-    //@ObservedResults(PokeDex.self) var info
+
     private var notificationToken: NotificationToken?
     @Published var model: [PokeDex] = Array(PokeDex.findAll())
     @Published var successDownload = false
     @Published var pokeDexCount: Int = 0
     @Published var location: LocationFilter = .national
+    
+    @Published var array:[Row] = []
+
 
     var taskHandle: Task<Void, Error>?
 
@@ -84,7 +96,85 @@ class PokeDexViewModel: ObservableObject {
         fetchData()
         observeChanges()
     }
+    func dexNum(){
+        array.removeAll()
+        switch location {
+        case .national:
+            for i in model{
+                array.append(Row(dexNum: i.national, num: i.national, image: i.image, name: i.name, type: Array(i.types)))
+                print(i.national)
+            }
+        case .kanto:
+            for i in model{
+                if let kanto = i.kanto{
+                    array.append(Row(dexNum: i.national,num: kanto, image: i.image, name: i.name, type: Array(i.types)))
+                }
+            }
+        case .johto:
+            for i in model{
+                if let johto = i.johto{
+                    array.append(Row(dexNum: i.national,num: johto, image: i.image, name: i.name, type: Array(i.types)))
+                }
+            }
+        case .hoenn:
+            for i in model{
+                if let hoenn = i.hoenn{
+                    array.append(Row(dexNum: i.national,num: hoenn, image: i.image, name: i.name, type: Array(i.types)))
+                }
+            }
+        case .sinnoh:
+            for i in model{
+                if let sinnoh = i.sinnoh{
+                    array.append(Row(dexNum: i.national,num: sinnoh, image: i.image, name: i.name, type: Array(i.types)))
+                }
+            }
+        case .unova:
+            for i in model{
+                if let unova = i.unova{
+                    array.append(Row(dexNum: i.national,num: unova, image: i.image, name: i.name, type: Array(i.types)))
+                }
+            }
+        case .kalos_ctl:
+            for i in model{
+                if let kalos_ctl = i.kalos_ctl{
+                    array.append(Row(dexNum: i.national,num: kalos_ctl, image: i.image, name: i.name, type: Array(i.types)))
+                }
+            }
+        case .kalos_cst:
+            for i in model{
+                if let kalos_cst = i.kalos_cst{
+                    array.append(Row(dexNum: i.national,num: kalos_cst, image: i.image, name: i.name, type: Array(i.types)))
+                }
+            }
+        case .kalos_mtn:
+            for i in model{
+                if let kalos_mtn = i.kalos_mtn{
+                    array.append(Row(dexNum: i.national,num: kalos_mtn, image: i.image, name: i.name, type: Array(i.types)))
+                }
+            }
+        case .alaola:
+            for i in model{
+                if let alaola = i.alaola{
+                    array.append(Row(dexNum: i.national,num: alaola, image: i.image, name: i.name, type: Array(i.types)))
+                }
+            }
+        case .galar:
+            for i in model{
+                if let galar = i.galar{
+                    array.append(Row(dexNum: i.national,num: galar, image: i.image, name: i.name, type: Array(i.types)))
+                }
+            }
+        case .paldea:
+            for i in model{
+                if let paldea = i.paldea{
+                    array.append(Row(dexNum: i.national,num: paldea, image: i.image, name: i.name, type: Array(i.types)))
+                }
+            }
+        }
+        array.sort(by: {$0.num < $1.num})
+    }
 
+    
     private func fetchData() {
         let pokeDex = PokeDex.findAll()
         pokeDexCount = pokeDex.count
@@ -95,54 +185,74 @@ class PokeDexViewModel: ObservableObject {
     }
 
     private func observeChanges() {
-        let pokeDex = PokeDex.findAll()
-        notificationToken = pokeDex.observe { [weak self] _ in
-            self?.fetchData()
-            DispatchQueue.main.async {
-                self?.objectWillChange.send()
+            let pokeDex = PokeDex.findAll()
+            notificationToken = pokeDex.observe { [weak self] _ in
+                DispatchQueue.main.async { [weak self] in
+                    self?.fetchData()
+                    self?.objectWillChange.send()
+                }
             }
         }
-    }
 
     func get() {
         taskHandle = Task {
-            let dex = try await PokemonAPI().gameService.fetchPokedex(location.endPoint)
+            let dex = try await PokemonAPI().gameService.fetchPokedex(1)
             if let dexEnt = dex.pokemonEntries {
                 await withTaskGroup(of: Void.self) { group in
-                    for i in dexEnt {
+                    for ent in dexEnt {
                         group.addTask {
                             do {
-                                let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(i.pokemonSpecies!.name!)
+                                let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(ent.pokemonSpecies!.name!)
+                                
                                 if let names = species.names {
                                     let info = PokeDex()
-
                                     for lang in names {
                                         if lang.language?.name == "ko" {
                                             let types = await self.getKoreanType(num: species.id!)
                                             info.image = self.imageUrl(url: species.id ?? 0)
                                             info.name = lang.name ?? ""
-                                            info.num = i.entryNumber ?? 0
+                                            info.national = ent.entryNumber ?? 0
                                             info.types.append(objectsIn: types)
-//                                            info.dex.append(objectsIn: types)
+                                            for i in LocationFilter.allCases{
+                                                let dexNum = try await PokemonAPI().gameService.fetchPokedex(i.endPoint)
+                                                if let entries = dexNum.pokemonEntries{
+                                                    for num in entries{
+                                                        if ent.entryNumber == self.urlToInt(url: num.pokemonSpecies?.url ?? ""){
+                                                            switch i{
+                                                            case .national:
+                                                                info.national = num.entryNumber ?? 0
+                                                            case .kanto:
+                                                                info.kanto = num.entryNumber ?? 0
+                                                            case .johto:
+                                                                info.johto = num.entryNumber ?? 0
+                                                            case .hoenn:
+                                                                info.hoenn = num.entryNumber ?? 0
+                                                            case .sinnoh:
+                                                                info.sinnoh = num.entryNumber ?? 0
+                                                            case .unova:
+                                                                info.unova = num.entryNumber ?? 0
+                                                            case .kalos_ctl:
+                                                                info.kalos_ctl = num.entryNumber ?? 0
+                                                            case .kalos_cst:
+                                                                info.kalos_cst = num.entryNumber ?? 0
+                                                            case .kalos_mtn:
+                                                                info.kalos_mtn = num.entryNumber ?? 0
+                                                            case .alaola:
+                                                                info.alaola = num.entryNumber ?? 0
+                                                            case .galar:
+                                                                info.galar = num.entryNumber ?? 0
+                                                            case .paldea:
+                                                                info.paldea = num.entryNumber ?? 0
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                             DispatchQueue.main.async {
                                                 PokeDex.addMemo(info)
                                             }
                                         }
                                     }
-
-//                                    if let dexNum = species.pokedexNumbers {
-//                                        for num in dexNum {
-//                                            for i in LocationFilter.allCases {
-//                                                if num.name?.name == i.apiName {
-//                                                    info.dex.append("\(i.apiName) : \(num.entryNumber ?? 0)")
-//                                                }
-//                                            }
-//                                        }
-//                                    }
-//                                    DispatchQueue.main.async {
-//                                        PokeDex.addMemo(info)
-////                                        PokeDex.editMemo(memo: info, location: i.apiName, num: num.entryNumber ?? 0)
-//                                    }
                                 }
                             } catch {
                                 // 에러 처리

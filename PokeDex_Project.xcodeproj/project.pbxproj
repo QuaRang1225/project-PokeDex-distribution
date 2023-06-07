@@ -32,7 +32,6 @@
 		81C15EB129FBC7BF00B29669 /* PokeDexViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C15EB029FBC7BF00B29669 /* PokeDexViewModel.swift */; };
 		81C15EB529FBF49500B29669 /* Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C15EB429FBF49500B29669 /* Row.swift */; };
 		81C15EB729FD44FD00B29669 /* DexRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C15EB629FD44FD00B29669 /* DexRowView.swift */; };
-		81C15EB929FEBACA00B29669 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 81C15EB829FEBACA00B29669 /* GoogleService-Info.plist */; };
 		81F04EE02A1B4438002E6CCB /* PokemonInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F04EDF2A1B4438002E6CCB /* PokemonInfoViewModel.swift */; };
 		81F04EE32A1B7D5A002E6CCB /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F04EE22A1B7D5A002E6CCB /* Sequence.swift */; };
 /* End PBXBuildFile section */
@@ -79,7 +78,6 @@
 		81C15EB029FBC7BF00B29669 /* PokeDexViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeDexViewModel.swift; sourceTree = "<group>"; };
 		81C15EB429FBF49500B29669 /* Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Row.swift; sourceTree = "<group>"; };
 		81C15EB629FD44FD00B29669 /* DexRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DexRowView.swift; sourceTree = "<group>"; };
-		81C15EB829FEBACA00B29669 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		81F04EDF2A1B4438002E6CCB /* PokemonInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonInfoViewModel.swift; sourceTree = "<group>"; };
 		81F04EE22A1B7D5A002E6CCB /* Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -145,7 +143,6 @@
 		8123985629F2865A00B7D560 /* PokeDex_Project */ = {
 			isa = PBXGroup;
 			children = (
-				81C15EB829FEBACA00B29669 /* GoogleService-Info.plist */,
 				8123985B29F2865B00B7D560 /* Assets.xcassets */,
 				8123985729F2865A00B7D560 /* PokeDex_ProjectApp.swift */,
 				81C15EB329FBF46700B29669 /* Model */,
@@ -399,7 +396,6 @@
 			files = (
 				8123985F29F2865B00B7D560 /* Preview Assets.xcassets in Resources */,
 				8123985C29F2865B00B7D560 /* Assets.xcassets in Resources */,
-				81C15EB929FEBACA00B29669 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,6 +599,8 @@
 				DEVELOPMENT_TEAM = N676ZFA7W8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "포켓몬도감";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.books";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -633,6 +631,8 @@
 				DEVELOPMENT_TEAM = N676ZFA7W8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "포켓몬도감";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.books";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -62,7 +62,6 @@ extension PokemonInfoView{
         ZStack{
             HStack{
                 Button {
-//                    back = false
                     dismiss()
                 } label: {
                     Image(systemName: "chevron.left")
@@ -70,7 +69,7 @@ extension PokemonInfoView{
                 .foregroundColor(.primary)
                 
                 Spacer()
-                Image(systemName: "star")
+//                Image(systemName: "star")
             }
             Text(vm.name + "\(formName)")
                 .bold()

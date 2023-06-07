@@ -7,6 +7,8 @@
 
 import SwiftUI
 import Kingfisher
+import RealmSwift
+import PokemonAPI
 
 struct MainView: View {
     
@@ -15,14 +17,15 @@ struct MainView: View {
     @State var text:String = ""
     @State var selectLocation = false
     @State var dexName = "전국도감"
+    @State var dex:[Int] = []
     
     @EnvironmentObject var vm:PokeDexViewModel
     
-    var filteredItems: [PokeDex] {
+    var filteredItems: [Row] {
         if text.isEmpty {
-            return vm.model
+            return vm.array
         } else {
-            return vm.model.filter { String($0.name).contains(text) || String($0.num).contains(text)}
+            return vm.array.filter { String($0.name).contains(text) || String($0.num).contains(text)}
         }
     }
     
@@ -41,7 +44,7 @@ struct MainView: View {
                                             .bold()
                                     }
                                     NavigationLink {
-                                        PokemonInfoView(num: item.num)
+                                        PokemonInfoView(num: item.dexNum)
                                             .navigationBarBackButtonHidden()
                                     } label: {
                                         DexRowView(row: item)
@@ -83,20 +86,12 @@ struct MainView: View {
                 }
             }
         }
-        
-        
         .onAppear{
-            vm.model = Array(PokeDex.findAll())
-            vm.model.sort(by: {$0.num < $1.num})
-            //vm.get()
+            vm.dexNum()
         }
-//        .onChange(of: vm.location) { _ in
-//            vm.cancelTask()
-//            if ((vm.taskHandle?.isCancelled) != nil){
-//                vm.model.removeAll()
-//                vm.get()
-//            }
-//        }
+        .onChange(of: vm.location) { _ in
+            vm.dexNum()
+        }
     }
     var header:some View{
         VStack{
@@ -107,29 +102,47 @@ struct MainView: View {
                     Text(dexName)
                         .font(.title)
                         .bold()
-                        .foregroundColor(.primary)
+                       
+                    Image(systemName: "chevron.down")
                 }
-                
+                .foregroundColor(.primary)
                 Spacer()
 //                Button {
-//                    //vm.get()
+//                    let realmURL = Realm.Configuration.defaultConfiguration.fileURL!
+//
+//                            let realmURLs = [
+//
+//                                realmURL,
+//
+//                                realmURL.appendingPathExtension("lock"),
+//
+//                                realmURL.appendingPathExtension("note"),
+//
+//                                realmURL.appendingPathExtension("management")
+//
+//                            ]
+//
+//                            for URL in realmURLs {
+//
+//                                do {
+//
+//                                    try FileManager.default.removeItem(at: URL)
+//
+//                                } catch {
+//
+//                                    // handle error
+//
+//                                }
+//
+//                            }
+//                    UserDefaults.standard.set(false, forKey: "ver 1.0.0")
 //                } label: {
-//                    Image(systemName:"arrow.triangle.2.circlepath")
+//                    Image(systemName:"trash")
 //                        .bold()
 //                        .font(.title3)
 //                        .foregroundColor(.primary)
 //                }
 //                .padding(.trailing)
-                Button {
-//                    PokeDex.deleteAll()
-                    UserDefaults.standard.set(false, forKey: "ver 1.0.0")
-                } label: {
-                    Image(systemName:"trash")
-                        .bold()
-                        .font(.title3)
-                        .foregroundColor(.primary)
-                }
-                .padding(.trailing)
                 Button {
                     withAnimation(.linear(duration: 0.1)){
                         isSearch.toggle()

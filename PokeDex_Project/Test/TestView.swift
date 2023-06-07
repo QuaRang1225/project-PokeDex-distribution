@@ -64,7 +64,7 @@ class ViewModel:ObservableObject{
                                         print("도감정보 바뀜")
                                         break
                                     }
-                                    model.append(Row(num: i.entryNumber ?? 0, image: imageUrl(url: species.id!), name: lang.name!, type: types))
+                                    model.append(Row(dexNum: i.entryNumber ?? 0, num: i.entryNumber ?? 0, image: imageUrl(url: species.id!), name: lang.name!, type: types))
                                 }
                             }
                         }

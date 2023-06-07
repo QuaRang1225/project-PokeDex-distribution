@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct DexRowView: View {
-    let row: PokeDex
+    let row: Row
     
     var body: some View {
         RoundedRectangle(cornerRadius: 10)
@@ -37,20 +37,20 @@ struct DexRowView: View {
                 HStack {
                     RoundedRectangle(cornerRadius: 10)
                         .frame(width: 65,height: 20)
-                        .foregroundColor(Color.typeColor(types: row.types.first ?? ""))
+                        .foregroundColor(Color.typeColor(types: row.type.first ?? ""))
                         .overlay {
-                            Text(row.types.first ?? "")
+                            Text(row.type.first ?? "")
                                 .shadow(color: .black, radius: 2)
                                 .padding(.horizontal)
                                 .padding(2)
                         }
 
-                    if row.types.count > 1 {
+                    if row.type.count > 1 {
                         RoundedRectangle(cornerRadius: 10)
                             .frame(width: 65,height: 20)
-                            .foregroundColor(Color.typeColor(types: row.types.last ?? ""))
+                            .foregroundColor(Color.typeColor(types: row.type.last ?? ""))
                             .overlay {
-                                Text(row.types.last ?? "")
+                                Text(row.type.last ?? "")
                                     .shadow(color: .black, radius: 2)
                                     .padding(.horizontal)
                                     .padding(2)
@@ -71,7 +71,7 @@ struct DexRowView: View {
 struct DexRowView_Previews: PreviewProvider {
     static var previews: some View {
         HStack{
-            DexRowView(row: PokeDex())
+            DexRowView(row:Row(dexNum: 1, num: 1, image: "", name: "이상해씨", type: ["풀","독"]))
             //(num: 1, image: "", name: "이상해씨", type: ["풀","독"])
         }
         .padding()
