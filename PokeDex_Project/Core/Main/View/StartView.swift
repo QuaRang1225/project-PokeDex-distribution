@@ -19,10 +19,6 @@ struct StartView: View {
                     CircleProgressView().padding(.top,100)
                 }
             }
-//            Text("버전 1.0.0").frame(maxWidth: .infinity,alignment: .trailing)
-//                .frame(maxHeight: .infinity,alignment: .bottom)
-//                .padding()
-//                .font(.caption)
         }
     }
 }

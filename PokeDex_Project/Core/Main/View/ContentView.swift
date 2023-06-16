@@ -25,7 +25,8 @@ struct ContentView:View{
                 }
             }
             print(Realm.Configuration.defaultConfiguration.fileURL!)
-        }.onChange(of: vm.successDownload){ newValue in
+        }
+        .onChange(of: vm.successDownload){ newValue in
             withAnimation(.easeInOut(duration: 1.0)){
                 start = newValue
                 UserDefaults.standard.set(true, forKey: "ver 1.0.0")

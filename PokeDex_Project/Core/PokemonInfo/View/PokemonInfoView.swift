@@ -575,10 +575,7 @@ extension PokemonInfoView{
                                 }
                                 
                             }
-//                            ForEach(Array(zip(vm.isForm,vm.isFormname)),id:\.0){ (image,name) in
-//
-//
-//                            }
+
                         }
                         
                     }

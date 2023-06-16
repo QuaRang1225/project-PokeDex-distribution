@@ -112,27 +112,6 @@ class PokemonInfoViewModel:ObservableObject{
                                 self.firstName.append(kor.name ?? "")
                                 self.first.append(self.imageUrl(url: self.urlToInt(url: evolChain.chain?.species?.url ?? "")))
                             
-//                            if let vari = species.varieties{
-//                                for pokemon in vari{
-//                                    DispatchQueue.main.async {
-//                                        if let name = pokemon.pokemon?.name,name.contains("mega"){
-//                                            if name.contains("mega"){
-//                                                if name.hasSuffix("mega-y"){
-//                                                    self.forthName.append("메가" + kor.name! + "Y")
-//                                                }
-//                                                if name.hasSuffix("mega-x"){
-//                                                    self.forthName.append("메가" + kor.name! + "X")
-//                                                }else{
-//                                                    self.forthName.append("메가" + kor.name!)
-//                                                }
-//                                                self.forthName = self.forthName.uniqued()
-//                                                self.forth.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                            }
-                            
                         }
                     }
                 }
@@ -147,28 +126,6 @@ class PokemonInfoViewModel:ObservableObject{
                                         self.secondName.append(kor.name ?? "")
                                         self.second.append(self.imageUrl(url: self.urlToInt(url: second.species?.url ?? "")))
                                     }
-//                                    if let vari = species.varieties{
-//                                        for pokemon in vari{
-//                                            DispatchQueue.main.async{
-//                                                if let name = pokemon.pokemon?.name,name.contains("mega"){
-//                                                   if name.contains("mega"){
-//                                                        if name.hasSuffix("mega-y"){
-//                                                            self.forthName.append("메가" + kor.name! + "Y")
-//                                                        }
-//                                                        if name.hasSuffix("mega-x"){
-//                                                            self.forthName.append("메가" + kor.name! + "X")
-//                                                        }else{
-//                                                            self.forthName.append("메가" + kor.name!)
-//
-//                                                        }
-//                                                        self.forthName = self.forthName.uniqued()
-//                                                        self.forth.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
-//                                                    }
-//                                                }
-//
-//                                            }
-//                                        }
-//                                    }
                                     
                                 }
                             }
@@ -184,27 +141,7 @@ class PokemonInfoViewModel:ObservableObject{
                                                 self.thirdName.append(kor.name ?? "")
                                                 self.third.append(self.imageUrl(url: self.urlToInt(url: third.species?.url ?? "")))
                                             }
-//                                            if let vari = species.varieties{
-//                                                for pokemon in vari{
-//                                                    DispatchQueue.main.async {
-//                                                        if let name = pokemon.pokemon?.name,name.contains("mega"){
-//                                                           if name.contains("mega"){
-//                                                                if name.hasSuffix("mega-y"){
-//                                                                    self.forthName.append("메가" + kor.name! + "Y")
-//                                                                }
-//                                                                if name.hasSuffix("mega-x"){
-//                                                                    self.forthName.append("메가" + kor.name! + "X")
-//                                                                }else{
-//                                                                    self.forthName.append("메가" + kor.name!)
-//                                                                }
-//                                                                self.forthName = self.forthName.uniqued()
-//                                                                self.forth.append(self.imageUrl(url: self.urlToInt(url: pokemon.pokemon?.url ?? "")))
-//                                                            }
-//                                                        }
-//                                                    }
-//
-//                                                }
-//                                            }
+
                                         }
                                     }
                                 }
@@ -413,27 +350,7 @@ class PokemonInfoViewModel:ObservableObject{
                                     }
                                     
                                 }
-//                                if getKoreanAbility.name == "quark-drive"{
-//                                    self.firstChar = "쿼크차지"
-//                                   // print(char)
-//                                }else if getKoreanAbility.name == "good-as-gold"{
-//                                    self.firstChar = "황금몸"
-//                                }
-//                                else if getKoreanAbility.name == "lingering-aroma"{
-//                                    self.firstChar = "가시지않는 향기"
-//                                }
-//
-//                                if getKoreanAbility.name == "quark-drive"{
-//                                    self.firstCharDesc = "부스트에너지를 지니고 있거나 일렉트릭필드일 때 가장 높은 능력이 올라간다."
-//                                   // print(charDesc)
-//                                }else if getKoreanAbility.name == "good-as-gold"{
-//                                    self.firstCharDesc = "상대가 사용하는 변화 기술의 영향을 받지 않는다."
-//
-//                                }
-//                                else if getKoreanAbility.name == "lingering-aroma"{
-//                                    self.firstCharDesc = "상대가 접촉하면 가시지 않는 향기가 상대에게 배어 버린다."
-//
-//                                }
+
                             }else{
                                 let getKoreanAbility = try await PokemonAPI().pokemonService.fetchAbility(urlToInt(url: ab.ability?.url ?? ""))
                                
@@ -471,20 +388,7 @@ class PokemonInfoViewModel:ObservableObject{
                                         }
                                     }
                                 }
-//                                if getKoreanAbility.name == "quark-drive"{
-//                                    self.secondChar = "쿼크차지"
-//                                   // print(char)
-//                                }else if getKoreanAbility.name == "good-as-gold"{
-//                                    self.secondChar = "황금몸"
-//                                }
-//
-//                                if getKoreanAbility.name == "quark-drive"{
-//                                    self.secondCharDesc = "부스트에너지를 지니고 있거나 일렉트릭필드일 때 가장 높은 능력이 올라간다."
-//                                   // print(charDesc)
-//                                }else if getKoreanAbility.name == "good-as-gold"{
-//                                    self.secondCharDesc = "상대가 사용하는 변화 기술의 영향을 받지 않는다."
-//
-//                                }
+
                             }
                         }
                         if hiddenChar == firstChar || hiddenChar == secondChar{

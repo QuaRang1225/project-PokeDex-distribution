@@ -31,7 +31,6 @@ struct MainView: View {
     
     var body: some View {
         NavigationView {
-            ZStack{
                 VStack(alignment: .leading,spacing: 0){
                     header
                     ScrollView{
@@ -84,13 +83,15 @@ struct MainView: View {
 
                     }
                 }
-            }
         }
         .onAppear{
             vm.dexNum()
         }
         .onChange(of: vm.location) { _ in
             vm.dexNum()
+        }
+        .onTapGesture{
+            UIApplication.shared.endEditing()
         }
     }
     var header:some View{
@@ -106,43 +107,7 @@ struct MainView: View {
                     Image(systemName: "chevron.down")
                 }
                 .foregroundColor(.primary)
-                Spacer()
-//                Button {
-//                    let realmURL = Realm.Configuration.defaultConfiguration.fileURL!
-//
-//                            let realmURLs = [
-//
-//                                realmURL,
-//
-//                                realmURL.appendingPathExtension("lock"),
-//
-//                                realmURL.appendingPathExtension("note"),
-//
-//                                realmURL.appendingPathExtension("management")
-//
-//                            ]
-//
-//                            for URL in realmURLs {
-//
-//                                do {
-//
-//                                    try FileManager.default.removeItem(at: URL)
-//
-//                                } catch {
-//
-//                                    // handle error
-//
-//                                }
-//
-//                            }
-//                    UserDefaults.standard.set(false, forKey: "ver 1.0.0")
-//                } label: {
-//                    Image(systemName:"trash")
-//                        .bold()
-//                        .font(.title3)
-//                        .foregroundColor(.primary)
-//                }
-//                .padding(.trailing)
+                Spacer()             
                 Button {
                     withAnimation(.linear(duration: 0.1)){
                         isSearch.toggle()
