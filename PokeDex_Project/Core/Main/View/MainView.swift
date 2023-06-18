@@ -31,6 +31,7 @@ struct MainView: View {
     
     var body: some View {
         NavigationView {
+            ZStack{
                 VStack(alignment: .leading,spacing: 0){
                     header
                     ScrollView{
@@ -53,45 +54,48 @@ struct MainView: View {
                             }
 
                         }.padding(.horizontal).padding(.top)
-                    }.onTapGesture {
-                        isSearch = false
-                    }.refreshable {}
+                    }.refreshable {
+                        vm.dexNum()
+                    }
                 }
                 if selectLocation{
                     Color.clear.ignoresSafeArea()
                         .background(.regularMaterial)
-                    VStack(spacing:30){
-                        ForEach(LocationFilter.allCases,id:\.self){ loc in
+                    VStack(spacing:20){
+                        ScrollView(showsIndicators: false){
+                            Spacer()
+                            ForEach(LocationFilter.allCases,id:\.self){ loc in
+                                Button {
+                                    dexName = loc.name
+                                    vm.location = loc
+                                    selectLocation = false
+                                } label: {
+                                    Text(loc.name)
+                                        .bold()
+                                        .foregroundColor(.primary)
+                                }.padding(.vertical,10)
+                                
+                            }.padding(.bottom)
                             Button {
-                                dexName = loc.name
-                                vm.location = loc
                                 selectLocation = false
                             } label: {
-                                Text(loc.name)
-                                    .bold()
+                                Image(systemName: "xmark.circle.fill")
                                     .foregroundColor(.primary)
+                                    .font(.largeTitle)
                             }
-                            
                         }
-                        Button {
-                            selectLocation = false
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.primary)
-                                .font(.largeTitle)
-                        }
-
                     }
                 }
-        }
-        .onAppear{
-            vm.dexNum()
-        }
-        .onChange(of: vm.location) { _ in
-            vm.dexNum()
-        }
-        .onTapGesture{
-            UIApplication.shared.endEditing()
+            }
+            .onAppear{
+                vm.dexNum()
+            }
+            .onChange(of: vm.location) { _ in
+                vm.dexNum()
+            }
+            .onTapGesture{
+                UIApplication.shared.endEditing()
+            }
         }
     }
     var header:some View{
@@ -107,7 +111,14 @@ struct MainView: View {
                     Image(systemName: "chevron.down")
                 }
                 .foregroundColor(.primary)
-                Spacer()             
+                Spacer()
+//                Image(systemName: "heart")
+//                    .onTapGesture {
+//                        PokeDex.deleteAll()
+//                        UserDefaults.standard.set(false, forKey: "ver 1.0.0")
+//                    }
+//                    .padding(.horizontal)
+                //테스트용
                 Button {
                     withAnimation(.linear(duration: 0.1)){
                         isSearch.toggle()

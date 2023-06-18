@@ -97,7 +97,10 @@ class PokeDexViewModel: ObservableObject {
         observeChanges()
     }
     func dexNum(){
+        
+        
         array.removeAll()
+        
         switch location {
         case .national:
             for i in model{
@@ -180,7 +183,7 @@ class PokeDexViewModel: ObservableObject {
         pokeDexCount = pokeDex.count
         if pokeDexCount == 1010 {
             successDownload = true
-            print(successDownload)
+            model = Array(PokeDex.findAll())    //빌드 5 이거 추가
         }
     }
 
@@ -189,7 +192,6 @@ class PokeDexViewModel: ObservableObject {
             notificationToken = pokeDex.observe { [weak self] _ in
                 DispatchQueue.main.async { [weak self] in
                     self?.fetchData()
-                    self?.objectWillChange.send()
                 }
             }
         }

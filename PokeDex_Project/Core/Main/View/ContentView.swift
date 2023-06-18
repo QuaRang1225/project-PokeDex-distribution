@@ -13,7 +13,6 @@ struct ContentView:View{
                 StartView().environmentObject(vm)
             }
         }.onAppear{
-            
             if !UserDefaults.standard.bool(forKey: "ver 1.0.0"){
                 PokeDex.deleteAll()
                 vm.get()
@@ -27,9 +26,11 @@ struct ContentView:View{
             print(Realm.Configuration.defaultConfiguration.fileURL!)
         }
         .onChange(of: vm.successDownload){ newValue in
-            withAnimation(.easeInOut(duration: 1.0)){
-                start = newValue
-                UserDefaults.standard.set(true, forKey: "ver 1.0.0")
+            DispatchQueue.main.async {
+                withAnimation(.easeInOut(duration: 1.0)){
+                    start = newValue
+                    UserDefaults.standard.set(true, forKey: "ver 1.0.0")
+                }
             }
         }
     }
