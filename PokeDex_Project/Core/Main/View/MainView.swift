@@ -33,37 +33,40 @@ struct MainView: View {
         NavigationView {
             ZStack{
                 VStack(alignment: .leading,spacing: 0){
-                    header
-                    ScrollView{
-                        LazyVGrid(columns: columns) {
-                            ForEach(filteredItems,id:\.self){ item in
-                                VStack(alignment: .leading,spacing: 0){
-                                    HStack(spacing: 0){
-                                        ball
-                                        Text(String(format: "%04d",item.num))
-                                            .bold()
+                    Section(header: header){
+                        ScrollView{
+                            LazyVGrid(columns: columns) {
+                                ForEach(filteredItems,id:\.self){ item in
+                                    VStack(alignment: .leading,spacing: 0){
+                                        HStack(spacing: 0){
+                                            ball
+                                            Text(String(format: "%04d",item.num))
+                                                .bold()
+                                        }
+                                        NavigationLink {
+                                            PokemonInfoView(num: item.dexNum)
+                                                .navigationBarBackButtonHidden()
+                                        } label: {
+                                            DexRowView(row: item)
+                                        }
+                                        .padding(.bottom,5)
                                     }
-                                    NavigationLink {
-                                        PokemonInfoView(num: item.dexNum)
-                                            .navigationBarBackButtonHidden()
-                                    } label: {
-                                        DexRowView(row: item)
-                                    }
-                                    .padding(.bottom,5)
                                 }
-                            }
 
-                        }.padding(.horizontal).padding(.top)
-                    }.refreshable {
-                        vm.dexNum()
+                            }.padding(.horizontal).padding(.top)
+                        }.refreshable {
+                            vm.dexNum()
+                        }
                     }
+                    
+                    
                 }
                 if selectLocation{
                     Color.clear.ignoresSafeArea()
                         .background(.regularMaterial)
                     VStack(spacing:20){
                         ScrollView(showsIndicators: false){
-                            Spacer()
+//                            Spacer()
                             ForEach(LocationFilter.allCases,id:\.self){ loc in
                                 Button {
                                     dexName = loc.name
@@ -73,7 +76,7 @@ struct MainView: View {
                                     Text(loc.name)
                                         .bold()
                                         .foregroundColor(.primary)
-                                }.padding(.vertical,10)
+                                }.padding(.vertical,7.5)
                                 
                             }.padding(.bottom)
                             Button {
@@ -83,10 +86,11 @@ struct MainView: View {
                                     .foregroundColor(.primary)
                                     .font(.largeTitle)
                             }
-                        }
+                        }.padding(.top,80)
                     }
                 }
             }
+            .ignoresSafeArea()
             .onAppear{
                 vm.dexNum()
             }
@@ -129,7 +133,7 @@ struct MainView: View {
                         .font(.title3)
                         .foregroundColor(.primary)
                 }
-            }
+            }.padding(.top,50)
             if isSearch{
                 SearchBarView(text: $text)
                     .padding()
