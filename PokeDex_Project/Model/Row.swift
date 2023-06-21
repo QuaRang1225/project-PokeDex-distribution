@@ -14,7 +14,7 @@ struct Row:Hashable{
     var num:Int
     var image:String
     var name:String
-    var type:[String]
+    var types:[String]
 }
 
 

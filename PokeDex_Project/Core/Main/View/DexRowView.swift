@@ -37,20 +37,20 @@ struct DexRowView: View {
                 HStack {
                     RoundedRectangle(cornerRadius: 10)
                         .frame(width: 65,height: 20)
-                        .foregroundColor(Color.typeColor(types: row.type.first ?? ""))
+                        .foregroundColor(Color.typeColor(types: row.types.first ?? ""))
                         .overlay {
-                            Text(row.type.first ?? "")
+                            Text(row.types.first ?? "")
                                 .shadow(color: .black, radius: 2)
                                 .padding(.horizontal)
                                 .padding(2)
                         }
 
-                    if row.type.count > 1 {
+                    if row.types.count > 1 {
                         RoundedRectangle(cornerRadius: 10)
                             .frame(width: 65,height: 20)
-                            .foregroundColor(Color.typeColor(types: row.type.last ?? ""))
+                            .foregroundColor(Color.typeColor(types: row.types.last ?? ""))
                             .overlay {
-                                Text(row.type.last ?? "")
+                                Text(row.types.last ?? "")
                                     .shadow(color: .black, radius: 2)
                                     .padding(.horizontal)
                                     .padding(2)
@@ -71,7 +71,7 @@ struct DexRowView: View {
 struct DexRowView_Previews: PreviewProvider {
     static var previews: some View {
         HStack{
-            DexRowView(row:Row(dexNum: 1, num: 1, image: "", name: "이상해씨", type: ["풀","독"]))
+            DexRowView(row:Row(dexNum: 1, num: 1, image: "", name: "이상해씨", types: ["풀","독"]))
             //(num: 1, image: "", name: "이상해씨", type: ["풀","독"])
         }
         .padding()

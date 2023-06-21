@@ -15,7 +15,7 @@ struct StartView: View {
                 Image("logo")
                     .resizable()
                     .frame(width: 80,height: 80)
-                if !UserDefaults.standard.bool(forKey: "ver 1.0.0"){
+                if vm.pokeDexCount != 1010{
                     CircleProgressView().padding(.top,100)
                 }
             }

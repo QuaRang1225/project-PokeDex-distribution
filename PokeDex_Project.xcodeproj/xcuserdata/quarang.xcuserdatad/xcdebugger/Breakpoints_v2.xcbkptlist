@@ -94,8 +94,8 @@
             filePath = "PokeDex_Project/Core/Main/ViewModel/PokeDexViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
             landmarkName = "dexNum()"
             landmarkType = "7">
             <Locations>
@@ -142,8 +142,8 @@
             filePath = "PokeDex_Project/Core/Main/ViewModel/PokeDexViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
             landmarkName = "PokeDexViewModel"
             landmarkType = "3">
             <Locations>
@@ -310,8 +310,8 @@
             filePath = "PokeDex_Project/Core/Main/ViewModel/PokeDexViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
             landmarkName = "PokeDexViewModel"
             landmarkType = "3">
             <Locations>
@@ -478,8 +478,8 @@
             filePath = "PokeDex_Project/Core/Main/ViewModel/PokeDexViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
             landmarkName = "PokeDexViewModel"
             landmarkType = "3">
             <Locations>
@@ -646,8 +646,8 @@
             filePath = "PokeDex_Project/Core/Main/ViewModel/PokeDexViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
             landmarkName = "PokeDexViewModel"
             landmarkType = "3">
             <Locations>
@@ -814,8 +814,8 @@
             filePath = "PokeDex_Project/Core/Main/ViewModel/PokeDexViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
             landmarkName = "PokeDexViewModel"
             landmarkType = "3">
             <Locations>
@@ -982,10 +982,90 @@
             filePath = "PokeDex_Project/Core/Main/ViewModel/PokeDexViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "93"
-            endingLineNumber = "93"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
             landmarkName = "PokeDexViewModel"
             landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "789D9231-575A-460B-B8CB-F695A56CC02E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PokeDex_Project/Core/Main/View/MySaveView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "6"
+            endingLineNumber = "6"
+            landmarkName = "unknown"
+            landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "356EABEA-CEFB-45EA-A919-786AD3F54A0A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PokeDex_Project/Core/Main/View/MySaveView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "PokemonSaveViewModel"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E0CE9239-E0A4-4DEF-8A18-978FB4FB5E52"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PokeDex_Project/Core/Save/ViewModel/PokemonSaveViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "SaveViewModel"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "E0CE9239-E0A4-4DEF-8A18-978FB4FB5E52 - 20f15bcd98f35963"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PokeDex_Project.SaveViewModel.deleteData(save: PokeDex_Project.Save) -&gt; ()"
+                  moduleName = "PokeDex_Project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/quarang/Documents/QUARANG&apos;S/Project/PokeDex_Project/PokeDex_Project/Core/Save/ViewModel/PokemonSaveViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "59"
+                  endingLineNumber = "59"
+                  offsetFromSymbolStart = "76">
+               </Location>
+               <Location
+                  uuid = "E0CE9239-E0A4-4DEF-8A18-978FB4FB5E52 - 20f15bcd98f35963"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PokeDex_Project.SaveViewModel.deleteData(save: PokeDex_Project.Save) -&gt; ()"
+                  moduleName = "PokeDex_Project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/quarang/Documents/QUARANG&apos;S/Project/PokeDex_Project/PokeDex_Project/Core/Save/ViewModel/PokemonSaveViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "59"
+                  endingLineNumber = "59"
+                  offsetFromSymbolStart = "60">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

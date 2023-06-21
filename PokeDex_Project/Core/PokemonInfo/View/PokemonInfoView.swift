@@ -14,7 +14,11 @@ struct PokemonInfoView: View {
     @State var form = false
     @State var formName = ""
     @State var basic = ""
+    
     @StateObject var vm = PokemonInfoViewModel()
+    @EnvironmentObject var vmSave:SaveViewModel
+//    @EnvironmentObject var vmSave:PokemonSaveViewModel
+    
     @Environment(\.dismiss) var dismiss
     let coloumn = [GridItem(.flexible()),GridItem(.flexible()),GridItem(.flexible())]
     let num:Int
@@ -52,6 +56,7 @@ struct PokemonInfoView: View {
 struct PokemonInfoView_Previews: PreviewProvider {
     static var previews: some View {
         PokemonInfoView(num: 916)
+            .environmentObject(SaveViewModel())
     }
 }
 extension PokemonInfoView{
@@ -66,11 +71,35 @@ extension PokemonInfoView{
                 } label: {
                     Image(systemName: "chevron.left")
                 }
-                .foregroundColor(.primary)
+              
                 
                 Spacer()
-//                Image(systemName: "star")
+                Button {
+                    if vmSave.save.contains(where: {$0.num == num}){
+                        for i in vmSave.save{
+                            if i.num == num{
+                                vmSave.deleteData(save: i)
+                            }
+                        }
+                    }else{
+                        vmSave.num = num
+                        vmSave.image = getImage(num: num)
+                        vmSave.name = vm.name
+                        vmSave.types = vm.types
+                        vmSave.addData()
+                    }
+                } label: {
+                    if vmSave.save.contains(where: {$0.num == num}){
+                        Image(systemName: "star.fill")
+                    }else{
+                        Image(systemName: "star")
+                    }
+                    
+                }
+
+               
             }
+            .foregroundColor(.primary)
             Text(vm.name + "\(formName)")
                 .bold()
                 .font(.title3)

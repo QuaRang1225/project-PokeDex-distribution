@@ -13,8 +13,22 @@ import UIKit
 class AppDelegate: NSObject, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         PokeDex.applicationWillTerminate()
+//        MySave.applicationWillTerminate()
     }
 }
+
+
+class Save:Object,Identifiable{
+
+    @Persisted(primaryKey: true) var id: ObjectId
+    @Persisted var num: Int
+    @Persisted var image: String
+    @Persisted var name: String
+    @Persisted var types: List<String>
+
+
+}
+    
 
 class PokeDex: Object, Identifiable {
     @Persisted(primaryKey: true) var id: ObjectId
@@ -104,73 +118,72 @@ class PokeDexViewModel: ObservableObject {
         switch location {
         case .national:
             for i in model{
-                array.append(Row(dexNum: i.national, num: i.national, image: i.image, name: i.name, type: Array(i.types)))
-                print(i.national)
+                array.append(Row(dexNum: i.national, num: i.national, image: i.image, name: i.name, types: Array(i.types)))
             }
         case .kanto:
             for i in model{
                 if let kanto = i.kanto{
-                    array.append(Row(dexNum: i.national,num: kanto, image: i.image, name: i.name, type: Array(i.types)))
+                    array.append(Row(dexNum: i.national,num: kanto, image: i.image, name: i.name, types: Array(i.types)))
                 }
             }
         case .johto:
             for i in model{
                 if let johto = i.johto{
-                    array.append(Row(dexNum: i.national,num: johto, image: i.image, name: i.name, type: Array(i.types)))
+                    array.append(Row(dexNum: i.national,num: johto, image: i.image, name: i.name, types: Array(i.types)))
                 }
             }
         case .hoenn:
             for i in model{
                 if let hoenn = i.hoenn{
-                    array.append(Row(dexNum: i.national,num: hoenn, image: i.image, name: i.name, type: Array(i.types)))
+                    array.append(Row(dexNum: i.national,num: hoenn, image: i.image, name: i.name, types: Array(i.types)))
                 }
             }
         case .sinnoh:
             for i in model{
                 if let sinnoh = i.sinnoh{
-                    array.append(Row(dexNum: i.national,num: sinnoh, image: i.image, name: i.name, type: Array(i.types)))
+                    array.append(Row(dexNum: i.national,num: sinnoh, image: i.image, name: i.name, types: Array(i.types)))
                 }
             }
         case .unova:
             for i in model{
                 if let unova = i.unova{
-                    array.append(Row(dexNum: i.national,num: unova, image: i.image, name: i.name, type: Array(i.types)))
+                    array.append(Row(dexNum: i.national,num: unova, image: i.image, name: i.name, types: Array(i.types)))
                 }
             }
         case .kalos_ctl:
             for i in model{
                 if let kalos_ctl = i.kalos_ctl{
-                    array.append(Row(dexNum: i.national,num: kalos_ctl, image: i.image, name: i.name, type: Array(i.types)))
+                    array.append(Row(dexNum: i.national,num: kalos_ctl, image: i.image, name: i.name, types: Array(i.types)))
                 }
             }
         case .kalos_cst:
             for i in model{
                 if let kalos_cst = i.kalos_cst{
-                    array.append(Row(dexNum: i.national,num: kalos_cst, image: i.image, name: i.name, type: Array(i.types)))
+                    array.append(Row(dexNum: i.national,num: kalos_cst, image: i.image, name: i.name, types: Array(i.types)))
                 }
             }
         case .kalos_mtn:
             for i in model{
                 if let kalos_mtn = i.kalos_mtn{
-                    array.append(Row(dexNum: i.national,num: kalos_mtn, image: i.image, name: i.name, type: Array(i.types)))
+                    array.append(Row(dexNum: i.national,num: kalos_mtn, image: i.image, name: i.name, types: Array(i.types)))
                 }
             }
         case .alaola:
             for i in model{
                 if let alaola = i.alaola{
-                    array.append(Row(dexNum: i.national,num: alaola, image: i.image, name: i.name, type: Array(i.types)))
+                    array.append(Row(dexNum: i.national,num: alaola, image: i.image, name: i.name, types: Array(i.types)))
                 }
             }
         case .galar:
             for i in model{
                 if let galar = i.galar{
-                    array.append(Row(dexNum: i.national,num: galar, image: i.image, name: i.name, type: Array(i.types)))
+                    array.append(Row(dexNum: i.national,num: galar, image: i.image, name: i.name, types: Array(i.types)))
                 }
             }
         case .paldea:
             for i in model{
                 if let paldea = i.paldea{
-                    array.append(Row(dexNum: i.national,num: paldea, image: i.image, name: i.name, type: Array(i.types)))
+                    array.append(Row(dexNum: i.national,num: paldea, image: i.image, name: i.name, types: Array(i.types)))
                 }
             }
         }

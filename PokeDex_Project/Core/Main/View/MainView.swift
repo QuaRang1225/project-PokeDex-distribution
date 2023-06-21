@@ -17,10 +17,9 @@ struct MainView: View {
     @State var text:String = ""
     @State var selectLocation = false
     @State var dexName = "전국도감"
-    @State var dex:[Int] = []
     
     @EnvironmentObject var vm:PokeDexViewModel
-    
+    @EnvironmentObject var vmSave:SaveViewModel
     var filteredItems: [Row] {
         if text.isEmpty {
             return vm.array
@@ -46,6 +45,7 @@ struct MainView: View {
                                         NavigationLink {
                                             PokemonInfoView(num: item.dexNum)
                                                 .navigationBarBackButtonHidden()
+                                                .environmentObject(vmSave)
                                         } label: {
                                             DexRowView(row: item)
                                         }
@@ -155,6 +155,6 @@ struct MainView_Previews: PreviewProvider {
     static var previews: some View {
             MainView()
                 .environmentObject(PokeDexViewModel())
-        
+                .environmentObject(SaveViewModel())
     }
 }
