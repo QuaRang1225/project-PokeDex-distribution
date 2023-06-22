@@ -11,9 +11,11 @@ import Kingfisher
 
 struct PokemonInfoView: View {
     
+    @State var current = 0
     @State var form = false
     @State var formName = ""
     @State var basic = ""
+    @State var isSaved = false
     
     @StateObject var vm = PokemonInfoViewModel()
     @EnvironmentObject var vmSave:SaveViewModel
@@ -23,26 +25,34 @@ struct PokemonInfoView: View {
     let coloumn = [GridItem(.flexible()),GridItem(.flexible()),GridItem(.flexible())]
     let num:Int
     
+
+    
     var body: some View {
-        VStack{
-            header
-            ScrollView{
-                thumnail
-                info
-                charictors
-                stats
-                evolution
-                description
-            }.overlay(alignment: .topTrailing) {
-                if vm.isRegion.count > 1 || vm.isForm.count > 1{
-                    isRegion
+        NavigationView {
+            ZStack(alignment: .bottomTrailing){
+                VStack{
+                    header
+                    ScrollView(showsIndicators: false){
+                        thumnail
+                        info
+                        charictors
+                        stats
+                        evolution
+                        description
+                    }.overlay(alignment: .topTrailing) {
+                        if vm.isRegion.count > 1 || vm.isForm.count > 1{
+                            isRegion
+                        }
+                    }
                 }
+                calculate
             }
         }
         .onTapGesture {
             form = false
         }
         .onAppear{
+            current = num
             vm.getEvol(num: num)
             vm.getSpecies(num: num)
             vm.getPokeon(num: num)
@@ -55,7 +65,7 @@ struct PokemonInfoView: View {
 
 struct PokemonInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInfoView(num: 916)
+        PokemonInfoView(num: 16)
             .environmentObject(SaveViewModel())
     }
 }
@@ -71,11 +81,9 @@ extension PokemonInfoView{
                 } label: {
                     Image(systemName: "chevron.left")
                 }
-              
-                
                 Spacer()
                 Button {
-                    if vmSave.save.contains(where: {$0.num == num}){
+                    if vmSave.save.contains(where: {$0.num == vm.dexNum}){
                         for i in vmSave.save{
                             if i.num == num{
                                 vmSave.deleteData(save: i)
@@ -89,7 +97,7 @@ extension PokemonInfoView{
                         vmSave.addData()
                     }
                 } label: {
-                    if vmSave.save.contains(where: {$0.num == num}){
+                    if vmSave.save.contains(where: {$0.num == vm.dexNum}){
                         Image(systemName: "star.fill")
                     }else{
                         Image(systemName: "star")
@@ -361,6 +369,7 @@ extension PokemonInfoView{
                                 vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 vm.getregional(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 vm.getform(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
+                                current = Int(String(image.filter({$0.isNumber}))) ?? 0
                             }
                             
                         }
@@ -386,6 +395,7 @@ extension PokemonInfoView{
                                         vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                         vm.getregional(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                         vm.getform(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
+                                        current = Int(String(image.filter({$0.isNumber}))) ?? 0
                                     }
                                     
                                 }
@@ -404,17 +414,18 @@ extension PokemonInfoView{
                                         .background(BallImage())
                                     Text(name)
                                 }.onTapGesture {
+                                    
                                     formName = ""
                                     vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                     vm.getregional(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                     vm.getSpecies(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                     vm.getform(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
+                                    current = Int(String(image.filter({$0.isNumber}))) ?? 0
                                 }
                                 
                             }
                         }
                     }
-                    
                     HStack(spacing: 30){
                         ForEach(Array(zip(vm.third,vm.thirdName)),id:\.0){ (image,name) in
                             VStack{
@@ -434,6 +445,7 @@ extension PokemonInfoView{
                                 vm.getregional(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 vm.getSpecies(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 vm.getform(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
+                                current = Int(String(image.filter({$0.isNumber}))) ?? 0
                             }
                             
                         }
@@ -462,6 +474,7 @@ extension PokemonInfoView{
                 .background(RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 2).foregroundColor(.gray.opacity(0.5)))
                 .padding(.horizontal)
         }
+        .padding(.bottom,120)
     }
     var isRegion:some View{
         VStack(alignment: .center){
@@ -511,10 +524,10 @@ extension PokemonInfoView{
                                                         // 원하는 작업 수행
                                                         vm.image = basic
                                                         vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
+                                                        
                                                     }else if index == 5{
                                                         vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                                     }else{
-                                                        
                                                         vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                                         vm.image = image
                                                     }
@@ -523,7 +536,7 @@ extension PokemonInfoView{
                                                     if name != vm.isFormname.first!{
                                                         formName = "(\(name))"
                                                     }
-                                                    
+                                                    current = Int(String(image.filter({$0.isNumber}))) ?? 0
                                                 }
                                             Text(name).font(.caption2)
                                                 .padding(.bottom,5)
@@ -553,6 +566,7 @@ extension PokemonInfoView{
                                                 if name != vm.isRegionName.first!{
                                                     formName = "(\(name))"
                                                 }
+                                                
                                             }
                                         Text(name).font(.caption2)
                                             .padding(.bottom,5)
@@ -611,10 +625,31 @@ extension PokemonInfoView{
                     
                 }
             }
-            
-            
         }.padding(.vertical,5)
         .padding()
+    }
+    var calculate:some View{
+        NavigationLink {
+            CalculatView(num: $current, formName: $formName)
+                .environmentObject(vm)
+                .navigationBarBackButtonHidden()    
+        } label: {
+            Circle()
+                .frame(width: 100,height: 100)
+                .foregroundColor(.antiPrimary)
+                .shadow(color: .primary,radius: 10)
+                .overlay {
+                    VStack{
+                        Image(systemName: "apps.ipad")
+                            .font(.largeTitle)
+                        Text("계산기")
+                            .font(.headline)
+                    }
+                    .foregroundColor(.primary)
+                }
+                
+        }
+        .padding(.trailing)
     }
 }
 

@@ -13,10 +13,11 @@ import PokemonAPI
 struct MainView: View {
     
     let columns = [ GridItem(.flexible()), GridItem(.flexible())]
+    
     @State var isSearch = false
     @State var text:String = ""
-    @State var selectLocation = false
     @State var dexName = "전국도감"
+    @State var selectLocation = false
     
     @EnvironmentObject var vm:PokeDexViewModel
     @EnvironmentObject var vmSave:SaveViewModel
@@ -58,15 +59,13 @@ struct MainView: View {
                             vm.dexNum()
                         }
                     }
-                    
-                    
                 }
                 if selectLocation{
                     Color.clear.ignoresSafeArea()
                         .background(.regularMaterial)
                     VStack(spacing:20){
                         ScrollView(showsIndicators: false){
-//                            Spacer()
+                            Spacer().frame(height: 80)
                             ForEach(LocationFilter.allCases,id:\.self){ loc in
                                 Button {
                                     dexName = loc.name
@@ -86,7 +85,7 @@ struct MainView: View {
                                     .foregroundColor(.primary)
                                     .font(.largeTitle)
                             }
-                        }.padding(.top,80)
+                        }
                     }
                 }
             }
@@ -116,6 +115,18 @@ struct MainView: View {
                 }
                 .foregroundColor(.primary)
                 Spacer()
+                NavigationLink {
+                    MySaveView()
+                        .environmentObject(vmSave)
+                        .navigationBarBackButtonHidden()
+                } label: {
+                    Image(systemName: "star.fill")
+                        
+                }
+                .foregroundColor(.primary)
+                .padding(.horizontal)
+
+               
 //                Image(systemName: "heart")
 //                    .onTapGesture {
 //                        PokeDex.deleteAll()
@@ -153,7 +164,7 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-            MainView()
+        MainView()
                 .environmentObject(PokeDexViewModel())
                 .environmentObject(SaveViewModel())
     }

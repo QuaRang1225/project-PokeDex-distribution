@@ -20,6 +20,7 @@ struct MySaveView: View {
     @State var text:String = ""
     @State var delete = false
     @EnvironmentObject var vm:SaveViewModel
+    @Environment(\.dismiss) var dismiss
 //    @StateObject var vm = SaveViewModel()
     
     var filteredItems: [Save] {
@@ -67,17 +68,12 @@ struct MySaveView: View {
                                     Divider()
                                 }.padding(.horizontal).padding(.vertical)
                                 .padding(.bottom,70)
-                        }.refreshable {
-//                            vm.refresh()
                         }
                     }
                 }
             }
+            .foregroundColor(.primary)
             .ignoresSafeArea()
-            .onAppear{
-//                vm.saveArray()
-//                vm.refresh()
-            }
             .onTapGesture{
                 UIApplication.shared.endEditing()
             }
@@ -99,6 +95,15 @@ extension MySaveView{
     var header:some View{
         VStack{
             HStack(spacing: 0){
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .bold()
+                        .padding(.trailing,10)
+                }
+
+                
                 Text("내 포켓몬")
                     .font(.title)
                     .bold()

@@ -9,10 +9,12 @@ struct ContentView:View{
     var body: some View{
         ZStack{
             if start{
-//                MainView().environmentObject(vm)
-                MenuTabView()
+                MainView()
                     .environmentObject(vm)
                     .environmentObject(vmSave)
+//                MenuTabView()
+//                    .environmentObject(vm)
+//                    .environmentObject(vmSave)
             }else{
                 StartView().environmentObject(vm)
             }
