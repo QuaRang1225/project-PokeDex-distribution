@@ -11,6 +11,8 @@ import Kingfisher
 struct CalculatView: View {
     @Binding var num:Int
     @Binding var formName:String
+    @Binding var formImage:String
+    @StateObject var vmCal = CalculateViewModel()
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var vm:PokemonInfoViewModel
     var body: some View {
@@ -19,14 +21,27 @@ struct CalculatView: View {
             ScrollView(showsIndicators: false) {
                 thumbnail
                 stats
+                Section(header:category) {
+                    TabView(selection: $vmCal.calculate) {
+                       PowerIndexView()
+                            .environmentObject(vm)
+                            .tag(CalculateViewModel.Calculate.attack)
+                        DefenseIndexView()
+                            .environmentObject(vm)
+                             .tag(CalculateViewModel.Calculate.defense)
+                    }.frame(height: 800)
+                }
+                .padding(.top,30)
             }
+        }.onTapGesture {
+            UIApplication.shared.endEditing()
         }
     }
 }
 
 struct CalculatView_Previews: PreviewProvider {
     static var previews: some View {
-        CalculatView(num: .constant(1), formName: .constant(""))
+        CalculatView(num: .constant(1), formName: .constant(""),formImage: .constant("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png"))
             .environmentObject(PokemonInfoViewModel())
     }
 }
@@ -63,10 +78,14 @@ extension CalculatView{
             .padding(.leading,20)
             .padding(.top,50)
             HStack{
-                KFImage(URL(string:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(num).png"))
+                KFImage(URL(string:formImage))
                     .resizable()
+                    .scaledToFill()
                     .frame(width: 70, height: 70)
-                Text(vm.name + "\(formName)")
+                VStack{
+                    Text(vm.name)
+                    Text(formName)
+                }
                 Spacer()
                 HStack {
                     RoundedRectangle(cornerRadius: 10)
@@ -90,8 +109,8 @@ extension CalculatView{
                                     .padding(2)
                             }
                     }
-                }
-            }.padding(.trailing)
+                }.foregroundColor(.white)
+            }.padding(.horizontal)
         }
         
     }
@@ -170,9 +189,37 @@ extension CalculatView{
                 .font(.headline)
                 
             }
-            .padding(.vertical)
-            .padding(.horizontal)
             .padding(.bottom)
+            .padding(.horizontal)
+        }
+    }
+    var category:some View{
+        GeometryReader{ geo in
+            let width = geo.size.width
+            HStack(spacing:0){
+                ForEach(CalculateViewModel.Calculate.allCases,id:\.self){ item in
+                    Button {
+                        withAnimation(.easeIn(duration: 0.2)){
+                            vmCal.calculate = item
+                        }
+                    } label: {
+                        Text(item.name)
+                            .font(.callout)
+                            .bold()
+                            .foregroundColor(vmCal.calculate == item ? .primary : .secondary)
+                            
+                    }.frame(maxWidth: .infinity)
+                }
+            }
+            .overlay(alignment: .leading){
+                    Capsule()
+                        .frame(width: geo.size.width/2,height: 3)
+                        .offset(x:vmCal.indicatorOffset(width: width)).padding(.top,45)
+                
+            }
+            .background{
+                Divider().padding(.top,45)
+            }
         }
     }
 }

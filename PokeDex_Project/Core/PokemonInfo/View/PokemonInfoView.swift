@@ -16,6 +16,7 @@ struct PokemonInfoView: View {
     @State var formName = ""
     @State var basic = ""
     @State var isSaved = false
+    @State var formImage = ""
     
     @StateObject var vm = PokemonInfoViewModel()
     @EnvironmentObject var vmSave:SaveViewModel
@@ -23,7 +24,7 @@ struct PokemonInfoView: View {
     
     @Environment(\.dismiss) var dismiss
     let coloumn = [GridItem(.flexible()),GridItem(.flexible()),GridItem(.flexible())]
-    let num:Int
+    var num:Int
     
 
     
@@ -48,10 +49,11 @@ struct PokemonInfoView: View {
                 calculate
             }
         }
-        .onTapGesture {
-            form = false
-        }
+//        .onTapGesture {
+//            form = false
+//        }
         .onAppear{
+            formName = ""
             current = num
             vm.getEvol(num: num)
             vm.getSpecies(num: num)
@@ -59,13 +61,14 @@ struct PokemonInfoView: View {
             vm.getregional(num: num)
             vm.getform(num: num)
             basic = vm.image
+            formImage = getImage(num: num)
         }
     }
 }
 
 struct PokemonInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInfoView(num: 16)
+        PokemonInfoView(num: 3)
             .environmentObject(SaveViewModel())
     }
 }
@@ -91,8 +94,8 @@ extension PokemonInfoView{
                         }
                     }else{
                         vmSave.num = num
-                        vmSave.image = getImage(num: num)
-                        vmSave.name = vm.name
+                        vmSave.image = formImage
+                        vmSave.name = vm.name + "\n\(formName)"
                         vmSave.types = vm.types
                         vmSave.addData()
                     }
@@ -364,6 +367,8 @@ extension PokemonInfoView{
                                     .background(BallImage())
                                 Text(name)
                             }.onTapGesture {
+//                                formImage =
+                                formImage = getImage(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 formName = ""
                                 vm.getSpecies(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
@@ -391,6 +396,7 @@ extension PokemonInfoView{
                                         Text(name)
                                     }.onTapGesture {
                                         formName = ""
+                                        formImage = getImage(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                         vm.getSpecies(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                         vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                         vm.getregional(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
@@ -416,6 +422,7 @@ extension PokemonInfoView{
                                 }.onTapGesture {
                                     
                                     formName = ""
+                                    formImage = getImage(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                     vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                     vm.getregional(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                     vm.getSpecies(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
@@ -478,25 +485,24 @@ extension PokemonInfoView{
     }
     var isRegion:some View{
         VStack(alignment: .center){
-            ZStack{
-                Circle().frame(width: 70,height: 70).foregroundColor(.antiPrimary)
-                Circle().frame(width: 70,height: 70).foregroundColor(.secondary).opacity(0.3)
-            }.overlay{
-                VStack(spacing: 0) {
-                    Text("다른폼")
-                        .font(.caption)
-                        .padding(.vertical,5)
-                    Button {
-                        withAnimation(.linear(duration: 0.4)){
-                            form.toggle()
-                        }
-                    } label: {
+            Button {
+                withAnimation(.linear(duration: 0.4)){
+                    form.toggle()
+                }
+            } label: {
+                ZStack{
+                    Circle().frame(width: 70,height: 70).foregroundColor(.antiPrimary)
+                    Circle().frame(width: 70,height: 70).foregroundColor(.secondary).opacity(0.3)
+                    VStack{
+                        Text("다른폼")
+                            .font(.caption)
+                            .padding(.vertical,5)
                         Image(systemName:form ?  "chevron.up":"chevron.down")
                             .padding(.bottom,5)
                             .foregroundColor(.primary)
-                            
                     }
-                }
+                    
+                }.foregroundColor(.primary)
             }.padding(.bottom,15)
             if form{
                 ScrollView(showsIndicators: false){
@@ -562,6 +568,7 @@ extension PokemonInfoView{
                                             .frame(width: 50,height: 50)
                                             .onTapGesture {
                                                 vm.getPokeon(num: image)
+                                                formImage = getImage(num: image)
                                                 formName = ""
                                                 if name != vm.isRegionName.first!{
                                                     formName = "(\(name))"
@@ -577,7 +584,6 @@ extension PokemonInfoView{
                             }
                             
                         }else{
-                            
                             ForEach(Array(zip(vm.isForm, vm.isFormname)).indices, id: \.self) { index in
                                 let (image, name) = (vm.isForm[index], vm.isFormname[index])
                                 // 첫 번째 인덱스 사용
@@ -595,13 +601,14 @@ extension PokemonInfoView{
                                             .scaledToFill()
                                             .frame(width: 50,height: 50)
                                             .onTapGesture {
+                                                
                                                 if index == 0 {
                                                     // 원하는 작업 수행
                                                     vm.image = basic
+                                                    
                                                 }else{
                                                     vm.image = image
                                                 }
-                                                
                                                 formName = ""
                                                 if name != vm.isFormname.first!{
                                                     formName = "(\(name))"
@@ -610,6 +617,7 @@ extension PokemonInfoView{
                                                     vm.types.removeAll()
                                                     vm.types.append(name)
                                                 }
+                                                formImage = getImage(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                             }
                                         Text(name).font(.caption2)
                                             .padding(.bottom,5)
@@ -630,7 +638,7 @@ extension PokemonInfoView{
     }
     var calculate:some View{
         NavigationLink {
-            CalculatView(num: $current, formName: $formName)
+            CalculatView(num: $current, formName: $formName, formImage: $formImage)
                 .environmentObject(vm)
                 .navigationBarBackButtonHidden()    
         } label: {

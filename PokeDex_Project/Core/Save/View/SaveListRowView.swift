@@ -15,6 +15,7 @@ struct SaveListRowView: View {
             KFImage(URL(string: row.image))
                 .resizable()
                 .frame(width: 50, height: 50)
+            
             Text(row.name)
             Spacer()
             HStack {

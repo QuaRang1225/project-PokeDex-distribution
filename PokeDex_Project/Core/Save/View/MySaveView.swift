@@ -58,7 +58,6 @@ struct MySaveView: View {
 //                                                    MySave.delMemo(item)
                                                 } label: {
                                                     Image(systemName: "xmark")
-                                                        .foregroundColor(.white)
                                                         .padding()
                                                         .ignoresSafeArea()
                                                 }
