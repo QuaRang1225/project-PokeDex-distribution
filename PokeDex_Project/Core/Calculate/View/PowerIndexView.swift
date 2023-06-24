@@ -49,7 +49,7 @@ struct PowerIndexView: View {
                             }
                             let endValue = realAttck * (Double(option1)! + Double(option2)!/10)
                           
-                            value = String(endValue) + "입니다."
+                            value = String(endValue)
                             error = true
                         }
                         else{
@@ -84,7 +84,7 @@ struct PowerIndexView: View {
                 }
             }
         
-            .padding(.top,80)
+//            .padding(.top,80)
         .padding(.horizontal)
     }
 }

@@ -28,8 +28,11 @@ struct CalculatView: View {
                             .tag(CalculateViewModel.Calculate.attack)
                         DefenseIndexView()
                             .environmentObject(vm)
+                            .ignoresSafeArea()
                              .tag(CalculateViewModel.Calculate.defense)
-                    }.frame(height: 800)
+                    }
+                    .frame(height: 1000)
+                        
                 }
                 .padding(.top,30)
             }

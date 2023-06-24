@@ -40,7 +40,7 @@ struct DefenseIndexView: View {
                         let hpPoint:Int = Int(Double(vm.hp.first!) + (Double(hpIndiNum)!/2) + (Double(hpeff)!/8) + 10.0 + Double(level)!)
                         let defPoint:Int = Int((Double(vm.defense.first!) + (Double(defIndiNum)!/2) + (Double(defEff)!/8) + 5) * defchar.value)
                         let sdefPoint:Int = Int((Double(vm.spDefense.first!) + (Double(sDefIndiNum)!/2) + (Double(sDefff)!/8) + 5) * sdefchar.value)
-                        value = "방어는 \(Double(hpPoint) * Double(defPoint)/0.411),   특수방어는 \(Double(hpPoint) * Double(sdefPoint)/0.411)입나디."
+                        value = "방어 - \(Double(hpPoint) * Double(defPoint)/0.411)\n특수방어 -  \(Double(hpPoint) * Double(sdefPoint)/0.411)"
                         error = true
                     }
                     else{
@@ -75,7 +75,7 @@ struct DefenseIndexView: View {
             }
 //            Spacer()
         }
-        .padding(.top,180)
+        .padding(.top,10)
     .padding(.horizontal)
     }
 }
