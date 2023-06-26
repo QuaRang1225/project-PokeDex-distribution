@@ -93,7 +93,7 @@ extension PokemonInfoView{
                             }
                         }
                     }else{
-                        vmSave.num = num
+                        vmSave.num = vm.dexNum
                         vmSave.image = formImage
                         vmSave.name = vm.name + "\n\(formName)"
                         vmSave.types = vm.types
