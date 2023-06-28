@@ -94,9 +94,9 @@
             filePath = "PokeDex_Project/Core/Main/ViewModel/PokeDexViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
-            landmarkName = "dexNum()"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "init()"
             landmarkType = "7">
             <Locations>
                <Location
@@ -982,8 +982,8 @@
             filePath = "PokeDex_Project/Core/Main/ViewModel/PokeDexViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
             landmarkName = "PokeDexViewModel"
             landmarkType = "3">
          </BreakpointContent>

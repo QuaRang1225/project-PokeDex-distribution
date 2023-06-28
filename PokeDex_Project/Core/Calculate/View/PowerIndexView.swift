@@ -36,9 +36,14 @@ struct PowerIndexView: View {
                 skillPower
                 Group{
                     Button {
-                        if /*Int(level)! > 0 && Int(level)! <= 100 && */Int(indiNum)! >= 0 && Int(indiNum)! <= 31 && Int(eff)! >= 0 && Int(eff)! <= 252 {
-                            let real = Int((ac ? Double(vm.spAttack.first!) : Double(vm.attack.first!) + (Double(indiNum)!/2) + (Double(eff)!/8) + 5) * char.value)
+                        if Int(indiNum)! >= 0 && Int(indiNum)! <= 31 && Int(eff)! >= 0 && Int(eff)! <= 252 {
+                            let real = Int(((ac ? Double(vm.spAttack.first!) : Double(vm.attack.first!)) + (Double(indiNum)!/2) + (Double(eff)!/8) + 5) * char.value)
+                            
                             var realAttck: Double = Double(real) * rank.value * Double(skill)! * (sameType ? 1.5 : 1.0)
+                            
+                            print(real)
+                            print(realAttck)
+                            
                             if adaptability{
                                 if sameType{
                                     realAttck *= 2.0/1.5
@@ -47,7 +52,9 @@ struct PowerIndexView: View {
                                     error = false
                                 }
                             }
-                            let endValue = realAttck * (Double(option1)! + Double(option2)!/10)
+                            let option1Value = Double(option1)!
+                            let option2Value = Decimal(Double(option2)!) / pow(10, Int(Double(option2.count)))
+                            let endValue = realAttck * (option1Value + Double(truncating: option2Value as NSNumber))
                           
                             value = String(endValue)
                             error = true

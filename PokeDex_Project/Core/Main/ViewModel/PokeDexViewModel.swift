@@ -103,7 +103,6 @@ class PokeDexViewModel: ObservableObject {
     
     @Published var array:[Row] = []
 
-
     var taskHandle: Task<Void, Error>?
 
     init() {
@@ -218,7 +217,6 @@ class PokeDexViewModel: ObservableObject {
                         group.addTask {
                             do {
                                 let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(ent.pokemonSpecies!.name!)
-                                
                                 if let names = species.names {
                                     let info = PokeDex()
                                     for lang in names {
@@ -269,18 +267,17 @@ class PokeDexViewModel: ObservableObject {
                                         }
                                     }
                                 }
-                            } catch {
+                            }
+                            catch {
                                 // 에러 처리
                             }
                         }
-                    }
-                    for await _ in group {
-                        // 작업이 완료될 때까지 대기
                     }
                 }
             }
         }
     }
+
 
     func getKoreanType(num: Int) async -> [String] {    // 포켓몬 타입/한글로 변환
         var koreanType = [String]()

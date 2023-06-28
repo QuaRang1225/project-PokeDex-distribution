@@ -68,7 +68,7 @@ struct PokemonInfoView: View {
 
 struct PokemonInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInfoView(num: 3)
+        PokemonInfoView(num: 1004)
             .environmentObject(SaveViewModel())
     }
 }
@@ -448,6 +448,7 @@ extension PokemonInfoView{
                                 Text(name)
                             }.onTapGesture {
                                 formName = ""
+                                formImage = getImage(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 vm.getPokeon(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 vm.getregional(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
                                 vm.getSpecies(num: Int(String(image.filter({$0.isNumber}))) ?? 0)
@@ -468,13 +469,17 @@ extension PokemonInfoView{
                 .bold()
                 .frame(maxWidth:.infinity)
             VStack(alignment: .leading) {
-                ForEach(vm.desc.uniqued(),id:\.self){ item in
-                    HStack{
-                        Circle()
-                            .frame(width:5,height:5)
-                            .padding(.trailing,5)
-                        Text(item.replacingOccurrences(of: "\n", with: " "))
-                            .padding(.bottom,5)
+                if vm.desc.isEmpty{
+                   Text("• 한국어 도감 설명 존재하지 않음..")
+                }else{
+                    ForEach(vm.desc.uniqued(),id:\.self){ item in
+                        HStack{
+                            Circle()
+                                .frame(width:5,height:5)
+                                .padding(.trailing,5)
+                            Text(item.replacingOccurrences(of: "\n", with: " "))
+                                .padding(.bottom,5)
+                        }
                     }
                 }
             }.padding()
@@ -638,9 +643,10 @@ extension PokemonInfoView{
     }
     var calculate:some View{
         NavigationLink {
+            
             CalculatView(num: $current, formName: $formName, formImage: $formImage)
                 .environmentObject(vm)
-                .navigationBarBackButtonHidden()    
+                .navigationBarBackButtonHidden()
         } label: {
             Circle()
                 .frame(width: 100,height: 100)

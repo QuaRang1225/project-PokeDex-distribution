@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DefenseIndexView: View {
-    @State var level = "\(50)"
+//    @State var level = "\(50)"
     @State var hpIndiNum = "\(31)"
     @State var defIndiNum = "\(31)"
     @State var sDefIndiNum = "\(31)"
@@ -27,7 +27,9 @@ struct DefenseIndexView: View {
     @EnvironmentObject var vm:PokemonInfoViewModel
     var body: some View {
         VStack(alignment: .leading) {
-            levelType
+//            levelType
+            Text("50레벨 기준")
+                .padding(.bottom,5)
             defense
             individual
             effort
@@ -35,12 +37,21 @@ struct DefenseIndexView: View {
             skillPower
             Group{
                 Button {
-                    if Int(level)! > 0 && Int(level)! <= 100 && Int(hpIndiNum)! >= 0 && Int(hpIndiNum)! <= 31 && Int(defIndiNum)! >= 0 && Int(defIndiNum)! <= 31 && Int(sDefIndiNum)! >= 0 && Int(sDefIndiNum)! <= 31 && Int(hpeff)! >= 0 && Int(hpeff)! <= 252 && Int(defEff)! >= 0 && Int(defEff)! <= 252 && Int(sDefff)! >= 0 && Int(sDefff)! <= 252{
+                    if Int(hpIndiNum)! <= 31 && Int(defIndiNum)! >= 0 && Int(defIndiNum)! <= 31 && Int(sDefIndiNum)! >= 0 && Int(sDefIndiNum)! <= 31 && Int(hpeff)! >= 0 && Int(hpeff)! <= 252 && Int(defEff)! >= 0 && Int(defEff)! <= 252 && Int(sDefff)! >= 0 && Int(sDefff)! <= 252{
                         
-                        let hpPoint:Int = Int(Double(vm.hp.first!) + (Double(hpIndiNum)!/2) + (Double(hpeff)!/8) + 10.0 + Double(level)!)
+                        let hpPoint:Int = Int(Double(vm.hp.first!) + (Double(hpIndiNum)!/2) + (Double(hpeff)!/8) + 10.0 + 50.0)
                         let defPoint:Int = Int((Double(vm.defense.first!) + (Double(defIndiNum)!/2) + (Double(defEff)!/8) + 5) * defchar.value)
                         let sdefPoint:Int = Int((Double(vm.spDefense.first!) + (Double(sDefIndiNum)!/2) + (Double(sDefff)!/8) + 5) * sdefchar.value)
-                        value = "방어 - \(Double(hpPoint) * Double(defPoint)/0.411)\n특수방어 -  \(Double(hpPoint) * Double(sdefPoint)/0.411)"
+                        
+                        let doption1Value = Double(doption1)!
+                        let doption2Value = Decimal(Double(doption2)!) / pow(10, Int(Double(doption2.count)))
+                        let dendValue = Double(hpPoint) * (Double(defPoint)/0.411) * (doption1Value + Double(truncating: doption2Value as NSNumber))
+                        
+                        let boption1Value = Double(boption1)!
+                        let boption2Value = Decimal(Double(boption2)!) / pow(10, Int(Double(boption2.count)))
+                        let bendValue = Double(hpPoint) * (Double(sdefPoint)/0.411) * (boption1Value + Double(truncating: boption2Value as NSNumber))
+                        
+                        value = "방어 - \(dendValue)\n특수방어 -  \(bendValue)"
                         error = true
                     }
                     else{
@@ -88,46 +99,46 @@ struct DefenseIndexView_Previews: PreviewProvider {
 }
 
 extension DefenseIndexView{
-        var levelType:some View{
-            HStack{
-                Text("레벨")
-                VStack{
-                    TextField("입력",text: $level)
-                        .textContentType(.oneTimeCode)
-                        .keyboardType(.numberPad)
-                    Divider()
-                        .background(Color.primary)
-                }
-                .offset(y:3)
-                .frame(width: 100)
-                Text("Lv")
-                Spacer()
-                Button {
-                    level = "\(50)"
-                } label: {
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width: 100,height: 30)
-                        .foregroundColor(.secondary).opacity(0.3)
-                        .overlay {
-                            Text("50")
-                                .foregroundColor(.primary)
-                        }
-                }
-                Button {
-                    level = "\(100)"
-                } label: {
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width: 100,height: 30)
-                        .foregroundColor(.secondary).opacity(0.3)
-                        .overlay {
-                            Text("100")
-                                .foregroundColor(.primary)
-                        }
-    
-                }
-    
-            }
-        }
+//        var levelType:some View{
+//            HStack{
+//                Text("레벨")
+//                VStack{
+//                    TextField("입력",text: $level)
+//                        .textContentType(.oneTimeCode)
+//                        .keyboardType(.numberPad)
+//                    Divider()
+//                        .background(Color.primary)
+//                }
+//                .offset(y:3)
+//                .frame(width: 100)
+//                Text("Lv")
+//                Spacer()
+//                Button {
+//                    level = "\(50)"
+//                } label: {
+//                    RoundedRectangle(cornerRadius: 10)
+//                        .frame(width: 100,height: 30)
+//                        .foregroundColor(.secondary).opacity(0.3)
+//                        .overlay {
+//                            Text("50")
+//                                .foregroundColor(.primary)
+//                        }
+//                }
+//                Button {
+//                    level = "\(100)"
+//                } label: {
+//                    RoundedRectangle(cornerRadius: 10)
+//                        .frame(width: 100,height: 30)
+//                        .foregroundColor(.secondary).opacity(0.3)
+//                        .overlay {
+//                            Text("100")
+//                                .foregroundColor(.primary)
+//                        }
+//
+//                }
+//
+//            }
+//        }
     
     var defense:some View{
         HStack(spacing: 10){

@@ -177,10 +177,7 @@ class PokemonInfoViewModel:ObservableObject{
                         self.desc.append(desc.flavorText ?? "")
                     }
                 }
-            }else{
-                self.desc.append("한국어 도감 설명이 존재하지 않습니다.")
             }
-            
             if let genera = species.genera{         //타이틀 - 이상해씨:씨앗포켓몬
                 if genera.contains(where: {$0.language?.name == "ko"}){
                     for gen in genera{
@@ -195,9 +192,7 @@ class PokemonInfoViewModel:ObservableObject{
                         }
                     }
                 }
-                
             }
-            
             if let gender = species.genderRate{     //성비
                 if gender != -1{
                     self.gender.append((1-Double(gender)/8.0) * 100)
@@ -206,14 +201,12 @@ class PokemonInfoViewModel:ObservableObject{
                     self.gender.append(1.0)
                 }
             }
-            
             if let eggGroup = species.eggGroups{    //알그룹
                 for egg in eggGroup{
                     let getKoreanEgg = try await PokemonAPI().pokemonService.fetchEggGroup(urlToInt(url: egg.url!))
                     self.eggGroup.append(getKoreanEgg.names?[1].name ?? "")
                 }
             }
-            
             if let rate = species.captureRate{  //포획률
                 self.get = rate
             }

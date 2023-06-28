@@ -52,7 +52,7 @@ struct MainView: View {
                                         }
                                         .padding(.bottom,5)
                                     }
-                                }
+                                }.padding(.bottom)
 
                             }.padding(.horizontal).padding(.top)
                         }.refreshable {
