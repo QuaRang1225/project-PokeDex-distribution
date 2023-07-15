@@ -45,7 +45,7 @@ struct CircleProgressView: View {
                     }
                 }.padding(.horizontal,30)
             
-            Text("최대 30초정도 소요될 수 있습니다..")
+            Text("최대 3분 정도 소요될 수 있습니다..")
                 .padding()
 //            Spacer()
             

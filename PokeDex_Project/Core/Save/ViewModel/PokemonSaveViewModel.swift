@@ -22,11 +22,8 @@ import SwiftUI
 //}
 
 class SaveViewModel:ObservableObject{
-    @Published var num:Int = 0
-    @Published var image:String = ""
-    @Published var name:String = ""
-    @Published var types:[String] = []
-    
+
+    @Published var savePokemon:Row? = nil
     @Published var save:[Save] = []
     
     init(){
@@ -41,10 +38,10 @@ class SaveViewModel:ObservableObject{
     }
     func addData(){
         let save = Save()
-        save.num = num
-        save.image = image
-        save.name = name
-        save.types.append(objectsIn: types)
+        save.num = savePokemon?.num ?? 0
+        save.image = savePokemon?.image ?? ""
+        save.name = savePokemon?.name ?? ""
+        save.types.append(objectsIn: savePokemon?.types ?? [])
         guard let dbRef = try? Realm() else {return}
         try? dbRef.write{
             dbRef.add(save)

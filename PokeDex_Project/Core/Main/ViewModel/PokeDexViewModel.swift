@@ -13,7 +13,6 @@ import UIKit
 class AppDelegate: NSObject, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         PokeDex.applicationWillTerminate()
-//        MySave.applicationWillTerminate()
     }
 }
 

@@ -43,6 +43,7 @@ class PokemonInfoViewModel:ObservableObject{
     @Published var first = [String]()
     @Published var second = [String]()
     @Published var third = [String]()
+    
     //진화트리 - 포켓몬 이름
     @Published var firstName = [String]()
     @Published var secondName = [String]()
@@ -225,12 +226,6 @@ class PokemonInfoViewModel:ObservableObject{
         self.speed.removeAll()
         self.avr.removeAll()
         
-        self.firstChar.removeAll()
-        self.secondChar.removeAll()
-        self.hiddenChar.removeAll()
-        self.firstCharDesc.removeAll()
-        self.secondCharDesc.removeAll()
-        self.hiddenCharDesc.removeAll()
         
         if num == 10143{
             image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/10143.png"
