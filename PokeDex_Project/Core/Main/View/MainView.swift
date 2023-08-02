@@ -13,21 +13,40 @@ import PokemonAPI
 struct MainView: View {
     
     let columns = [ GridItem(.flexible()), GridItem(.flexible())]
+    let typesColumns = [ GridItem(.flexible()), GridItem(.flexible()),GridItem(.flexible()),GridItem(.flexible())]
     
     @State var isSearch = false
+    @State var isType = false
+    
     @State var text:String = ""
     @State var dexName = "전국도감"
     @State var selectLocation = false
+    @State var selectType:[TypeFilter] = []
+    @State var types:[TypeFilter] = TypeFilter.allCases
     
     @EnvironmentObject var vm:PokeDexViewModel
     @EnvironmentObject var vmSave:SaveViewModel
+    
     var filteredItems: [Row] {
         if text.isEmpty {
-            return vm.array
-        } else {
-            return vm.array.filter { String($0.name).contains(text) || String($0.num).contains(text)}
+            if selectType.isEmpty{
+                return vm.array
+            }else{
+                return vm.array.filter{$0.types.contains(selectType.first?.name ?? "") && $0.types.contains(selectType.last?.name ?? "")}
+            }
+        }
+        else {
+            if selectType.isEmpty{
+                return vm.array.filter { String($0.name).contains(text) || String($0.num).contains(text)}
+            }else{
+                return vm.array.filter{$0.types.contains(selectType.first?.name ?? "") && $0.types.contains(selectType.last?.name ?? "")}
+            }
+            
         }
     }
+    
+
+    
     
     var body: some View {
         NavigationView {
@@ -145,12 +164,32 @@ struct MainView: View {
                         .foregroundColor(.primary)
                 }
             }.padding(.top,50)
+            
+            
             if isSearch{
-                SearchBarView(text: $text)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(15)
-                    .padding(.top)
+                if isType{
+                    filter
+                }
+                HStack(alignment: .center){
+                    Button {
+                        withAnimation {
+                            isType.toggle()
+                        }
+                    } label: {
+                        Image(systemName: "slider.horizontal.3")
+                            .bold()
+                            .font(.title3)
+                            .offset(y: 5)
+                            .padding(.trailing,15)
+                    }
+                    .foregroundColor(.primary)
+                    SearchBarView(text: $text)
+                        .padding()
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(15)
+                        .padding(.top)
+                }
+                
             }
         }.padding(.horizontal,20)
             .padding(.bottom)
@@ -167,5 +206,96 @@ struct MainView_Previews: PreviewProvider {
         MainView()
                 .environmentObject(PokeDexViewModel())
                 .environmentObject(SaveViewModel())
+    }
+}
+
+extension MainView{
+    var filter:some View{
+        VStack(alignment: .leading){
+            HStack{
+                Text("타입 필터 : ")
+                    .font(.caption)
+                    .bold()
+                ForEach(selectType,id: \.self) { type in
+                    Button {
+                        selectType.removeAll {$0.name == type.name}
+                    } label: {
+                        TypeComponentView(type: type.name)
+                    }
+                }
+            }
+            .padding([.leading,.top])
+            .padding(.bottom,10)
+            LazyVGrid(columns: typesColumns) {
+                ForEach(types,id: \.self){ type in
+                    Button {
+                        if selectType.count < 2{
+                            selectType.append(type)
+                        }
+                    } label: {
+                        TypeComponentView(type: type.name)
+                            .padding(.bottom,5)
+                    }
+                }
+            }
+        }
+    }
+}
+enum TypeFilter:CaseIterable{
+    case grass
+    case fire
+    case water
+    case normal
+    case dark
+    case eletronic
+    case ice
+    case rock
+    case ground
+    case flying
+    case fighting
+    case fairy
+    case steel
+    case psychic
+    case bug
+    case poison
+    case ghost
+    
+    var name:String{
+        switch self{
+        case .grass:
+            return "풀"
+        case .fire:
+            return "불꽃"
+        case .water:
+            return "물"
+        case .normal:
+            return "노말"
+        case .dark:
+            return "악"
+        case .eletronic:
+            return "전기"
+        case .ice:
+            return "얼음"
+        case .rock:
+            return "바위"
+        case .ground:
+            return "땅"
+        case .flying:
+            return "비행"
+        case .fighting:
+            return "격투"
+        case .fairy:
+            return "페어리"
+        case .steel:
+            return "강철"
+        case .psychic:
+            return "에스퍼"
+        case .bug:
+            return "벌레"
+        case .poison:
+            return "독"
+        case .ghost:
+            return "고스트"
+        }
     }
 }

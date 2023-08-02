@@ -35,31 +35,12 @@ struct DexRowView: View {
             })
             .overlay(alignment:.bottom) {
                 HStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width: 65,height: 20)
-                        .foregroundColor(Color.typeColor(types: row.types.first ?? ""))
-                        .overlay {
-                            Text(row.types.first ?? "")
-                                .shadow(color: .black, radius: 2)
-                                .padding(.horizontal)
-                                .padding(2)
-                        }
+                    TypeComponentView(type: row.types.first!)
 
                     if row.types.count > 1 {
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(width: 65,height: 20)
-                            .foregroundColor(Color.typeColor(types: row.types.last ?? ""))
-                            .overlay {
-                                Text(row.types.last ?? "")
-                                    .shadow(color: .black, radius: 2)
-                                    .padding(.horizontal)
-                                    .padding(2)
-                            }
+                        TypeComponentView(type: row.types.last!)
                     }
                 }
-                .font(.caption2)
-                .bold()
-                .foregroundColor(.white)
                 .padding(.bottom, 5)
             }
 
@@ -72,7 +53,6 @@ struct DexRowView_Previews: PreviewProvider {
     static var previews: some View {
         HStack{
             DexRowView(row:Row(dexNum: 1, num: 1, image: "", name: "이상해씨", types: ["풀","독"]))
-            //(num: 1, image: "", name: "이상해씨", type: ["풀","독"])
         }
         .padding()
     }
