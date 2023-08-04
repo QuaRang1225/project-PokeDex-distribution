@@ -226,15 +226,35 @@ extension MainView{
             }
             .padding([.leading,.top])
             .padding(.bottom,10)
-            LazyVGrid(columns: typesColumns) {
-                ForEach(types,id: \.self){ type in
-                    Button {
-                        if selectType.count < 2{
-                            selectType.append(type)
+            ScrollView(.horizontal,showsIndicators: false){
+                HStack{
+                    ForEach(types,id: \.self){ type in
+                        Button {
+                            if selectType.count < 2{
+                                selectType.append(type)
+                            }
+                        } label: {
+                            Capsule()
+                                .stroke(lineWidth: 2)
+                                .frame(width: 100,height: 40)
+                                .overlay {
+                                    Text(type.name)
+                                        .bold()
+                                        .foregroundColor(.primary)
+//                                        .shadow(color:.black,radius: 5)
+                                }
+                                .foregroundColor(Color.typeColor(types: type.name))
+//                                .background{
+//                                    Capsule()
+//                                        .frame(width: 100,height: 40)
+//                                        .foregroundColor(.white)
+//                                }
+                                .padding(.bottom,5)
+                                .shadow(radius: 20)
+                                
                         }
-                    } label: {
-                        TypeComponentView(type: type.name)
-                            .padding(.bottom,5)
+                        .padding(.top,5)
+                        .padding(.leading,5)
                     }
                 }
             }
