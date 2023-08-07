@@ -109,7 +109,6 @@ class PokemonInfoViewModel:ObservableObject{
                 if let name = species.names{
                     for kor in name{
                         if let korName =  kor.language?.name,korName == "ko"{
-                         
                                 self.firstName.append(kor.name ?? "")
                                 self.first.append(self.imageUrl(url: self.urlToInt(url: evolChain.chain?.species?.url ?? "")))
                             
@@ -119,6 +118,14 @@ class PokemonInfoViewModel:ObservableObject{
                 
                 if let secondEvo = evolChain.chain?.evolvesTo{
                     for second in secondEvo{
+//                        if let details = second.evolutionDetails{
+//                            for s in details{
+//                                print(s)
+//                            }
+//                        }
+                        
+                        
+                        
                         let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(urlToInt(url: second.species?.url ?? ""))
                         if let name = species.names{
                             for kor in name{
@@ -127,13 +134,17 @@ class PokemonInfoViewModel:ObservableObject{
                                         self.secondName.append(kor.name ?? "")
                                         self.second.append(self.imageUrl(url: self.urlToInt(url: second.species?.url ?? "")))
                                     }
-                                    
                                 }
                             }
                         }
                         
                         if let thirdEvo = second.evolvesTo{
                             for third in thirdEvo{
+//                                if let details = third.evolutionDetails{
+//                                    for s in details{
+////                                        print(s.item.)
+//                                    }
+//                                }
                                 let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(urlToInt(url: third.species?.url ?? ""))
                                 if let name = species.names{
                                     for kor in name{

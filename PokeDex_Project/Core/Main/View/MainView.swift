@@ -39,7 +39,7 @@ struct MainView: View {
             if selectType.isEmpty{
                 return vm.array.filter { String($0.name).contains(text) || String($0.num).contains(text)}
             }else{
-                return vm.array.filter{$0.types.contains(selectType.first?.name ?? "") && $0.types.contains(selectType.last?.name ?? "")}
+                return vm.array.filter{$0.types.contains(selectType.first?.name ?? "") && $0.types.contains(selectType.last?.name ?? "") && (String($0.name).contains(text) || String($0.num).contains(text))}
             }
             
         }
@@ -250,7 +250,6 @@ extension MainView{
 //                                        .foregroundColor(.white)
 //                                }
                                 .padding(.bottom,5)
-                                .shadow(radius: 20)
                                 
                         }
                         .padding(.top,5)
