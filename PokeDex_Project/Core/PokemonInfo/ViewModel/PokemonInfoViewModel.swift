@@ -8,6 +8,7 @@
 import Foundation
 import PokemonAPI
 
+
 class PokemonInfoViewModel:ObservableObject{
     
     
@@ -119,9 +120,11 @@ class PokemonInfoViewModel:ObservableObject{
                 if let secondEvo = evolChain.chain?.evolvesTo{
                     for second in secondEvo{
 //                        if let details = second.evolutionDetails{
+//                            var url = 0
 //                            for s in details{
-//                                print(s)
+//                                url = urlToInt(url: (s.trigger?.url)!)
 //                            }
+//                            print(url)
 //                        }
                         
                         
@@ -141,9 +144,11 @@ class PokemonInfoViewModel:ObservableObject{
                         if let thirdEvo = second.evolvesTo{
                             for third in thirdEvo{
 //                                if let details = third.evolutionDetails{
+//                                    var url = 0
 //                                    for s in details{
-////                                        print(s.item.)
+//                                        url = urlToInt(url: (s.trigger?.url)!)
 //                                    }
+//                                    print(url)
 //                                }
                                 let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(urlToInt(url: third.species?.url ?? ""))
                                 if let name = species.names{

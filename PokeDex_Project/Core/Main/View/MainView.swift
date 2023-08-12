@@ -278,6 +278,7 @@ enum TypeFilter:CaseIterable{
     case bug
     case poison
     case ghost
+    case dragon
     
     var name:String{
         switch self{
@@ -315,6 +316,9 @@ enum TypeFilter:CaseIterable{
             return "독"
         case .ghost:
             return "고스트"
+        case .dragon:
+            return "드래곤"
+            
         }
     }
 }
