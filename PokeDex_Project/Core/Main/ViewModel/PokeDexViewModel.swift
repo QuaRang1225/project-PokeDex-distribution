@@ -10,11 +10,11 @@ import PokemonAPI
 import RealmSwift
 import UIKit
 
-class AppDelegate: NSObject, UIApplicationDelegate {
-    func applicationWillTerminate(_ application: UIApplication) {
-        PokeDex.applicationWillTerminate()
-    }
-}
+//class RealmAppDelegate: NSObject, UIApplicationDelegate {
+//    func applicationWillTerminate(_ application: UIApplication) {
+//        PokeDex.applicationWillTerminate()
+//    }
+//}
 
 
 class Save:Object,Identifiable{
