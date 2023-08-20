@@ -107,6 +107,10 @@ class PokemonInfoViewModel:ObservableObject{
             if let chain = species.evolutionChain?.url{     //진화트리
                 let evolChain = try await PokemonAPI().evolutionService.fetchEvolutionChain(urlToInt(url: chain))   //체인
                 let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(urlToInt(url: evolChain.chain?.species?.url ?? ""))
+                if let details = evolChain.chain?.evolutionDetails{
+                    
+                }
+               
                 if let name = species.names{
                     for kor in name{
                         if let korName =  kor.language?.name,korName == "ko"{
@@ -665,3 +669,17 @@ class PokemonInfoViewModel:ObservableObject{
         }
     }
 }
+
+
+//extension PKMEvolutionDetail{
+//    func getEvolution(detail:PKMEvolutionDetail){
+//        var setDetail = detail
+//        if let gender = detail.gender{
+//            setDetail.gender = gender
+//        }
+//        if let heldItem = detail.heldItem{
+//            setDetail.heldItem = heldItem.
+//        }
+//        print(setDetail)
+//    }
+//}
