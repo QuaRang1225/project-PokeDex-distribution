@@ -97,12 +97,12 @@ class MoveSaveViewModel:ObservableObject{
     }
     
     func getMove() async{
-        //        for i in 1...900{
-        //            await getMoveList(num:i)
-        //        }
-        //        for i in 10001...10018{
-        //            await getMoveList(num:i)
-        //        }
+        for i in 1...900{
+            await getMoveList(num:i)
+        }
+        for i in 10001...10018{
+            await getMoveList(num:i)
+        }
     }
 }
 

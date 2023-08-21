@@ -11,9 +11,28 @@ struct TestView: View {
     @StateObject var vm = MoveSaveViewModel()
     var body: some View {
         VStack{
-            
-        }.task{
-             vm.getItemList()
+            Button {
+                Task{
+                    vm.getItemList()
+                }
+            } label: {
+                Text("아이템DB저장")
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.gray.opacity(0.5))
+                    .cornerRadius(20)
+            }
+            Button {
+                Task{
+                     await vm.getMove()
+                }
+            } label: {
+                Text("기술DB저장")
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.gray.opacity(0.5))
+                    .cornerRadius(20)
+            }
         }
     }
 }
