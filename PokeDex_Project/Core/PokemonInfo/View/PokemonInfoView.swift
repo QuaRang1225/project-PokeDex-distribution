@@ -49,9 +49,6 @@ struct PokemonInfoView: View {
                 calculate
             }
         }
-//        .onTapGesture {
-//            form = false
-//        }
         .onAppear{
             formName = ""
             current = num
@@ -68,7 +65,7 @@ struct PokemonInfoView: View {
 
 struct PokemonInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInfoView(num: 1004)
+        PokemonInfoView(num: 1)
             .environmentObject(SaveViewModel())
     }
 }

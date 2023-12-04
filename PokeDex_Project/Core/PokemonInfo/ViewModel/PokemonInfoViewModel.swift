@@ -184,6 +184,7 @@ class PokemonInfoViewModel:ObservableObject{
         self.eggGroup.removeAll()
         
         
+        
         Task{
             let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(num)
             let name = await getKoreanName(num: num)

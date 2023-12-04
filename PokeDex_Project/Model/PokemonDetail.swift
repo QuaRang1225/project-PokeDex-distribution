@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+struct PokemonDetail{
+    var id:Int
+    var name:String
+    var sprite:String
+    var evolDetail:[String]?
+}

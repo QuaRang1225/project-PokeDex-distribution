@@ -106,4 +106,12 @@ enum LocationFilter:String,CaseIterable{
             return "paldea"
         }
     }
+    var region:String{
+        switch self{
+        case .national,.kanto,.johto,.hoenn,.sinnoh,.unova,.alaola,.galar,.paldea:
+            return rawValue
+        case .kalos_ctl,.kalos_cst,.kalos_mtn:
+            return "kalos"
+        }
+    }
 }

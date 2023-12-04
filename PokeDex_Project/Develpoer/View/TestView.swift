@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import PokemonAPI
 
 struct TestView: View {
+    let pokemon = 133
     @StateObject var vm = MoveSaveViewModel()
     var body: some View {
         VStack{
@@ -33,6 +35,19 @@ struct TestView: View {
                     .background(Color.gray.opacity(0.5))
                     .cornerRadius(20)
             }
+            Button {
+                Task{
+                    vm.getPokemon(num:pokemon)
+                    vm.getSpecies(num:pokemon)
+                }
+            } label: {
+                Text("테스트")
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.gray.opacity(0.5))
+                    .cornerRadius(20)
+            }
+
         }
     }
 }
