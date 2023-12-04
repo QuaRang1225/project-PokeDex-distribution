@@ -1,6 +1,8 @@
-![IMG_9499](https://github.com/QuaRang1225/PokeDex_Project/assets/31721255/6a5e4174-bfc8-4685-9a59-eb3748d1c5ae)<img width="100" alt="logo" src="https://github.com/QuaRang1225/PokeDex_Project/assets/31721255/f207d779-58ca-4104-b50e-480ca7e70a72">
 
-### 🔗 관련링크
+<img width="235" alt="스크린샷 2023-12-04 오후 7 47 36" src="https://github.com/QuaRang1225/PokeDex_Project/assets/31721255/d13f4d61-cc0b-41db-96cc-81689906eb5a">
+
+
+🔗 관련링크
 
 
 [‎올포원 앱스토어 링크](https://apps.apple.com/kr/app/%EC%98%AC%ED%8F%AC%EC%9B%90/id6450005052)
@@ -15,10 +17,6 @@
 ### 🤔 고민한 점
 
 > 포켓몬의 정보는 어떻게 불러올까?
-
-![스크린샷 2023-12-01 오후 5 01 57](https://github.com/QuaRang1225/PokeDex_Project/assets/31721255/74d0ddb9-86d4-4746-ac65-c119ea2f2831)
-
-
 외부 라이브러리를 사용해보는 것을 목적으로 두었기 때문에 직접 통신기능을 구현하지 않고 pokeAPI에서 제공하는 iOS RESTful API를 사용하기로 했습니다. 
 
 - 사용 패키지
@@ -41,10 +39,12 @@ https://github.com/kinkofer/PokemonAPI
 3. 그중에 개발자에게 직관적이며 Andorid 확장 가능성이 용이한 RealmDB를 사용하기로 결정
 
 ### 📱 기능 & 화면
+
 ![스크린샷 2023-12-04 오후 7 39 55](https://github.com/QuaRang1225/PokeDex_Project/assets/31721255/68ddb760-c41b-4007-853c-0ace68c642be)
 
 
 - 첫 실행 시 포켓몬도감 리스트 정보를 담는 작업 중에 간단한 퀴즈게임 제공
+
 ![스크린샷 2023-12-04 오후 7 39 41](https://github.com/QuaRang1225/PokeDex_Project/assets/31721255/b6b8ab41-3aa1-4170-b3d8-b7c41d640be8)
 
 
