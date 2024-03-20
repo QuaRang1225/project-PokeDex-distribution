@@ -20,27 +20,25 @@ import SwiftUI
 class TreeNode: Identifiable {
     let id = UUID()
     var value: Int
-    var left: TreeNode?
-    var right: TreeNode?
+    var children: [TreeNode]
     
-    init(value: Int, left: TreeNode? = nil, right: TreeNode? = nil) {
+    init(value: Int, children: [TreeNode] = []) {
         self.value = value
-        self.left = left
-        self.right = right
+        self.children = children
     }
 }
 
 // 이진 트리를 생성하는 함수 정의
-func createBinaryTree() -> TreeNode {
-    let node7 = TreeNode(value: 7)
-    let node6 = TreeNode(value: 6)
-    let node5 = TreeNode(value: 5)
-    let node4 = TreeNode(value: 4)
-    let node3 = TreeNode(value: 3, left: node6, right: node7)
-    let node2 = TreeNode(value: 2, left: node4, right: node5)
-    let root = TreeNode(value: 1, left: node2, right: node3)
-    return root
-}
+//func createBinaryTree() -> TreeNode {
+//    let node7 = TreeNode(value: 7)
+//    let node6 = TreeNode(value: 6)
+//    let node5 = TreeNode(value: 5)
+//    let node4 = TreeNode(value: 4)
+//    let node3 = TreeNode(value: 3, left: node6, right: node7)
+//    let node2 = TreeNode(value: 2, left: node4, right: node5)
+//    let root = TreeNode(value: 1, left: node2, right: node3)
+//    return root
+//}
 
 // 트리의 각 노드를 표시하는 SwiftUI 뷰 정의
 struct TreeNodeView: View {
@@ -57,12 +55,8 @@ struct TreeNodeView: View {
                         .font(.headline)
                 )
             HStack {
-                if let left = node.left {
-                    TreeNodeView(node: left)
-                }
-                Spacer()
-                if let right = node.right {
-                    TreeNodeView(node: right)
+                ForEach(node.children) { child in
+                    TreeNodeView(node: child)
                 }
             }
         }
@@ -82,16 +76,23 @@ struct TreeView: View {
 
 // ContentView에 트리 뷰 추가
 struct Test1View: View {
-    let treeRoot = createBinaryTree()
-    
-    var body: some View {
-        TreeView(root: treeRoot)
-    }
+    let treeRoot: TreeNode
+        
+        var body: some View {
+            TreeNodeView(node: treeRoot)
+        }
 }
 
 // ContentView를 미리보기
 struct Test1View_Previews: PreviewProvider {
     static var previews: some View {
-        Test1View()
-    }
+            let node4 = TreeNode(value: 4)
+            let node5 = TreeNode(value: 5)
+            let node6 = TreeNode(value: 6)
+            let node7 = TreeNode(value: 7)
+            let node2 = TreeNode(value: 2, children: [node4, node5])
+            let node3 = TreeNode(value: 3, children: [node6, node7])
+            let treeRoot = TreeNode(value: 1, children: [node2, node3])
+            return Test1View(treeRoot: treeRoot)
+        }
 }
