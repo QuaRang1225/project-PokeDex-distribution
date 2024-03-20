@@ -107,9 +107,9 @@ class PokemonInfoViewModel:ObservableObject{
             if let chain = species.evolutionChain?.url{     //진화트리
                 let evolChain = try await PokemonAPI().evolutionService.fetchEvolutionChain(urlToInt(url: chain))   //체인
                 let species = try await PokemonAPI().pokemonService.fetchPokemonSpecies(urlToInt(url: evolChain.chain?.species?.url ?? ""))
-                if let details = evolChain.chain?.evolutionDetails{
-                    
-                }
+//                if let details = evolChain.chain?.evolutionDetails{
+//                    
+//                }
                
                 if let name = species.names{
                     for kor in name{

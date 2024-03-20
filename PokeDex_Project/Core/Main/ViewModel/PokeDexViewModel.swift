@@ -192,7 +192,7 @@ class PokeDexViewModel: ObservableObject {
     private func fetchData() {
         let pokeDex = PokeDex.findAll()
         pokeDexCount = pokeDex.count
-        if pokeDexCount == 1010 {
+        if pokeDexCount == 1025 {
             successDownload = true
             model = Array(PokeDex.findAll())    //빌드 5 이거 추가
         }

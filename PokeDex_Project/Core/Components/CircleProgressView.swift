@@ -20,33 +20,33 @@ struct CircleProgressView: View {
     var body: some View {
         VStack(spacing:0){
             Spacer()
-          solveScreen
-            Spacer()
-            ProgressView("",value: Double(vm.pokeDexCount),total: 1010)
-                
-                .accentColor(.red)
-                .overlay(alignment:.topLeading){
-                    HStack{
-                        Circle()
-                            .stroke(
-                                AngularGradient(
-                                    gradient: Gradient(colors: [Color.clear, Color.red]),
-                                    center: .center,
-                                    startAngle: .zero,
-                                    endAngle: .degrees(360)
-                                ),
-                                lineWidth: 1
-                            )
-                            .frame(width: 10, height: 10)
-                            .rotationEffect(Angle(degrees: rotation))
-                        Text(countStart ?  "도감 정보 다운로드중.." : "리소스 검사 중..")
-                        Text("\(vm.pokeDexCount >= 10 ? (vm.pokeDexCount-10)/10 : (vm.pokeDexCount-10)/10 + 1)%")
-                       
-                    }
-                }.padding(.horizontal,30)
-            
-            Text("최대 3분 정도 소요될 수 있습니다..")
-                .padding()
+//          solveScreen
+//            Spacer()
+//            ProgressView("",value: Double(vm.pokeDexCount),total: 1010)
+//                
+//                .accentColor(.red)
+//                .overlay(alignment:.topLeading){
+//                    HStack{
+//                        Circle()
+//                            .stroke(
+//                                AngularGradient(
+//                                    gradient: Gradient(colors: [Color.clear, Color.red]),
+//                                    center: .center,
+//                                    startAngle: .zero,
+//                                    endAngle: .degrees(360)
+//                                ),
+//                                lineWidth: 1
+//                            )
+//                            .frame(width: 10, height: 10)
+//                            .rotationEffect(Angle(degrees: rotation))
+//                        Text(countStart ?  "도감 정보 다운로드중.." : "리소스 검사 중..")
+//                        Text("\(vm.pokeDexCount >= 10 ? (vm.pokeDexCount-10)/10 : (vm.pokeDexCount-10)/10 + 1)%")
+//                       
+//                    }
+//                }.padding(.horizontal,30)
+//            
+//            Text("최대 3분 정도 소요될 수 있습니다..")
+//                .padding()
 //            Spacer()
             
         }

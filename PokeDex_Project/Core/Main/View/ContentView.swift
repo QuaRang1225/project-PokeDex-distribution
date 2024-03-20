@@ -20,7 +20,7 @@ struct ContentView:View{
                     CircleProgressView()
                         .environmentObject(vm)
                         .onAppear{
-                            if vm.pokeDexCount != 1010{
+                            if vm.pokeDexCount != 1025{
                                 PokeDex.deleteAll()
                                 vm.get()
                             }
@@ -34,7 +34,7 @@ struct ContentView:View{
             print(Realm.Configuration.defaultConfiguration.fileURL!)
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 withAnimation(.easeInOut(duration: 1.0)){
-                    if vm.pokeDexCount == 1010{
+                    if vm.pokeDexCount == 1025{
                         downloadStart = true
                         start = true
                         

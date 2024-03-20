@@ -28,62 +28,62 @@ struct DefenseIndexView: View {
     var body: some View {
         VStack(alignment: .leading) {
 //            levelType
-            Text("50레벨 기준")
-                .padding(.bottom,5)
-            defense
-            individual
-            effort
-            character
-            skillPower
-            Group{
-                Button {
-                    if Int(hpIndiNum)! <= 31 && Int(defIndiNum)! >= 0 && Int(defIndiNum)! <= 31 && Int(sDefIndiNum)! >= 0 && Int(sDefIndiNum)! <= 31 && Int(hpeff)! >= 0 && Int(hpeff)! <= 252 && Int(defEff)! >= 0 && Int(defEff)! <= 252 && Int(sDefff)! >= 0 && Int(sDefff)! <= 252{
-                        
-                        let hpPoint:Int = Int(Double(vm.hp.first!) + (Double(hpIndiNum)!/2) + (Double(hpeff)!/8) + 10.0 + 50.0)
-                        let defPoint:Int = Int((Double(vm.defense.first!) + (Double(defIndiNum)!/2) + (Double(defEff)!/8) + 5) * defchar.value)
-                        let sdefPoint:Int = Int((Double(vm.spDefense.first!) + (Double(sDefIndiNum)!/2) + (Double(sDefff)!/8) + 5) * sdefchar.value)
-                        
-                        let doption1Value = Double(doption1)!
-                        let doption2Value = Decimal(Double(doption2)!) / pow(10, Int(Double(doption2.count)))
-                        let dendValue = Double(hpPoint) * (Double(defPoint)/0.411) * (doption1Value + Double(truncating: doption2Value as NSNumber))
-                        
-                        let boption1Value = Double(boption1)!
-                        let boption2Value = Decimal(Double(boption2)!) / pow(10, Int(Double(boption2.count)))
-                        let bendValue = Double(hpPoint) * (Double(sdefPoint)/0.411) * (boption1Value + Double(truncating: boption2Value as NSNumber))
-                        
-                        value = "방어 - \(dendValue)\n특수방어 -  \(bendValue)"
-                        error = true
-                    }
-                    else{
-                        value = "레벨은 0~100, 개체값은 0~31, 노력치는 0~252사이만 입력할 수 있습니다!"
-                        error = false
-                    }
-                } label: {
-                    RoundedRectangle(cornerRadius: 20)
-                        .frame(height: 60)
-                        .foregroundColor(.secondary)
-                        .padding(.vertical,50)
-                        .overlay {
-                            Text("계산")
-                                .foregroundColor(.white)
-                        }
-                }
-                HStack{
-                    Spacer()
-                    if error{
-                        Text("결정력 : ")
-                            .bold()
-                    }
-                    Text(value)
-                        .padding(.vertical,20)
-                        .font(.title3)
-                        .bold()
-                        .foregroundColor(error ? .green : .red)
-                    Spacer()
-                }
-                
-                Spacer()
-            }
+//            Text("50레벨 기준")
+//                .padding(.bottom,5)
+//            defense
+//            individual
+//            effort
+//            character
+//            skillPower
+//            Group{
+//                Button {
+//                    if Int(hpIndiNum)! <= 31 && Int(defIndiNum)! >= 0 && Int(defIndiNum)! <= 31 && Int(sDefIndiNum)! >= 0 && Int(sDefIndiNum)! <= 31 && Int(hpeff)! >= 0 && Int(hpeff)! <= 252 && Int(defEff)! >= 0 && Int(defEff)! <= 252 && Int(sDefff)! >= 0 && Int(sDefff)! <= 252{
+//                        
+//                        let hpPoint:Int = Int(Double(vm.hp.first!) + (Double(hpIndiNum)!/2) + (Double(hpeff)!/8) + 10.0 + 50.0)
+//                        let defPoint:Int = Int((Double(vm.defense.first!) + (Double(defIndiNum)!/2) + (Double(defEff)!/8) + 5) * defchar.value)
+//                        let sdefPoint:Int = Int((Double(vm.spDefense.first!) + (Double(sDefIndiNum)!/2) + (Double(sDefff)!/8) + 5) * sdefchar.value)
+//                        
+//                        let doption1Value = Double(doption1)!
+//                        let doption2Value = Decimal(Double(doption2)!) / pow(10, Int(Double(doption2.count)))
+//                        let dendValue = Double(hpPoint) * (Double(defPoint)/0.411) * (doption1Value + Double(truncating: doption2Value as NSNumber))
+//                        
+//                        let boption1Value = Double(boption1)!
+//                        let boption2Value = Decimal(Double(boption2)!) / pow(10, Int(Double(boption2.count)))
+//                        let bendValue = Double(hpPoint) * (Double(sdefPoint)/0.411) * (boption1Value + Double(truncating: boption2Value as NSNumber))
+//                        
+//                        value = "방어 - \(dendValue)\n특수방어 -  \(bendValue)"
+//                        error = true
+//                    }
+//                    else{
+//                        value = "레벨은 0~100, 개체값은 0~31, 노력치는 0~252사이만 입력할 수 있습니다!"
+//                        error = false
+//                    }
+//                } label: {
+//                    RoundedRectangle(cornerRadius: 20)
+//                        .frame(height: 60)
+//                        .foregroundColor(.secondary)
+//                        .padding(.vertical,50)
+//                        .overlay {
+//                            Text("계산")
+//                                .foregroundColor(.white)
+//                        }
+//                }
+//                HStack{
+//                    Spacer()
+//                    if error{
+//                        Text("결정력 : ")
+//                            .bold()
+//                    }
+//                    Text(value)
+//                        .padding(.vertical,20)
+//                        .font(.title3)
+//                        .bold()
+//                        .foregroundColor(error ? .green : .red)
+//                    Spacer()
+//                }
+//                
+//                Spacer()
+//            }
 //            Spacer()
         }
         .padding(.top,10)
