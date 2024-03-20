@@ -7,8 +7,8 @@
 
 import Foundation
 import PokemonAPI
-import FirebaseFirestoreSwift
-import FirebaseFirestore
+//import FirebaseFirestoreSwift
+//import FirebaseFirestore
 
 
 class MoveSaveViewModel:ObservableObject{
@@ -60,7 +60,7 @@ class MoveSaveViewModel:ObservableObject{
                 "damge":damageClass
             ]
             
-            try await Firestore.firestore().collection("Move").document("\(num)").setData(data)
+//            try await Firestore.firestore().collection("Move").document("\(num)").setData(data)
         }
     }
     
@@ -86,7 +86,7 @@ class MoveSaveViewModel:ObservableObject{
                             "coast":item.cost ?? 0,
                             "sprites":item.sprites?.default ?? ""
                         ]
-                        try await Firestore.firestore().collection("Items").document("\(num)").setData(data)
+//                        try await Firestore.firestore().collection("Items").document("\(num)").setData(data)
                         
                     }catch{}
                 }
