@@ -1,5 +1,5 @@
 {
-  "originHash" : "bc917bb54ac54935b80e14f451af6e2a994ac91753df3042fb14dfdb8ebd75c2",
+  "originHash" : "a0e41175342964db7c74c4a13ebe3d9eded7edc1fba983447069124ccf9e4fbf",
   "pins" : [
     {
       "identity" : "kingfisher",
@@ -8,15 +8,6 @@
       "state" : {
         "revision" : "5b92f029fab2cce44386d28588098b5be0824ef5",
         "version" : "7.11.0"
-      }
-    },
-    {
-      "identity" : "pokemonapi",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kinkofer/PokemonAPI.git",
-      "state" : {
-        "revision" : "dfb4cfbf5f91798a5c37b031b913e21a74a06289",
-        "version" : "6.1.1"
       }
     },
     {
