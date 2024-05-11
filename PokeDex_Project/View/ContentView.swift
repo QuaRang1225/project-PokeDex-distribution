@@ -8,10 +8,9 @@ struct ContentView:View{
     var body: some View{
         ZStack{
             if start{
-//
-                
+                MainView()
             }else{
-//                StartView().environmentObject(vm)
+                StartView()
             }
         }.onAppear{
             print(Realm.Configuration.defaultConfiguration.fileURL!)
@@ -24,26 +23,6 @@ struct ContentView:View{
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
-
-
-extension ContentView{
-    var ok:some View{
-        Button{
-            
-        } label: {
-            
-        }
-    }
-    var dismiss:some View{
-        Button {
-            
-        } label: {
-            
-        }
-    }
+#Preview {
+    ContentView()
 }
