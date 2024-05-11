@@ -4,14 +4,14 @@
 //
 //  Created by 유영웅 on 5/10/24.
 //
-
+import Foundation
 import Alamofire
 
 final class ApiClient{
     
     var session:Session
     static let shared = ApiClient()
-    static let baseURL =  "https://\(Bundle.main.infoDictionary?["AWS_URL"] ?? "")"
+    static let baseURL =  "http://\(Bundle.main.infoDictionary?["AWS_URL"] ?? "")"
     
     let monitors = [ApiLogger()] as [EventMonitor]
     
