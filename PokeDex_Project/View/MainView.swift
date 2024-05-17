@@ -28,7 +28,7 @@ struct MainView: View {
                     .tabItem {
                         VStack{
                             Image(systemName: "book.closed")
-                            Text("도감")
+                            Text("도감 ")
                         }
                     }
                 Text("")
@@ -57,7 +57,9 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView(vm: PokemonViewModel(pokemonList: [], pokemon: nil))
+    NavigationStack{
+        MainView(vm: PokemonViewModel(pokemonList: [], pokemon: nil))
+    }
 }
 
 extension MainView{
@@ -71,19 +73,25 @@ extension MainView{
                             .frame(width: 25,height: 25)
                         Text(String(format: "%04d", pokemon.id))
                     }
-                    RoundedRectangle(cornerRadius: 20)
-                        .frame(height: UIScreen.main.bounds.width/3)
-                        .foregroundColor(.typeColor(pokemon.color).opacity(0.15))
-                        .overlay {
-                            KFImage(URL(string:pokemon.base.image ))
-                                .resizable()
-                                .padding(.bottom)
-                            
-                        }
+                    NavigationLink {
+                        PokemonView(pokemonId: pokemon.base.num)
+                            .navigationBarBackButtonHidden()
+                    } label: {
+                        RoundedRectangle(cornerRadius: 20)
+                            .frame(height: UIScreen.main.bounds.width/3)
+                            .foregroundColor(.typeColor(pokemon.color).opacity(0.15))
+                            .overlay {
+                                KFImage(URL(string:pokemon.base.image ))
+                                    .resizable()
+                                    .padding(.bottom)
+                                
+                            }
+                    }
+                    
                     Text(pokemon.name)
                     HStack(spacing: 5){
                         ForEach(pokemon.base.types,id:\.self){ type in
-                            typesView(type: type, height: 15, width: 70, font: .system(size: 10))
+                            TypesView(type: type, width: 70, height: 15, font: .system(size: 10))
                         }
                     }.padding(.bottom,10)
                     
@@ -175,7 +183,7 @@ extension MainView{
                     Button {
                         types = types.filter{ type != $0 }
                     } label: {
-                        typesView(type: type, height: 22, width: 80, font: .callout)
+                        TypesView(type: type, width: 80, height: 22, font: .callout)
                     }
                 }
             }.padding(.horizontal)
@@ -187,7 +195,7 @@ extension MainView{
                             types.append(type.rawValue)
                         }
                     } label: {
-                        typesView(type: type.rawValue, height: 22, width: nil, font: .callout)
+                        TypesView(type: type.rawValue, width: nil, height: 22, font: .callout)
                         
                     }
                     
@@ -219,29 +227,23 @@ extension MainView{
             
         }
     }
-    func typesView(type:String,height:CGFloat,width:CGFloat?,font:Font) -> some View{
-        RoundedRectangle(cornerRadius: 5)
-            .frame(height: height)
-            .frame(maxWidth: width)
-            .foregroundColor(Color.typeColor(type))
-            .overlay {
-                Text(type)
-                    .font(font)
-                    .padding(.horizontal,15)
-                    .foregroundColor(.white)
-                    .shadow(color:.black, radius: 1)
-                
-            }
-    }
+   
     var illustratedView:some View{
         VStack(alignment:.leading){
             HStack{
                 Button {
-                    regionChange = true
+                    withAnimation(.bouncy){
+                        regionChange = true
+                    }
+                    
                 } label: {
-                    Text("\(filter.rawValue)도감")
-                        .font(.title)
-                        .bold()
+                    HStack(spacing: 5){
+                        Text("\(filter.rawValue)도감 ")
+                            .font(.title)
+                            .bold()
+                        Image(systemName: "chevron.down")
+                    }
+                    
                 }
                 Spacer()
                 Button {
