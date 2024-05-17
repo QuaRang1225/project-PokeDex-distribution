@@ -17,6 +17,11 @@ class PokemonViewModel:ObservableObject{
     @Published var currentPage = 1
     @Published var maxPage = 0
     
+    init(pokemonList:[PokemonsList],pokemon:Pokemons?){
+        self.pokemon = pokemon
+        self.pokemonList = pokemonList
+    }
+    
     func fetchPokemon(id:Int){
         PokemonApiService.pokemon(id: id)
             .sink {completion in
