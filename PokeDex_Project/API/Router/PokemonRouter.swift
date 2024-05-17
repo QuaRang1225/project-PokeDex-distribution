@@ -35,8 +35,8 @@ enum PokemonRouter:URLRequestConvertible{
             var params = Parameters()
             params["page"] = page
             params["region"] = region
-            params["type_1"] = type_1
-            params["type_2"] = type_2
+            params["types_1"] = type_1
+            params["types_2"] = type_2
             params["query"] = query
             return params
         }
@@ -49,7 +49,7 @@ enum PokemonRouter:URLRequestConvertible{
         case .pokemon:
             return request
         case .pokemons:
-            return try URLEncoding(destination: .queryString).encode(request, with: parameters)
+            return try URLEncoding.queryString.encode(request, with: parameters)
         }
     }
 }
