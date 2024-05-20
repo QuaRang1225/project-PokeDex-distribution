@@ -18,44 +18,15 @@ struct PokemonView: View {
     
     var body: some View {
         VStack{
-            if var pokemon = vm.pokemon,var variety = vm.variety{
+            if let pokemon = vm.pokemon,var variety = vm.variety{
                 headerView(pokemon:pokemon)
                 ScrollView(showsIndicators: false){
                     pokemonView(pokemon: pokemon,variety: variety)
-                    formView(pokemon: pokemon,variety: variety)
-                    if let count = vm.variety?.form.images.count,count > 1{
-                        VStack(alignment: .leading){
-                            Text("다른 모습").bold().padding(.top)
-                            ScrollView(.horizontal,showsIndicators: false) {
-                                HStack{
-                                    ForEach(0..<count,id:\.self){ index in
-                                        Button {
-                                            switch pokemonId{
-                                            case 493: variety.types = [variety.form.name[index]]
-                                            default:break
-                                            }
-                                            variety.form.images[0] = vm.formList[index]
-                                            vm.variety = variety
-                                        } label: {
-                                            VStack{
-                                                KFImage(URL(string: vm.formList[index]))
-                                                    .resizable()
-                                                    .frame(width: 50,height: 50)
-                                                Text(variety.form.name[index])
-                                                    .font(.caption2)
-                                            }
-                                            .foregroundColor(.primary)
-                                            .opacity(variety.form.images[0] == vm.formList[index] ? 1 : 0.4)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
+                    formView(pokemon: pokemon)
                     info1View(pokemon: pokemon,variety: variety)
                     statsView(pokemon: pokemon,variety: variety)
                     abilityView(pokemon: pokemon,variety: variety)
+                    evolutionTreeView()
                     textEntrieView(pokemon: pokemon)
                     
                 }
@@ -69,7 +40,7 @@ struct PokemonView: View {
 }
 
 #Preview {
-    PokemonView(pokemonId: 423)
+    PokemonView(pokemonId: 133)
 }
 
 extension PokemonView{
@@ -112,7 +83,7 @@ extension PokemonView{
         }
         
     }
-    func formView(pokemon:Pokemons,variety: Varieties)->some View{
+    func formView(pokemon:Pokemons)->some View{
         VStack{
             if vm.varieties.count != 1{
                 VStack(alignment: .leading){
@@ -132,6 +103,37 @@ extension PokemonView{
                                     }
                                     .foregroundColor(.primary)
                                     .opacity(vm.variety == variety ? 1 : 0.4)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if var variety = vm.variety{
+                if let count = vm.variety?.form.images.count,count > 1{
+                    VStack(alignment: .leading){
+                        Text("다른 모습").bold().padding(.top)
+                        ScrollView(.horizontal,showsIndicators: false) {
+                            HStack{
+                                ForEach(0..<count,id:\.self){ index in
+                                    Button {
+                                        switch pokemonId{
+                                        case 493: variety.types = [variety.form.name[index]]
+                                        default:break
+                                        }
+                                        variety.form.images[0] = vm.formList[index]
+                                        vm.variety = variety
+                                    } label: {
+                                        VStack{
+                                            KFImage(URL(string: vm.formList[index]))
+                                                .resizable()
+                                                .frame(width: 50,height: 50)
+                                            Text(variety.form.name[index])
+                                                .font(.caption2)
+                                        }
+                                        .foregroundColor(.primary)
+                                        .opacity(variety.form.images[0] == vm.formList[index] ? 1 : 0.4)
+                                    }
                                 }
                             }
                         }
@@ -242,6 +244,14 @@ extension PokemonView{
                 
             }
             .font(.system(size: 13))
+        }
+    }
+    func evolutionTreeView()-> some View{
+        VStack{
+            Text("진화트리")
+                .bold()
+                .padding(.top)
+            EvolTreeNodeView(node:  vm.evolutionTree ?? EvolutionTo(image: [], name: ""))
         }
     }
     func textEntrieView(pokemon:Pokemons)->some View{

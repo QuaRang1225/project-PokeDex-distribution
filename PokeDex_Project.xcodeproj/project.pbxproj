@@ -46,6 +46,9 @@
 		D639CE292BF77996002E0B5D /* TypesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639CE282BF77996002E0B5D /* TypesView.swift */; };
 		D639CE2B2BF79DD2002E0B5D /* VarietiesRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639CE2A2BF79DD2002E0B5D /* VarietiesRouter.swift */; };
 		D639CE2D2BF79EA3002E0B5D /* VarietiesApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639CE2C2BF79EA3002E0B5D /* VarietiesApiService.swift */; };
+		D679C1072BFB3CD300223D6D /* EvolutionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679C1062BFB3CD300223D6D /* EvolutionRouter.swift */; };
+		D679C1092BFB3EC300223D6D /* EvolutionApiRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679C1082BFB3EC300223D6D /* EvolutionApiRouter.swift */; };
+		D679C10B2BFB410700223D6D /* EvolTreeNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679C10A2BFB410700223D6D /* EvolTreeNodeView.swift */; };
 		D68F1DF72BAAABF80086BC9C /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = D68F1DF62BAAABF80086BC9C /* Realm */; };
 		D68F1DF92BAAABF80086BC9C /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D68F1DF82BAAABF80086BC9C /* RealmSwift */; };
 		D68F1DFC2BAAAC000086BC9C /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D68F1DFB2BAAAC000086BC9C /* Kingfisher */; };
@@ -112,6 +115,9 @@
 		D639CE282BF77996002E0B5D /* TypesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypesView.swift; sourceTree = "<group>"; };
 		D639CE2A2BF79DD2002E0B5D /* VarietiesRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VarietiesRouter.swift; sourceTree = "<group>"; };
 		D639CE2C2BF79EA3002E0B5D /* VarietiesApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VarietiesApiService.swift; sourceTree = "<group>"; };
+		D679C1062BFB3CD300223D6D /* EvolutionRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionRouter.swift; sourceTree = "<group>"; };
+		D679C1082BFB3EC300223D6D /* EvolutionApiRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionApiRouter.swift; sourceTree = "<group>"; };
+		D679C10A2BFB410700223D6D /* EvolTreeNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolTreeNodeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +221,7 @@
 				8123985929F2865A00B7D560 /* ContentView.swift */,
 				D639CDDB2BEDEEFB002E0B5D /* MainView.swift */,
 				D639CE212BF72D75002E0B5D /* PokemonView.swift */,
+				D679C10A2BFB410700223D6D /* EvolTreeNodeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -243,6 +250,7 @@
 			children = (
 				D639CDE72BEDF19D002E0B5D /* PokemonRouter.swift */,
 				D639CE2A2BF79DD2002E0B5D /* VarietiesRouter.swift */,
+				D679C1062BFB3CD300223D6D /* EvolutionRouter.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -323,6 +331,7 @@
 			children = (
 				D639CE102BEDF789002E0B5D /* PokemonApiService.swift */,
 				D639CE2C2BF79EA3002E0B5D /* VarietiesApiService.swift */,
+				D679C1082BFB3EC300223D6D /* EvolutionApiRouter.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -514,6 +523,7 @@
 				D639CDE62BEDF176002E0B5D /* APILogger.swift in Sources */,
 				D639CE292BF77996002E0B5D /* TypesView.swift in Sources */,
 				D639CE032BEDF4B9002E0B5D /* Dex.swift in Sources */,
+				D679C10B2BFB410700223D6D /* EvolTreeNodeView.swift in Sources */,
 				D639CDEC2BEDF3FB002E0B5D /* PokemonViewModel.swift in Sources */,
 				D639CE1C2BF702ED002E0B5D /* TypeFilter.swift in Sources */,
 				D639CE012BEDF4B9002E0B5D /* EvolutionTo.swift in Sources */,
@@ -526,10 +536,12 @@
 				D639CE182BF4D6AC002E0B5D /* RegionFilter.swift in Sources */,
 				D639CDE22BEDF106002E0B5D /* APIClient.swift in Sources */,
 				D639CE152BF4CCD1002E0B5D /* CustomData.swift in Sources */,
+				D679C1072BFB3CD300223D6D /* EvolutionRouter.swift in Sources */,
 				D639CE2D2BF79EA3002E0B5D /* VarietiesApiService.swift in Sources */,
 				D639CE0E2BEDF4B9002E0B5D /* Varieties.swift in Sources */,
 				D639CE0B2BEDF4B9002E0B5D /* VarietiesResponse.swift in Sources */,
 				D639CE022BEDF4B9002E0B5D /* Base.swift in Sources */,
+				D679C1092BFB3EC300223D6D /* EvolutionApiRouter.swift in Sources */,
 				D639CE062BEDF4B9002E0B5D /* PokemonPages.swift in Sources */,
 				D639CE112BEDF789002E0B5D /* PokemonApiService.swift in Sources */,
 				D639CE2B2BF79DD2002E0B5D /* VarietiesRouter.swift in Sources */,
