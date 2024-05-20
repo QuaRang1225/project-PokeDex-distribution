@@ -8,8 +8,26 @@
 import SwiftUI
 
 struct BookmarkView: View {
+    @State var pokemonList:[RealmPokemon] = []
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            Button {
+                RealmManager.deleteAll()
+                pokemonList = RealmManager.fetchPokemons()
+            } label: {
+                Image(systemName: "trash")
+            }
+            List{
+                ForEach(pokemonList,id: \.self){ a in
+                    Text(a.name)
+                        
+                }
+            }
+            
+        }
+        .onAppear{
+            pokemonList = RealmManager.fetchPokemons()
+        }
     }
 }
 

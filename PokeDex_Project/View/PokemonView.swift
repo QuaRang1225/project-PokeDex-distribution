@@ -7,19 +7,22 @@
 
 import SwiftUI
 import Kingfisher
+import RealmSwift
+
 
 struct PokemonView: View {
     let pokemonId:Int
     let monsterball = "https://github.com/PokeAPI/sprites/blob/master/sprites/items/poke-ball.png?raw=true"
     
     let statName = ["HP","공격","방어","특공","특방","스피드"]
+    @State var bookmark = false
     @Environment(\.dismiss) var dismiss
     @StateObject var vm = PokemonViewModel(pokemonList: [], pokemon: nil)
     
     var body: some View {
         VStack{
             if let pokemon = vm.pokemon,let variety = vm.variety{
-                headerView(pokemon:pokemon)
+                headerView(pokemon:pokemon,variety: variety)
                 ScrollView(showsIndicators: false){
                     pokemonView(pokemon: pokemon,variety: variety)
                     formView(pokemon: pokemon)
@@ -35,16 +38,19 @@ struct PokemonView: View {
         .padding()
         .onAppear{
             vm.fetchPokemon(id: pokemonId)
+            if RealmManager.fetchPokemon(num: pokemonId).num == pokemonId{
+                bookmark = true
+            }
         }
     }
 }
 
 #Preview {
-    PokemonView(pokemonId: 133)
+    PokemonView(pokemonId: 413)
 }
 
 extension PokemonView{
-    func headerView(pokemon:Pokemons)->some View{
+    func headerView(pokemon:Pokemons,variety:Varieties)->some View{
         ZStack{
             HStack(spacing: 0){
                 Button {
@@ -56,8 +62,26 @@ extension PokemonView{
                     Text(String(format : "%04d",pokemon.id))
                 }.foregroundColor(.primary)
                 Spacer()
-                Image(systemName: "bookmark")
-                    .font(.title3)
+                Button {
+                    bookmark.toggle()
+                    if !bookmark{
+                        RealmManager.deletePokemon(num: pokemonId)
+                    }else{
+                        let typeList = RealmSwift.List<String>()
+                        typeList.append(objectsIn: variety.types)
+                        
+                        let object = RealmObject()
+                        object.num = pokemonId
+                        object.name = pokemon.name
+                        object.image = variety.form.images.first ?? ""
+                        object.types = typeList
+                        RealmManager.storePokemon(pokemon: object)
+                    }
+                } label: {
+                    Image(systemName: bookmark ? "bookmark.fill" : "bookmark")
+                        .foregroundColor(.primary)
+                        .font(.title3)
+                }
             }
             Text(pokemon.name)
                 .font(.title3)

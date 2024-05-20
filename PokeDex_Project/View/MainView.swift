@@ -31,7 +31,7 @@ struct MainView: View {
                             Text("도감 ")
                         }
                     }
-                Text("")
+                BookmarkView()
                     .tabItem {
                         VStack{
                             Image(systemName: "bookmark")

@@ -49,6 +49,10 @@
 		D679C1072BFB3CD300223D6D /* EvolutionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679C1062BFB3CD300223D6D /* EvolutionRouter.swift */; };
 		D679C1092BFB3EC300223D6D /* EvolutionApiRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679C1082BFB3EC300223D6D /* EvolutionApiRouter.swift */; };
 		D679C10B2BFB410700223D6D /* EvolTreeNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679C10A2BFB410700223D6D /* EvolTreeNodeView.swift */; };
+		D679C10E2BFB849100223D6D /* RealmObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679C10D2BFB849100223D6D /* RealmObject.swift */; };
+		D679C1102BFB850C00223D6D /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679C10F2BFB850C00223D6D /* RealmManager.swift */; };
+		D679C1132BFB91CF00223D6D /* RealmPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679C1122BFB91CF00223D6D /* RealmPokemon.swift */; };
+		D679C1152BFB975200223D6D /* BookmarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679C1142BFB975200223D6D /* BookmarkView.swift */; };
 		D68F1DF72BAAABF80086BC9C /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = D68F1DF62BAAABF80086BC9C /* Realm */; };
 		D68F1DF92BAAABF80086BC9C /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D68F1DF82BAAABF80086BC9C /* RealmSwift */; };
 		D68F1DFC2BAAAC000086BC9C /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D68F1DFB2BAAAC000086BC9C /* Kingfisher */; };
@@ -118,6 +122,10 @@
 		D679C1062BFB3CD300223D6D /* EvolutionRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionRouter.swift; sourceTree = "<group>"; };
 		D679C1082BFB3EC300223D6D /* EvolutionApiRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionApiRouter.swift; sourceTree = "<group>"; };
 		D679C10A2BFB410700223D6D /* EvolTreeNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolTreeNodeView.swift; sourceTree = "<group>"; };
+		D679C10D2BFB849100223D6D /* RealmObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmObject.swift; sourceTree = "<group>"; };
+		D679C10F2BFB850C00223D6D /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		D679C1122BFB91CF00223D6D /* RealmPokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmPokemon.swift; sourceTree = "<group>"; };
+		D679C1142BFB975200223D6D /* BookmarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,12 +181,13 @@
 		8123985629F2865A00B7D560 /* PokeDex_Project */ = {
 			isa = PBXGroup;
 			children = (
-				D639CE272BF7797E002E0B5D /* Components */,
-				D639CE162BF4D698002E0B5D /* Filter */,
+				D679C10C2BFB847D00223D6D /* Realm */,
 				D639CE122BEE44D2002E0B5D /* PokeDex-Project-Info.plist */,
 				8123985B29F2865B00B7D560 /* Assets.xcassets */,
 				8123985729F2865A00B7D560 /* PokeDex_ProjectApp.swift */,
 				D639CDE32BEDF14B002E0B5D /* Config.xcconfig */,
+				D639CE272BF7797E002E0B5D /* Components */,
+				D639CE162BF4D698002E0B5D /* Filter */,
 				D639CE132BF4CCC3002E0B5D /* Custom */,
 				D639CDE02BEDF066002E0B5D /* API */,
 				D639CDEA2BEDF3ED002E0B5D /* ViewModel */,
@@ -222,6 +231,7 @@
 				D639CDDB2BEDEEFB002E0B5D /* MainView.swift */,
 				D639CE212BF72D75002E0B5D /* PokemonView.swift */,
 				D679C10A2BFB410700223D6D /* EvolTreeNodeView.swift */,
+				D679C1142BFB975200223D6D /* BookmarkView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -316,6 +326,7 @@
 		D639CE002BEDF4B9002E0B5D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				D679C1112BFB91C000223D6D /* Realm */,
 				D639CDEE2BEDF4B9002E0B5D /* Evolution */,
 				D639CDF32BEDF4B9002E0B5D /* Pokemons */,
 				D639CDF62BEDF4B9002E0B5D /* PokemonsList */,
@@ -361,6 +372,23 @@
 				D639CE282BF77996002E0B5D /* TypesView.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		D679C10C2BFB847D00223D6D /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				D679C10D2BFB849100223D6D /* RealmObject.swift */,
+				D679C10F2BFB850C00223D6D /* RealmManager.swift */,
+			);
+			path = Realm;
+			sourceTree = "<group>";
+		};
+		D679C1112BFB91C000223D6D /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				D679C1122BFB91CF00223D6D /* RealmPokemon.swift */,
+			);
+			path = Realm;
 			sourceTree = "<group>";
 		};
 		D6B0B98F2BAA9C7900E782F2 /* Frameworks */ = {
@@ -517,6 +545,7 @@
 				D639CE042BEDF4B9002E0B5D /* Pokemons.swift in Sources */,
 				8123985829F2865A00B7D560 /* PokeDex_ProjectApp.swift in Sources */,
 				D639CE222BF72D76002E0B5D /* PokemonView.swift in Sources */,
+				D679C1152BFB975200223D6D /* BookmarkView.swift in Sources */,
 				D639CE072BEDF4B9002E0B5D /* PokemonsList.swift in Sources */,
 				D639CE0A2BEDF4B9002E0B5D /* PokemonsListResponse.swift in Sources */,
 				D639CE052BEDF4B9002E0B5D /* TextEntries.swift in Sources */,
@@ -536,14 +565,17 @@
 				D639CE182BF4D6AC002E0B5D /* RegionFilter.swift in Sources */,
 				D639CDE22BEDF106002E0B5D /* APIClient.swift in Sources */,
 				D639CE152BF4CCD1002E0B5D /* CustomData.swift in Sources */,
+				D679C1132BFB91CF00223D6D /* RealmPokemon.swift in Sources */,
 				D679C1072BFB3CD300223D6D /* EvolutionRouter.swift in Sources */,
 				D639CE2D2BF79EA3002E0B5D /* VarietiesApiService.swift in Sources */,
 				D639CE0E2BEDF4B9002E0B5D /* Varieties.swift in Sources */,
 				D639CE0B2BEDF4B9002E0B5D /* VarietiesResponse.swift in Sources */,
 				D639CE022BEDF4B9002E0B5D /* Base.swift in Sources */,
+				D679C10E2BFB849100223D6D /* RealmObject.swift in Sources */,
 				D679C1092BFB3EC300223D6D /* EvolutionApiRouter.swift in Sources */,
 				D639CE062BEDF4B9002E0B5D /* PokemonPages.swift in Sources */,
 				D639CE112BEDF789002E0B5D /* PokemonApiService.swift in Sources */,
+				D679C1102BFB850C00223D6D /* RealmManager.swift in Sources */,
 				D639CE2B2BF79DD2002E0B5D /* VarietiesRouter.swift in Sources */,
 				D639CE0D2BEDF4B9002E0B5D /* Form.swift in Sources */,
 				D639CE202BF72C59002E0B5D /* StartView.swift in Sources */,
