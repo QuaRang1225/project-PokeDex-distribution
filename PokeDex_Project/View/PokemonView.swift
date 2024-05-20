@@ -11,11 +11,14 @@ import Kingfisher
 struct PokemonView: View {
     let pokemonId:Int
     let monsterball = "https://github.com/PokeAPI/sprites/blob/master/sprites/items/poke-ball.png?raw=true"
+    
+    let statName = ["HP","공격","방어","특공","특방","스피드"]
     @Environment(\.dismiss) var dismiss
     @StateObject var vm = PokemonViewModel(pokemonList: [], pokemon: nil)
+    
     var body: some View {
         VStack{
-            if let pokemon = vm.pokemon{
+            if var pokemon = vm.pokemon,var variety = vm.variety{
                 ZStack{
                     HStack(spacing: 0){
                         Button {
@@ -39,16 +42,70 @@ struct PokemonView: View {
                     ZStack{
                         BallImageView()
                             .frame(width: UIScreen.main.bounds.width/1.5,height: UIScreen.main.bounds.width/1.5)
-                        KFImage(URL(string: pokemon.base.image))
+                        KFImage(URL(string: variety.form.images.first ?? ""))
                             .resizable()
                             .frame(width: UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.width/2)
                     }
                     .padding(.bottom)
                     HStack{
-                        ForEach(pokemon.base.types,id: \.self){ type in
+                        ForEach(variety.types,id: \.self){ type in
                             TypesView(type: type, width: 100, height: 25, font: .body)
                         }
                     }
+                    if vm.varieties.count != 1{
+                        VStack(alignment: .leading){
+                            Text("다른 폼").bold().padding(.top)
+                            ScrollView(.horizontal,showsIndicators: false) {
+                               포켓 HStack{
+                                    ForEach(vm.varieties,id:\.self){ variety in
+                                        Button {
+                                            vm.variety = variety
+                                        } label: {
+                                            VStack{
+                                                KFImage(URL(string: variety.form.images.first ?? ""))
+                                                    .resizable()
+                                                    .frame(width: 50,height: 50)
+                                                Text((variety.form.name.first?.isEmpty ?? false) ? "기본" : variety.form.name.first ?? "")
+                                                    .font(.caption2)
+                                            }
+                                            .foregroundColor(.primary)
+                                            .opacity(vm.variety == variety ? 1 : 0.4)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if let count = vm.variety?.form.images.count,count > 1{
+                        VStack(alignment: .leading){
+                            Text("다른 모습").bold().padding(.top)
+                            ScrollView(.horizontal,showsIndicators: false) {
+                                HStack{
+                                    ForEach(0..<count,id:\.self){ index in
+                                        Button {
+                                            switch pokemonId{
+                                            case 493: variety.types = [variety.form.name[index]]
+                                            default:break
+                                            }
+                                            variety.form.images[0] = vm.formList[index]
+                                            vm.variety = variety
+                                        } label: {
+                                            VStack{
+                                                KFImage(URL(string: vm.formList[index]))
+                                                    .resizable()
+                                                    .frame(width: 50,height: 50)
+                                                Text(variety.form.name[index])
+                                                    .font(.caption2)
+                                            }
+                                            .foregroundColor(.primary)
+                                            .opacity(vm.variety?.form.images[0] == variety.form.images[index] ? 1 : 0.4)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
                     HStack(alignment: .top){
                         Group{
                             Text("분류").bold().padding(.bottom,5)
@@ -63,8 +120,8 @@ struct PokemonView: View {
                     HStack{
                         Group{
                             Text("\(pokemon.genra)").font(.callout)
-                            Text("\(0.1, specifier: "%.1f")m").font(.callout)
-                            Text("\(2)kg").font(.callout)
+                            Text("\(variety.height, specifier: "%.1f")m").font(.callout)
+                            Text("\(variety.weight,specifier: "%.1f")kg").font(.callout)
                             Text("\(pokemon.captureRate)").font(.callout)
                         }
                         .frame(maxWidth: .infinity)
@@ -98,6 +155,45 @@ struct PokemonView: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
+                    Text("종족값").bold().padding(.top)
+                    HStack{
+                        Group{
+                            ForEach(0..<variety.stats.count,id:\.self){ index in
+                                VStack{
+                                    Text(statName[index]).bold()
+                                    Text("\(variety.stats[index])")
+                                }
+                            }
+                            VStack{
+                                Text("합계").bold()
+                                Text("\(variety.stats.reduce(0, +))")
+                            }
+                        }
+                        .frame(width: UIScreen.main.bounds.width/9,height: 70)
+                        .background(Color.gray.opacity(0.2))
+                    }.font(.callout)
+                    Text("특성").bold().padding(.top)
+                    ForEach(0..<variety.abilites.isHidden.count,id: \.self){ index in
+                        HStack{
+                            HStack(spacing:1){
+                                Text(variety.abilites.name[index])
+                                if variety.abilites.isHidden[index]{
+                                    Image(systemName: "star.fill")
+                                        .font(.caption2)
+                                }
+                            }
+                            .frame(width: 100)
+                            .frame(height: 60)
+                            .background(Color.gray.opacity(0.2))
+                            Spacer()
+                            Text(variety.abilites.text[index].replacingOccurrences(of: "\n", with: " "))
+                            Spacer()
+                        }
+                        .background(Color.typeColor(pokemon.color).opacity(0.2))
+                        .cornerRadius(10)
+                        
+                    }
+                    .font(.system(size: 13))
                     Text("도감 설명")
                         .bold()
                         .padding(.top)
@@ -123,11 +219,10 @@ struct PokemonView: View {
         .padding()
         .onAppear{
             vm.fetchPokemon(id: pokemonId)
-            
         }
     }
 }
 
 #Preview {
-    PokemonView(pokemonId: 1)
+    PokemonView(pokemonId: 852)
 }
