@@ -50,7 +50,7 @@ struct MainView: View {
             
         }
         .onAppear{
-            vm.fetchPokemonList(page: 1, region: filter.rawValue, type_1: type_1 , type_2: type_2, query: query)
+            vm.fetchPokemonList(page: vm.currentPage, region: filter.rawValue, type_1: type_1 , type_2: type_2, query: query)
         }
         
     }
@@ -126,7 +126,8 @@ extension MainView{
                     Button {
                         filter = region
                         vm.pokemonList = []
-                        vm.fetchPokemonList(page: 1, region: region.rawValue, type_1: type_1 , type_2: type_2, query: query)
+                        vm.currentPage = 1
+                        vm.fetchPokemonList(page: vm.currentPage, region: region.rawValue, type_1: type_1 , type_2: type_2, query: query)
                         regionChange = false
                     } label: {
                         Text(region.rawValue)
@@ -204,6 +205,7 @@ extension MainView{
             }.padding(.horizontal)
             Spacer()
             Button {
+                vm.currentPage = 1
                 vm.pokemonList = []
                 switch types.count{
                 case 0: break
@@ -214,7 +216,7 @@ extension MainView{
                     type_2 = types[1]
                 default: break
                 }
-                vm.fetchPokemonList(page: 1, region: filter.rawValue, type_1: type_1 , type_2: type_2, query: query)
+                vm.fetchPokemonList(page: vm.currentPage, region: filter.rawValue, type_1: type_1 , type_2: type_2, query: query)
                 
                 search = false
             } label: {
