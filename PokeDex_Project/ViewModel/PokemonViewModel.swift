@@ -42,8 +42,6 @@ class PokemonViewModel:ObservableObject{
                     self?.fetchVariety(name: variety)
                 }
             }.store(in: &cancelable)
-        
-        
     }
     func fetchPokemonList(page:Int,region:String,type_1:String,type_2:String,query:String){
         PokemonApiService.pokemons(page:page,region:region,type_1:type_1,type_2:type_2,query:query)
@@ -68,6 +66,7 @@ class PokemonViewModel:ObservableObject{
                     print(error.localizedDescription)
                 case .finished:
                     self.variety = self.varieties[0]
+                    self.variety?.form.id.sort()
                     self.formList = self.variety?.form.images ?? []
                     print(completion)
                 }

@@ -18,7 +18,7 @@ struct PokemonView: View {
     
     var body: some View {
         VStack{
-            if let pokemon = vm.pokemon,var variety = vm.variety{
+            if let pokemon = vm.pokemon,let variety = vm.variety{
                 headerView(pokemon:pokemon)
                 ScrollView(showsIndicators: false){
                     pokemonView(pokemon: pokemon,variety: variety)
