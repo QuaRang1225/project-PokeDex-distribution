@@ -4,6 +4,8 @@
 <dict>
     <key>AWS_URL</key>
     <string>${AWS_URL}</string>
+    <key>LOCAL_URL</key>
+    <string>${LOCAL_URL}</string>
     <key>NSAppTransportSecurity</key>
     <dict>
         <key>NSAllowsArbitraryLoads</key>

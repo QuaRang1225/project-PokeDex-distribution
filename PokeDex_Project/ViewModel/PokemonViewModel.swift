@@ -12,7 +12,10 @@ class PokemonViewModel:ObservableObject{
     
     var cancelable = Set<AnyCancellable>()
     @Published var pokemon:Pokemons? = nil
+    @Published var variety:Varieties? = nil
+    @Published var varieties:[Varieties] = []
     @Published var pokemonList:[PokemonsList] = []
+    @Published var formList:[String] = []
     
     @Published var currentPage = 1
     @Published var maxPage = 0
@@ -33,6 +36,9 @@ class PokemonViewModel:ObservableObject{
                 }
             } receiveValue: { [weak self] data in
                 self?.pokemon = data.data
+                data.data.varieties.forEach { variety in
+                    self?.fetchVariety(name: variety)
+                }
             }.store(in: &cancelable)
         
         
@@ -50,6 +56,21 @@ class PokemonViewModel:ObservableObject{
             } receiveValue: { [weak self] data in
                 self?.pokemonList.append(contentsOf: data.data.pokemon)
                 self?.maxPage = data.data.totalPages
+            }.store(in: &cancelable)
+    }
+    func fetchVariety(name:String){
+        VarietiesApiService.variety(name: name)
+            .sink {completion in
+                switch completion{
+                case .failure(let error):
+                    print(error.localizedDescription)
+                case .finished:
+                    self.variety = self.varieties[0]
+                    self.formList = self.variety?.form.images ?? []
+                    print(completion)
+                }
+            } receiveValue: { [weak self] data in
+                self?.varieties.append(data.data)
             }.store(in: &cancelable)
     }
 }
