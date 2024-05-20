@@ -67,6 +67,7 @@ class PokemonViewModel:ObservableObject{
                 case .finished:
                     self.variety = self.varieties[0]
                     self.variety?.form.id.sort()
+                    self.varieties.sort(by: {$0.form.id[0] < $1.form.id[0]})
                     self.formList = self.variety?.form.images ?? []
                     print(completion)
                 }
