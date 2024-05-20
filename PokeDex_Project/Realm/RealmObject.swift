@@ -8,9 +8,10 @@
 import Foundation
 import RealmSwift
 
-class MyPokemon: Object {
+class RealmObject: Object {
     
     @Persisted(primaryKey: true) var id: ObjectId
+    @Persisted var num:Int
     @Persisted var name:String
     @Persisted var image:String
     @Persisted var types:List<String>
