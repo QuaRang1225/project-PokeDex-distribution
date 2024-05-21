@@ -33,22 +33,29 @@ struct BookmarkView: View {
             
             List{
                 ForEach(pokemonList,id: \.self){ pokemon in
-                    HStack{
-                        KFImage(URL(string:pokemon.image))
-                            .resizable()
-                            .frame(width: 50,height: 50)
-                        VStack(alignment: .leading,spacing: 0) {
-                            HStack(spacing: 0){
-                                KFImage(URL(string: monsterball))
-                                Text(String(format : "%04d",pokemon.num))
+                    NavigationLink {
+                        PokemonView(pokemonId: pokemon.num)
+                            .navigationBarBackButtonHidden()
+                    } label: {
+                        HStack{
+                            KFImage(URL(string:pokemon.image))
+                                .resizable()
+                                .frame(width: 50,height: 50)
+                            VStack(alignment: .leading,spacing: 0) {
+                                HStack(spacing: 0){
+                                    KFImage(URL(string: monsterball))
+                                    Text(String(format : "%04d",pokemon.num))
+                                }
+                                Text(pokemon.name).padding(.leading,5)
                             }
-                            Text(pokemon.name).padding(.leading,5)
-                        }
-                        Spacer()
-                        ForEach(pokemon.types,id:\.self){ type in
-                            TypesView(type: type, width: 60, height: 20, font: .callout)
+                            Spacer()
+                            ForEach(pokemon.types,id:\.self){ type in
+                                TypesView(type: type, width: 60, height: 20, font: .callout)
+                            }
                         }
                     }
+
+                    
                 }
                 .onMove(perform:moveList)
                 .onDelete(perform:removeList)

@@ -11,18 +11,26 @@ import Kingfisher
 struct EvolTreeNodeView: View {
     let items = [GridItem(.flexible()),GridItem(.flexible()),GridItem(.flexible())]
     let node: EvolutionTo
+    @EnvironmentObject var vm:PokemonViewModel
     
     var body: some View {
         VStack {
             HStack{
-                ForEach(node.image,id: \.self){
-                    KFImage(URL(string: $0))
-                        .placeholder{
-                            Color.gray.opacity(0.2)
-                        }
-                        .resizable()
-                        .frame(width: 70,height: 70)
-                        .cornerRadius(10)
+                ForEach(node.image,id: \.self){ image in
+                    Button {
+                        vm.formList = []
+                        vm.varieties = []
+                        let id = image.filter{"0123456789".contains($0)}
+                        vm.fetchPokemon(id: Int(id)!)
+                    } label: {
+                        KFImage(URL(string: image))
+                            .placeholder{
+                                Color.gray.opacity(0.2)
+                            }
+                            .resizable()
+                            .frame(width: 70,height: 70)
+                            .cornerRadius(10)
+                    }
                 }
             }
             Text(node.name).bold().font(.caption)
@@ -36,12 +44,14 @@ struct EvolTreeNodeView: View {
                     LazyVGrid(columns: items){
                         ForEach(node.evolTo,id: \.self) { child in
                             EvolTreeNodeView(node: child)
+                                .environmentObject(vm)
                                 .padding()
                         }
                     }
                 }else{
                     ForEach(node.evolTo,id: \.self) { child in
                         EvolTreeNodeView(node: child)
+                            .environmentObject(vm)
                     }
                 }
             }
@@ -51,4 +61,5 @@ struct EvolTreeNodeView: View {
 
 #Preview {
     EvolTreeNodeView(node:EvolutionTo(image: [], name: ""))
+        .environmentObject(PokemonViewModel(pokemonList: [], pokemon: nil))
 }

@@ -276,6 +276,7 @@ extension PokemonView{
                 .bold()
                 .padding(.top)
             EvolTreeNodeView(node:  vm.evolutionTree ?? EvolutionTo(image: [], name: ""))
+                .environmentObject(vm)
         }
     }
     func textEntrieView(pokemon:Pokemons)->some View{
