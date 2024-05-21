@@ -72,7 +72,7 @@ extension PokemonView{
                         
                         let object = RealmObject()
                         object.num = pokemonId
-                        object.name = pokemon.name
+                        object.name = pokemon.name + "\(variety.form.name[0].isEmpty ?  "" :  "(\(variety.form.name.first ?? ""))")"
                         object.image = variety.form.images.first ?? ""
                         object.types = typeList
                         RealmManager.storePokemon(pokemon: object)
