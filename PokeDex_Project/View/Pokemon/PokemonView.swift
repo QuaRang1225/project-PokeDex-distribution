@@ -27,6 +27,7 @@ struct PokemonView: View {
                     pokemonView(pokemon: pokemon,variety: variety)
                     formView(pokemon: pokemon)
                     info1View(pokemon: pokemon,variety: variety)
+                    info2View(pokemon: pokemon)
                     statsView(pokemon: pokemon,variety: variety)
                     abilityView(pokemon: pokemon,variety: variety)
                     evolutionTreeView()
@@ -62,6 +63,16 @@ extension PokemonView{
                     Text(String(format : "%04d",pokemon.id))
                 }.foregroundColor(.primary)
                 Spacer()
+                NavigationLink {
+                    CalculateView(pokemon: RealmPokemon(id: "", num: pokemonId, name: pokemon.name + "\(variety.form.name[0].isEmpty ?  "" :  "(\(variety.form.name.first ?? ""))")", image: variety.form.images.first ?? "", types: variety.types, stats: variety.stats))
+                } label: {
+                    Image(systemName: "plus.forwardslash.minus")
+                        .foregroundColor(.white)
+                        .font(.body)
+                        .padding(5)
+                        .background(Circle().foregroundColor(.pink))
+                }.padding(.trailing)
+
                 Button {
                     bookmark.toggle()
                     if !bookmark{

@@ -37,22 +37,7 @@ struct BookmarkView: View {
                         PokemonView(pokemonId: pokemon.num)
                             .navigationBarBackButtonHidden()
                     } label: {
-                        HStack{
-                            KFImage(URL(string:pokemon.image))
-                                .resizable()
-                                .frame(width: 50,height: 50)
-                            VStack(alignment: .leading,spacing: 0) {
-                                HStack(spacing: 0){
-                                    KFImage(URL(string: monsterball))
-                                    Text(String(format : "%04d",pokemon.num))
-                                }
-                                Text(pokemon.name).padding(.leading,5)
-                            }
-                            Spacer()
-                            ForEach(pokemon.types,id:\.self){ type in
-                                TypesView(type: type, width: 60, height: 20, font: .callout)
-                            }
-                        }
+                        DexNumView(pokemon: pokemon)
                     }
 
                     
@@ -61,6 +46,7 @@ struct BookmarkView: View {
                 .onDelete(perform:removeList)
                 
             }.listStyle(.inset)
+                .font(.callout)
             
         }
         .onAppear{
