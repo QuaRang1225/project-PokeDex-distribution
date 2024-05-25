@@ -9,24 +9,25 @@ import SwiftUI
 import Kingfisher
 
 struct CalculateView: View {
-    
     let pokemon:RealmPokemon
+    
     @StateObject var vm = CalculateViewModel()
     @Environment(\.dismiss) var dismiss
     var body: some View {
         VStack{
-           hederView
-            DexNumView(pokemon: pokemon).padding(.vertical)
+            Group{
+                hederView
+                DexNumView(pokemon: pokemon).padding(.vertical)
+            }.padding(.horizontal)
             categoryView
             TabView(selection: $vm.calculate){
-                Text("a")
+                PowerView(stats: (pokemon.stats?[1] ?? 0,pokemon.stats?[3] ?? 0))
                     .tag(CalculateFilter.attack)
-                Text("b")
+                DefenseView(stats: (pokemon.stats?[0] ?? 0,pokemon.stats?[2] ?? 0,pokemon.stats?[4] ?? 0))
                     .tag(CalculateFilter.defense)
                 
             }
         }
-        .padding(.horizontal)
     }
 }
 
@@ -65,19 +66,19 @@ extension CalculateView{
                             .font(.callout)
                             .bold()
                             .foregroundColor(vm.calculate == item ? .primary : .secondary)
-                            
+                        
                     }.frame(maxWidth: .infinity)
                 }
             }
             .overlay(alignment: .leading){
-                    Capsule()
-                        .frame(width: geo.size.width/2,height: 3)
-                        .offset(x:vm.indicatorOffset(width: width)).padding(.top,45)
+                Capsule()
+                    .frame(width: geo.size.width/2,height: 3)
+                    .offset(x:vm.indicatorOffset(width: width)).padding(.top,45)
                 
             }
             .background{
                 Divider().padding(.top,45)
             }
-        }
+        }.frame(height: 40)
     }
 }

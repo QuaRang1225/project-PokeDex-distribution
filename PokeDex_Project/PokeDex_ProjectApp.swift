@@ -13,6 +13,7 @@ struct PokeDex_ProjectApp: App {
         WindowGroup {
             NavigationStack{
                 ContentView()
+                    .navigationViewStyle(StackNavigationViewStyle())
             }
         }
     }

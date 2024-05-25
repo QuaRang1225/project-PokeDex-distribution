@@ -38,6 +38,8 @@ struct PokemonView: View {
         }
         .padding()
         .onAppear{
+            vm.formList = []
+            vm.varieties = []
             vm.fetchPokemon(id: pokemonId)
             if RealmManager.fetchPokemon(num: pokemonId).num == pokemonId{
                 bookmark = true
@@ -64,7 +66,7 @@ extension PokemonView{
                 }.foregroundColor(.primary)
                 Spacer()
                 NavigationLink {
-                    CalculateView(pokemon: RealmPokemon(id: "", num: pokemonId, name: pokemon.name + "\(variety.form.name[0].isEmpty ?  "" :  "(\(variety.form.name.first ?? ""))")", image: variety.form.images.first ?? "", types: variety.types, stats: variety.stats))
+                    CalculateView(pokemon: RealmPokemon(id: "", num: pokemonId, name: pokemon.name + "\(variety.form.name[0].isEmpty ?  "" :  "(\(variety.form.name.first ?? ""))")", image: variety.form.images.first ?? "", types: variety.types, stats: variety.stats)).navigationBarBackButtonHidden()
                 } label: {
                     Image(systemName: "plus.forwardslash.minus")
                         .foregroundColor(.white)
