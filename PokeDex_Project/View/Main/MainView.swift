@@ -127,6 +127,10 @@ extension MainView{
                         filter = region
                         vm.pokemonList = []
                         vm.currentPage = 1
+                        type_1 = ""
+                        type_2 = ""
+                        query = ""
+                        types = []
                         vm.fetchPokemonList(page: vm.currentPage, region: region.rawValue, type_1: type_1 , type_2: type_2, query: query)
                         regionChange = false
                     } label: {
@@ -154,6 +158,10 @@ extension MainView{
                         type_1 = ""
                         type_2 = ""
                         types = []
+                        vm.currentPage = 1
+                        vm.pokemonList = []
+                        vm.fetchPokemonList(page: vm.currentPage, region: filter.rawValue, type_1: type_1 , type_2: type_2, query: query)
+                        search = false
                     } label: {
                         HStack(spacing: 2){
                             Image(systemName: "arrow.counterclockwise")

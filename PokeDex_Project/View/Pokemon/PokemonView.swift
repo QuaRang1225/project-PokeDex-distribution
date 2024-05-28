@@ -227,7 +227,7 @@ extension PokemonView{
                         }
                     }
                     VStack{
-                        if pokemon.genderRate == 0{
+                        if pokemon.genderRate == -1{
                             Text("성별없음")
                         }else{
                             Text("수컷 : \(100 - (Double(pokemon.genderRate)/8 * 100), specifier: "%.1f")%").font(.callout)
