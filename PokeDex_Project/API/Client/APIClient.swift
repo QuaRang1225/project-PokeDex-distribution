@@ -11,7 +11,7 @@ final class ApiClient{
     
     var session:Session
     static let shared = ApiClient()
-    static let baseURL =  "http://\(Bundle.main.infoDictionary?["LOCAL_URL"] ?? "")"
+    static let baseURL =  "http://\(Bundle.main.infoDictionary?["AWS_URL"] ?? "")"
     
     let monitors = [ApiLogger()] as [EventMonitor]
     

@@ -8,7 +8,7 @@
 import SwiftUI
 import Kingfisher
 import RealmSwift
-
+import GoogleMobileAds
 
 struct PokemonView: View {
     let pokemonId:Int
@@ -19,10 +19,14 @@ struct PokemonView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var vm = PokemonViewModel(pokemonList: [], pokemon: nil)
     
+   
+
     var body: some View {
         VStack{
             if let pokemon = vm.pokemon,let variety = vm.variety{
                 headerView(pokemon:pokemon,variety: variety)
+                AdBannerView(adUnitID: Bundle.main.infoDictionary?["SDK_ID"] as! String)
+                               .frame(height: 50)
                 ScrollView(showsIndicators: false){
                     pokemonView(pokemon: pokemon,variety: variety)
                     formView(pokemon: pokemon)
@@ -38,6 +42,7 @@ struct PokemonView: View {
         }
         .padding()
         .onAppear{
+            GADMobileAds.sharedInstance().start(completionHandler: nil)
             vm.formList = []
             vm.varieties = []
             vm.fetchPokemon(id: pokemonId)
