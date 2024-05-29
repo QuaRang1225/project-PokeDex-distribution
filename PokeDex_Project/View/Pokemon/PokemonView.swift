@@ -11,22 +11,23 @@ import RealmSwift
 import GoogleMobileAds
 
 struct PokemonView: View {
-    let pokemonId:Int
+    @State var pokemonId:Int
     let monsterball = "https://github.com/PokeAPI/sprites/blob/master/sprites/items/poke-ball.png?raw=true"
     
     let statName = ["HP","공격","방어","특공","특방","스피드"]
     @State var bookmark = false
+    @Binding var hasAppeared: Bool
     @Environment(\.dismiss) var dismiss
     @StateObject var vm = PokemonViewModel(pokemonList: [], pokemon: nil)
     
-   
-
+    
+    
     var body: some View {
         VStack{
             if let pokemon = vm.pokemon,let variety = vm.variety{
                 headerView(pokemon:pokemon,variety: variety)
                 AdBannerView(adUnitID: Bundle.main.infoDictionary?["SDK_ID"] as! String)
-                               .frame(height: 50)
+                    .frame(height: 50)
                 ScrollView(showsIndicators: false){
                     pokemonView(pokemon: pokemon,variety: variety)
                     formView(pokemon: pokemon)
@@ -50,11 +51,14 @@ struct PokemonView: View {
                 bookmark = true
             }
         }
+        .onDisappear{
+            hasAppeared = true
+        }
     }
 }
 
 #Preview {
-    PokemonView(pokemonId: 413)
+    PokemonView(pokemonId: 1, hasAppeared: .constant(false))
 }
 
 extension PokemonView{
@@ -66,9 +70,11 @@ extension PokemonView{
                 } label: {
                     Image(systemName: "chevron.left")
                         .bold()
+                }.foregroundColor(.primary)
+                HStack{
                     KFImage(URL(string: monsterball))
                     Text(String(format : "%04d",pokemon.id))
-                }.foregroundColor(.primary)
+                }
                 Spacer()
                 NavigationLink {
                     CalculateView(pokemon: RealmPokemon(id: "", num: pokemonId, name: pokemon.name + "\(variety.form.name[0].isEmpty ?  "" :  "(\(variety.form.name.first ?? ""))")", image: variety.form.images.first ?? "", types: variety.types, stats: variety.stats)).navigationBarBackButtonHidden()
@@ -79,7 +85,7 @@ extension PokemonView{
                         .padding(5)
                         .background(Circle().foregroundColor(.pink))
                 }.padding(.trailing)
-
+                
                 Button {
                     bookmark.toggle()
                     if !bookmark{
@@ -109,12 +115,47 @@ extension PokemonView{
     }
     func pokemonView(pokemon:Pokemons,variety:Varieties)->some View{
         VStack{
-            ZStack{
-                BallImageView()
-                    .frame(width: UIScreen.main.bounds.width/1.5,height: UIScreen.main.bounds.width/1.5)
-                KFImage(URL(string: variety.form.images.first ?? ""))
-                    .resizable()
-                    .frame(width: UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.width/2)
+            HStack{
+                Button {
+                    if pokemonId == 1 { pokemonId = 1025}
+                    else{ pokemonId -= 1 }
+                    vm.variety = nil
+                    vm.formList = []
+                    vm.varieties = []
+                    vm.fetchPokemon(id: pokemonId)
+                    bookmark = false
+                    if RealmManager.fetchPokemon(num: pokemonId).num == pokemonId{
+                        bookmark = true
+                    }
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.title)
+                        .foregroundColor(.primary)
+                }
+                
+                ZStack{
+                    BallImageView()
+                        .frame(width: UIScreen.main.bounds.width/1.5,height: UIScreen.main.bounds.width/1.5)
+                    KFImage(URL(string: variety.form.images.first ?? ""))
+                        .resizable()
+                        .frame(width: UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.width/2)
+                }
+                Button {
+                    if pokemonId == 1025 { pokemonId = 1}
+                    else{ pokemonId += 1 }
+                    vm.variety = nil
+                    vm.formList = []
+                    vm.varieties = []
+                    vm.fetchPokemon(id: pokemonId)
+                    bookmark = false
+                    if RealmManager.fetchPokemon(num: pokemonId).num == pokemonId{
+                        bookmark = true
+                    }
+                } label: {
+                    Image(systemName: "chevron.right")
+                        .font(.title)
+                        .foregroundColor(.primary)
+                }
             }
             .padding(.bottom)
             HStack{
