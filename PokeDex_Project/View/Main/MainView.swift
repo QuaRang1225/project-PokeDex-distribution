@@ -19,6 +19,7 @@ struct MainView: View {
     @State var types:[String] = []
     @State var type_1 = ""
     @State var type_2 = ""
+    @State private var hasAppeared = false
     
     @StateObject var vm = PokemonViewModel(pokemonList: [], pokemon: nil)
     var body: some View {
@@ -50,7 +51,9 @@ struct MainView: View {
             
         }
         .onAppear{
-            vm.fetchPokemonList(page: vm.currentPage, region: filter.rawValue, type_1: type_1 , type_2: type_2, query: query)
+            if !hasAppeared{
+                vm.fetchPokemonList(page: vm.currentPage, region: filter.rawValue, type_1: type_1 , type_2: type_2, query: query)
+            }
         }
         
     }
@@ -74,7 +77,7 @@ extension MainView{
                         Text(String(format: "%04d", pokemon.id))
                     }
                     NavigationLink {
-                        PokemonView(pokemonId: pokemon.base.num)
+                        PokemonView(pokemonId: pokemon.base.num, hasAppeared: $hasAppeared)
                             .navigationBarBackButtonHidden()
                     } label: {
                         RoundedRectangle(cornerRadius: 20)

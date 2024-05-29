@@ -34,7 +34,7 @@ struct BookmarkView: View {
             List{
                 ForEach(pokemonList,id: \.self){ pokemon in
                     NavigationLink {
-                        PokemonView(pokemonId: pokemon.num)
+                        PokemonView(pokemonId: pokemon.num, hasAppeared: .constant(false))
                             .navigationBarBackButtonHidden()
                     } label: {
                         DexNumView(pokemon: pokemon)
