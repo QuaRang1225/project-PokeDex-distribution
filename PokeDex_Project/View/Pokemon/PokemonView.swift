@@ -161,6 +161,10 @@ extension PokemonView{
                                     Button {
                                         switch pokemonId{
                                         case 493: variety.types = [variety.form.name[index]]
+                                        case 773:
+                                            if let type = SilverDFilter(rawValue: variety.form.name[index]){
+                                                variety.types = [type.type]
+                                            }
                                         default:break
                                         }
                                         variety.form.images[0] = vm.formList[index]
