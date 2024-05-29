@@ -216,9 +216,12 @@ extension MainView{
                 vm.currentPage = 1
                 vm.pokemonList = []
                 switch types.count{
-                case 0: break
+                case 0:
+                    type_1 = ""
+                    type_2 = ""
                 case 1 :
                     type_1 = types[0]
+                    type_2 = ""
                 case 2 :
                     type_1 = types[0]
                     type_2 = types[1]
