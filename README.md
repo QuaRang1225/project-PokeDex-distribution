@@ -38,9 +38,9 @@
 
 > 사용 패키지
 
-```
-https://github.com/kinkofer/PokemonAPI
-```
+
+[PokemonAPI](https://github.com/kinkofer/PokemonAPI)
+
 
 - 통신 이벤트에 callback 지옥을 우려해 async/await로 이벤트를 처리
 - 포켓몬 상세정보를 확인하는 뷰에서 도감에 필요한 정보를 request/response
