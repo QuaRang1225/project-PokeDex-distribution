@@ -36,7 +36,6 @@
 - Alamofire
 - RealmDB
 - Kingfisher
-- Concurrency
 - MVVM
 
 
