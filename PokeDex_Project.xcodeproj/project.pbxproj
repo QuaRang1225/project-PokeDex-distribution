@@ -843,7 +843,7 @@
 					"@executable_path/Frameworks",
 				);
 				LOCAL_URL = "220.123.52.178:3000";
-				MARKETING_VERSION = 2.1.5;
+				MARKETING_VERSION = 2.1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "quarang.PokeDex-Project";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDK_ID = "ca-app-pub-5972300736721591/9521635672";
@@ -883,7 +883,7 @@
 					"@executable_path/Frameworks",
 				);
 				LOCAL_URL = "220.123.52.178:3000";
-				MARKETING_VERSION = 2.1.5;
+				MARKETING_VERSION = 2.1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "quarang.PokeDex-Project";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDK_ID = "ca-app-pub-5972300736721591/9521635672";
