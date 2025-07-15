@@ -46,9 +46,13 @@ struct MainView: View {
             }
         }
         .sheet(isPresented: $search){
-            serachView
-                .presentationDetents([.fraction(0.6)])
-            
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                // iPad일 때 실행할 코드
+                serachView
+            } else {
+                serachView
+                    .presentationDetents([.fraction(0.6)])
+            }
         }
         .onAppear{
             if !hasAppeared{
@@ -236,7 +240,7 @@ extension MainView{
             } label: {
                 Text("검색")
                     .foregroundStyle(.white)
-                    .padding(.top)
+                    .padding(UIDevice.current.userInterfaceIdiom == .pad ? .vertical : .top)
                     .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                     .background(Color.pink)
             }

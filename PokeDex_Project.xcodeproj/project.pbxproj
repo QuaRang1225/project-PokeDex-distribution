@@ -762,6 +762,7 @@
 		};
 		8123987729F2865C00B7D560 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D639CDE32BEDF14B002E0B5D /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				AWS_URL = "poke-dex-env.eba-gq6ggz7x.ap-northeast-2.elasticbeanstalk.com";
@@ -823,7 +824,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_ASSET_PATHS = "\"PokeDex_Project/Preview Content\"";
 				DEVELOPMENT_TEAM = N676ZFA7W8;
 				ENABLE_PREVIEWS = YES;
@@ -858,12 +859,13 @@
 		};
 		8123987A29F2865C00B7D560 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D639CDE32BEDF14B002E0B5D /* Config.xcconfig */;
 			buildSettings = {
 				ADSMOB_ID = "ca-app-pub-5972300736721591~6378998408";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_ASSET_PATHS = "\"PokeDex_Project/Preview Content\"";
 				DEVELOPMENT_TEAM = N676ZFA7W8;
 				ENABLE_PREVIEWS = YES;
@@ -919,6 +921,7 @@
 		};
 		8123987D29F2865C00B7D560 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D639CDE32BEDF14B002E0B5D /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -958,6 +961,7 @@
 		};
 		8123988029F2865C00B7D560 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D639CDE32BEDF14B002E0B5D /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
