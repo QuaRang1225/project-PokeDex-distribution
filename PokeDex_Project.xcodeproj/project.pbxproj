@@ -13,6 +13,7 @@
 		8123987329F2865C00B7D560 /* PokeDex_ProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123987229F2865C00B7D560 /* PokeDex_ProjectUITests.swift */; };
 		8123987529F2865C00B7D560 /* PokeDex_ProjectUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123987429F2865C00B7D560 /* PokeDex_ProjectUITestsLaunchTests.swift */; };
 		815C57E22DDC120700FC3F18 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815C57E12DDC120700FC3F18 /* StartView.swift */; };
+		81E3AFC32E2781F7009B579C /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 81E3AFC22E2781F7009B579C /* ComposableArchitecture */; };
 		D639CDDC2BEDEEFB002E0B5D /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639CDDB2BEDEEFB002E0B5D /* MainView.swift */; };
 		D639CDDF2BEDF041002E0B5D /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = D639CDDE2BEDF041002E0B5D /* Alamofire */; };
 		D639CDE22BEDF106002E0B5D /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639CDE12BEDF106002E0B5D /* APIClient.swift */; };
@@ -159,6 +160,7 @@
 			files = (
 				D68F1DFC2BAAAC000086BC9C /* Kingfisher in Frameworks */,
 				D639CDDF2BEDF041002E0B5D /* Alamofire in Frameworks */,
+				81E3AFC32E2781F7009B579C /* ComposableArchitecture in Frameworks */,
 				D6E331D12C04838B00C79D22 /* GoogleMobileAds in Frameworks */,
 				D68F1DF92BAAABF80086BC9C /* RealmSwift in Frameworks */,
 				D68F1DF72BAAABF80086BC9C /* Realm in Frameworks */,
@@ -490,6 +492,7 @@
 				D68F1DFB2BAAAC000086BC9C /* Kingfisher */,
 				D639CDDE2BEDF041002E0B5D /* Alamofire */,
 				D6E331D02C04838B00C79D22 /* GoogleMobileAds */,
+				81E3AFC22E2781F7009B579C /* ComposableArchitecture */,
 			);
 			productName = PokeDex_Project;
 			productReference = 8123985429F2865A00B7D560 /* PokeDex_Project.app */;
@@ -569,6 +572,7 @@
 				D68F1DFA2BAAAC000086BC9C /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				D639CDDD2BEDF041002E0B5D /* XCRemoteSwiftPackageReference "Alamofire" */,
 				D6E331CF2C04838B00C79D22 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				81E3AFC12E2781F7009B579C /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			productRefGroup = 8123985529F2865A00B7D560 /* Products */;
 			projectDirPath = "";
@@ -1038,6 +1042,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		81E3AFC12E2781F7009B579C /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.20.2;
+			};
+		};
 		D639CDDD2BEDF041002E0B5D /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -1073,6 +1085,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		81E3AFC22E2781F7009B579C /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 81E3AFC12E2781F7009B579C /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
 		D639CDDE2BEDF041002E0B5D /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D639CDDD2BEDF041002E0B5D /* XCRemoteSwiftPackageReference "Alamofire" */;
