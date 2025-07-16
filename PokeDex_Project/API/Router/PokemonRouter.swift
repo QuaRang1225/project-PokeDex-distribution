@@ -54,7 +54,7 @@ enum PokemonRouter: Router {
         }
     }
     
-    func makeURLRequest() -> URLRequest? {
+    func makeURLRequest() -> URLRequest {
         var url = baseUrl.appendingPathComponent(endPoint)
         
         if let addedQueryUrl = addQuery(url) {
