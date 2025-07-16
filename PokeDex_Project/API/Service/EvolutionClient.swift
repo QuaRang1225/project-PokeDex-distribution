@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 import Combine
 
-enum EvolutionApiService{
+struct EvolutionClient {
     static func evolution(num:Int)-> AnyPublisher<EvolutionTreeResponse,AFError>{
         print("포켓몬 진화트리 api 호출")
         return ApiClient.shared.session

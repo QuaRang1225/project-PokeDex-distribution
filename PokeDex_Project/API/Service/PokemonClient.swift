@@ -9,8 +9,8 @@ import Foundation
 import Alamofire
 import Combine
 
-enum PokemonApiService{
-    static func pokemon(id:Int)-> AnyPublisher<PokemonResponse,AFError>{
+enum PokemonAPIService {
+    static func pokemon(id:Int) -> AnyPublisher<PokemonResponse,AFError>{
         print("포켓몬 api 호출")
         return ApiClient.shared.session
             .request(PokemonRouter.pokemon(id: id))
