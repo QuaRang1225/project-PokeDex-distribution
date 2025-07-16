@@ -16,8 +16,6 @@
 		81E3AFC32E2781F7009B579C /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 81E3AFC22E2781F7009B579C /* ComposableArchitecture */; };
 		D639CDDC2BEDEEFB002E0B5D /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639CDDB2BEDEEFB002E0B5D /* MainView.swift */; };
 		D639CDDF2BEDF041002E0B5D /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = D639CDDE2BEDF041002E0B5D /* Alamofire */; };
-		D639CDE22BEDF106002E0B5D /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639CDE12BEDF106002E0B5D /* APIClient.swift */; };
-		D639CDE62BEDF176002E0B5D /* APILogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639CDE52BEDF176002E0B5D /* APILogger.swift */; };
 		D639CDE82BEDF19D002E0B5D /* PokemonRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639CDE72BEDF19D002E0B5D /* PokemonRouter.swift */; };
 		D639CDEC2BEDF3FB002E0B5D /* PokemonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639CDEB2BEDF3FB002E0B5D /* PokemonViewModel.swift */; };
 		D639CE112BEDF789002E0B5D /* PokemonApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639CE102BEDF789002E0B5D /* PokemonApiService.swift */; };
@@ -98,8 +96,6 @@
 		8123987429F2865C00B7D560 /* PokeDex_ProjectUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeDex_ProjectUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		815C57E12DDC120700FC3F18 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		D639CDDB2BEDEEFB002E0B5D /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		D639CDE12BEDF106002E0B5D /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
-		D639CDE52BEDF176002E0B5D /* APILogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APILogger.swift; sourceTree = "<group>"; };
 		D639CDE72BEDF19D002E0B5D /* PokemonRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonRouter.swift; sourceTree = "<group>"; };
 		D639CDEB2BEDF3FB002E0B5D /* PokemonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonViewModel.swift; sourceTree = "<group>"; };
 		D639CE102BEDF789002E0B5D /* PokemonApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonApiService.swift; sourceTree = "<group>"; };
@@ -151,6 +147,8 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		816FC24B2E275687004525E1 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
 		816FC24D2E275696004525E1 /* App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = App; sourceTree = "<group>"; };
+		81E3AFC42E27830E009B579C /* Dependencies */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Dependencies; sourceTree = "<group>"; };
+		81E3AFC52E278A4B009B579C /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,6 +206,7 @@
 		8123985629F2865A00B7D560 /* PokeDex_Project */ = {
 			isa = PBXGroup;
 			children = (
+				81E3AFC42E27830E009B579C /* Dependencies */,
 				816FC24D2E275696004525E1 /* App */,
 				816FC24B2E275687004525E1 /* Resources */,
 				D6E331BE2C0482F500C79D22 /* Model */,
@@ -263,20 +262,11 @@
 		D639CDE02BEDF066002E0B5D /* API */ = {
 			isa = PBXGroup;
 			children = (
+				81E3AFC52E278A4B009B579C /* Utils */,
 				D639CE0F2BEDF77D002E0B5D /* Service */,
 				D639CDE92BEDF1A0002E0B5D /* Router */,
-				D639CDE42BEDF164002E0B5D /* Client */,
 			);
 			path = API;
-			sourceTree = "<group>";
-		};
-		D639CDE42BEDF164002E0B5D /* Client */ = {
-			isa = PBXGroup;
-			children = (
-				D639CDE12BEDF106002E0B5D /* APIClient.swift */,
-				D639CDE52BEDF176002E0B5D /* APILogger.swift */,
-			);
-			path = Client;
 			sourceTree = "<group>";
 		};
 		D639CDE92BEDF1A0002E0B5D /* Router */ = {
@@ -484,6 +474,8 @@
 			fileSystemSynchronizedGroups = (
 				816FC24B2E275687004525E1 /* Resources */,
 				816FC24D2E275696004525E1 /* App */,
+				81E3AFC42E27830E009B579C /* Dependencies */,
+				81E3AFC52E278A4B009B579C /* Utils */,
 			);
 			name = PokeDex_Project;
 			packageProductDependencies = (
@@ -625,7 +617,6 @@
 				D6E331C12C0482F500C79D22 /* Dex.swift in Sources */,
 				D639CE222BF72D76002E0B5D /* PokemonView.swift in Sources */,
 				D679C1152BFB975200223D6D /* BookmarkView.swift in Sources */,
-				D639CDE62BEDF176002E0B5D /* APILogger.swift in Sources */,
 				D6E331CD2C0482F500C79D22 /* Form.swift in Sources */,
 				D639CE292BF77996002E0B5D /* TypesView.swift in Sources */,
 				D679C12E2BFEFBE400223D6D /* DefenseView.swift in Sources */,
@@ -646,7 +637,6 @@
 				D6E331D32C0483DF00C79D22 /* AddBannerView.swift in Sources */,
 				D639CE182BF4D6AC002E0B5D /* RegionFilter.swift in Sources */,
 				815C57E22DDC120700FC3F18 /* StartView.swift in Sources */,
-				D639CDE22BEDF106002E0B5D /* APIClient.swift in Sources */,
 				D679C1242BFEFAB000223D6D /* CalculateFilter.swift in Sources */,
 				D639CE152BF4CCD1002E0B5D /* CustomData.swift in Sources */,
 				D679C1072BFB3CD300223D6D /* EvolutionRouter.swift in Sources */,
