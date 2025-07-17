@@ -21,7 +21,7 @@ struct MainView: View {
     @State var type_2 = ""
     @State private var hasAppeared = false
     
-    @StateObject var vm = PokemonViewModel(pokemonList: [], pokemon: nil)
+//    @StateObject var vm = PokemonViewModel(pokemonList: [], pokemon: nil)
     var body: some View {
         ZStack{
             TabView{
@@ -65,7 +65,7 @@ struct MainView: View {
 
 #Preview {
     NavigationStack{
-        MainView(vm: PokemonViewModel(pokemonList: [], pokemon: nil))
+        MainView()
     }
 }
 
