@@ -30,8 +30,8 @@ enum PokemonListRouter: Router {
             return [
                 "page": "\(page)",
                 "region": region,
-                "types_1": types.0,
-                "types_2": types.1,
+                "types_1": types.first,
+                "types_2": types.last,
                 "query": query
             ]
         }
