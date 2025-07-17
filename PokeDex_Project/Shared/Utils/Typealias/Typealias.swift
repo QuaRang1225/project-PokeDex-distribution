@@ -7,4 +7,4 @@
 
 import Foundation
 
-typealias Types = (String, String)
+typealias Types = (String, String)      // 포켓몬 타입 정의 (타입1, 타입2)
