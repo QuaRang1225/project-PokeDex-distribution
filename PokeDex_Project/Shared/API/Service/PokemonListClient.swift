@@ -16,7 +16,7 @@ struct PokemonListClient {
         _ type_1: String,
         _ type_2: String,
         _ query: String
-    ) async throws -> PokemonListResponse
+    ) async throws -> Response<PokemonList>
     
     /// 포켓몬 리스트 요청
     var fetchPokemons: ReturnPokemons
@@ -27,7 +27,7 @@ extension PokemonListClient: DependencyKey {
     static var liveValue: PokemonListClient {
         let pokemons: ReturnPokemons = { page, region, type_1, type_2, query in
             let request = PokemonListRouter.pokemons(page: page, region: region, type_1: type_1, type_2: type_2, query: query).makeURLRequest()
-            return try await URLSession.shared.requestDecoding(PokemonListResponse.self, urlRequest: request)
+            return try await URLSession.shared.requestDecoding(Response<PokemonList>.self, urlRequest: request)
         }
         return PokemonListClient(fetchPokemons: pokemons)
     }

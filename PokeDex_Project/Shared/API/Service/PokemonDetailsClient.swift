@@ -10,9 +10,9 @@ import Foundation
 
 /// 포켓몬, 리전폼, 진화트리 (상세화면) APIClient
 struct PokemonDetailsClient {
-    typealias ReturnPokemon = @Sendable (_ id: Int) async throws -> PokemonResponse
-    typealias ReturnVarieties = @Sendable (_ name:String) async throws -> VarietiesRespons
-    typealias ReturnEvolution = @Sendable (_ num: Int) async throws -> EvolutionTreeResponse
+    typealias ReturnPokemon = @Sendable (_ id: Int) async throws -> Response<Pokemon>
+    typealias ReturnVarieties = @Sendable (_ name:String) async throws -> Response<Varieties>
+    typealias ReturnEvolution = @Sendable (_ num: Int) async throws -> Response<EvolutionTo>
     
     /// 단일 포켓몬 요청
     var fetchPokemon: ReturnPokemon
@@ -27,15 +27,15 @@ extension PokemonDetailsClient: DependencyKey {
     static var liveValue: PokemonDetailsClient {
         let pokemon: ReturnPokemon = { id in
             let request = PokemonDetailsRouter.pokemon(id: id).makeURLRequest()
-            return try await URLSession.shared.requestDecoding(PokemonResponse.self, urlRequest: request)
+            return try await URLSession.shared.requestDecoding(Response<Pokemon>.self, urlRequest: request)
         }
         let variety: ReturnVarieties = { name in
             let request = PokemonDetailsRouter.variety(name: name).makeURLRequest()
-            return try await URLSession.shared.requestDecoding(VarietiesRespons.self, urlRequest: request)
+            return try await URLSession.shared.requestDecoding(Response<Varieties>.self, urlRequest: request)
         }
         let evolution: ReturnEvolution = { num in
             let request = PokemonDetailsRouter.evolutuon(num: num).makeURLRequest()
-            return try await URLSession.shared.requestDecoding(EvolutionTreeResponse.self, urlRequest: request)
+            return try await URLSession.shared.requestDecoding(Response<EvolutionTo>.self, urlRequest: request)
         }
         return PokemonDetailsClient(fetchPokemon: pokemon, fetchVariety: variety, fetchEvolution: evolution)
     }
