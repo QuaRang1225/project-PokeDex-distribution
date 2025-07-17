@@ -11,7 +11,7 @@ struct PokemonsList:Codable,Hashable{
     
     let id: Int
     let color, name: String
-    let base: ListBase
+    let base: Base
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"

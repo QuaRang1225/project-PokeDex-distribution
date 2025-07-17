@@ -11,8 +11,9 @@ import ComposableArchitecture
 /// 메인 Feature
 struct MainFeature: Reducer {
     
-    struct State {
-        
+    struct State: Equatable {
+        var pokemons: [PokemonsList] = []
+        var isLoading: Bool = false
     }
     
     enum Action {
