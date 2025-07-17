@@ -8,6 +8,7 @@
 import Foundation
 import RealmSwift
 
+/// RealmDB에 직접적으로 저장되는 Object
 class RealmObject: Object {
     @Persisted(primaryKey: true) var id: ObjectId   // ID
     @Persisted var num: Int                         // 도감 번호
