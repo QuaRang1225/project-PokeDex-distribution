@@ -145,13 +145,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		8149E4CC2E27E2BD00B78CB2 /* Features */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Features; sourceTree = "<group>"; };
+		8149E4D02E28C14600B78CB2 /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
 		816FC24B2E275687004525E1 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
 		816FC24D2E275696004525E1 /* App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = App; sourceTree = "<group>"; };
-		81E3AFC42E27830E009B579C /* Dependencies */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Dependencies; sourceTree = "<group>"; };
-		81E3AFC52E278A4B009B579C /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
-		81E3AFDE2E27A988009B579C /* Error */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Error; sourceTree = "<group>"; };
-		81E3AFE12E27BC62009B579C /* Interface */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Interface; sourceTree = "<group>"; };
-		81E3AFE22E27DB2C009B579C /* Extension */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Extension; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,7 +206,8 @@
 		8123985629F2865A00B7D560 /* PokeDex_Project */ = {
 			isa = PBXGroup;
 			children = (
-				81E3AFC42E27830E009B579C /* Dependencies */,
+				8149E4D02E28C14600B78CB2 /* Shared */,
+				8149E4CC2E27E2BD00B78CB2 /* Features */,
 				816FC24D2E275696004525E1 /* App */,
 				816FC24B2E275687004525E1 /* Resources */,
 				D6E331BE2C0482F500C79D22 /* Model */,
@@ -265,10 +263,6 @@
 		D639CDE02BEDF066002E0B5D /* API */ = {
 			isa = PBXGroup;
 			children = (
-				81E3AFE22E27DB2C009B579C /* Extension */,
-				81E3AFE12E27BC62009B579C /* Interface */,
-				81E3AFDE2E27A988009B579C /* Error */,
-				81E3AFC52E278A4B009B579C /* Utils */,
 				D639CE0F2BEDF77D002E0B5D /* Service */,
 				D639CDE92BEDF1A0002E0B5D /* Router */,
 			);
@@ -478,13 +472,10 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				8149E4CC2E27E2BD00B78CB2 /* Features */,
+				8149E4D02E28C14600B78CB2 /* Shared */,
 				816FC24B2E275687004525E1 /* Resources */,
 				816FC24D2E275696004525E1 /* App */,
-				81E3AFC42E27830E009B579C /* Dependencies */,
-				81E3AFC52E278A4B009B579C /* Utils */,
-				81E3AFDE2E27A988009B579C /* Error */,
-				81E3AFE12E27BC62009B579C /* Interface */,
-				81E3AFE22E27DB2C009B579C /* Extension */,
 			);
 			name = PokeDex_Project;
 			packageProductDependencies = (
@@ -851,7 +842,7 @@
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.8;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -895,7 +886,7 @@
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.8;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
