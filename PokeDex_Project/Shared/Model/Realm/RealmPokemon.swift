@@ -8,7 +8,7 @@
 import Foundation
 
 /// RealmDB에 저장할 포켓몬 정보
-struct RealmPokemon: Hashable {
+struct RealmPokemon: Hashable, Equatable {
     var id: String          // ID
     var num: Int            // 도감번호
     var name: String        // 이름

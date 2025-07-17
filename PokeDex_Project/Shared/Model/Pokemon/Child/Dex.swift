@@ -8,7 +8,7 @@
 import Foundation
 
 /// 지역별 번호 및 지방 이름
-struct Dex: Codable, Hashable {
+struct Dex: Codable, Hashable, Equatable {
     var num : Int               // 도감 번호
     var region : String         // 번호에 해당되는 지방
 }

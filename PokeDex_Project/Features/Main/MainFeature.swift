@@ -12,11 +12,11 @@ import ComposableArchitecture
 struct MainFeature: Reducer {
     
     struct State: Equatable {
-        var pokemons: [PokemonsList] = []
+        var pokemons: [Pokemon] = []
         var isLoading: Bool = false
     }
     
-    enum Action {
+    enum Action: Equatable {
         
     }
     

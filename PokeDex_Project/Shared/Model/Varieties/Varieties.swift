@@ -8,7 +8,7 @@
 import Foundation
 
 /// 다른모습
-struct Varieties: Codable, Hashable {
+struct Varieties: Codable, Hashable, Equatable {
     var id: String                  // ID
     var abilites: Abilites          // 특성 (숨특 여부, 특성명, 특성 설명)
     var form: Form                  // 폼 (ID, 폼 이미지, 이름)

@@ -8,7 +8,7 @@
 import Foundation
 
 /// 폼 정보
-struct Form: Codable,Hashable {
+struct Form: Codable, Hashable, Equatable {
     var id:[Double]             // ID
     var images: [String]        // 폼 이미지
     var name: [String]          // 폼 이름
