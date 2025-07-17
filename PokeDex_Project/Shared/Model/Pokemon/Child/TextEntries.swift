@@ -8,7 +8,7 @@
 import Foundation
 
 /// 도감 설명
-struct TextEntries: Codable, Equatable {
+struct TextEntries: Codable, Hashable, Equatable {
     var text: [String]          // 설명
     var version : [String]      // 버전
 }

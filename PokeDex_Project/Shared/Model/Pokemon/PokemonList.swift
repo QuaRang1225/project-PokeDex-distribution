@@ -8,7 +8,7 @@
 import Foundation
 
 /// 리스트 형태의 반환 데이터를 디코딩하기 위함
-struct PokemonList: Codable, Equatable {
+struct PokemonList: Codable, Hashable, Equatable {
     let totalCount: Int         // 총 개수
     let totalPages: Int         // 총 페이지 수
     let currentPage: Int        // 현재 페이지
