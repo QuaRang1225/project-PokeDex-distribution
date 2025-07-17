@@ -6,13 +6,27 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 struct TabBarView: View {
+    let store: StoreOf<TabBarFeature>
+    let mainStore = Store(initialState: MainFeature.State()) { MainFeature() }
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        WithViewStore(store, observe: \.selectedTab) { viewStore in
+            TabView(selection: viewStore.binding(
+                get: \.self,
+                send: TabBarFeature.Action.selectTab
+            )) {
+                MainView(store: mainStore)
+                    .tabItem { Label("Home", systemImage: "house") }
+                    .tag(TabBarFeature.Tab.home)
+            }
+        }
     }
 }
 
 #Preview {
-    TabBarView()
+    let store = Store(initialState: TabBarFeature.State(selectedTab: .home)) { TabBarFeature() }
+    TabBarView(store: store)
 }
