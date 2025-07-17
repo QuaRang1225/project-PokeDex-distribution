@@ -31,29 +31,52 @@ struct RealmClient {
 
 extension RealmClient: DependencyKey {
     static func liveValue(realm: Realm = try! Realm()) -> RealmClient {
+        // 컨텍스트 저장
         let storePokemon: StorePokemon = { pokemon in
             try! realm.write { realm.add(pokemon) }
         }
+        // 포켓몬 요청
         let fetchPokemon: FetchPokemon = { num in
             guard let pokemonData = realm.objects(RealmObject.self).filter("num == \(num)").first else { throw RealmError.notFound }
-            return RealmPokemon(id: pokemonData.id.stringValue, num: pokemonData.num, name: pokemonData.name, image: pokemonData.image, types: pokemonData.types.map{String($0)})
+            return RealmPokemon(
+                id: pokemonData.id.stringValue,
+                num: pokemonData.num,
+                name: pokemonData.name,
+                image: pokemonData.image,
+                types: pokemonData.types.map{String($0)}
+            )
         }
+        // 포켓몬 리스트 요청
         let fetchPokemons: FetchPokemons = {
             var pokemons:[RealmPokemon] = []
             realm.objects(RealmObject.self).forEach { data in
-                pokemons.append(RealmPokemon(id: data.id.stringValue, num: data.num, name: data.name, image: data.image, types: data.types.map{String($0)}))
+                pokemons.append(
+                    RealmPokemon(
+                        id: data.id.stringValue,
+                        num: data.num,
+                        name: data.name,
+                        image: data.image,
+                        types: data.types.map{String($0)}
+                    )
+                )
             }
             return pokemons
         }
+        // 포켓몬 삭제
         let deletePokemon: DeletePokemon = { num in
-            guard let pokemon = realm.objects(RealmObject.self).filter("num == \(num)").first else { throw RealmError.deleteFailed }
+            guard let pokemon = realm
+                .objects(RealmObject.self)
+                .filter("num == \(num)")
+                .first else { throw RealmError.deleteFailed }
             try! realm.write {
                 realm.delete(pokemon)
             }
         }
+        // 포켓몬 모두 삭제
         let deleteAll: DeleteAllPokemons = {
             try! realm.write { realm.deleteAll() }
         }
+        // MARK: - 반환
         return RealmClient(
             storePokemon: storePokemon,
             fetchPokemon: fetchPokemon,

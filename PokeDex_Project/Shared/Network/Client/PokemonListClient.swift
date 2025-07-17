@@ -24,10 +24,12 @@ struct PokemonListClient {
 // MARK: - 각 요청에 해당하는 의존성 키 주입
 extension PokemonListClient: DependencyKey {
     static var liveValue: PokemonListClient {
+        // 포켓몬 리스트 요청
         let pokemons: ReturnPokemons = { page, region, types, query in
             let request = PokemonListRouter.pokemons(page: page, region: region, types: types, query: query).makeURLRequest()
             return try await URLSession.shared.requestDecoding(Response<PokemonList>.self, urlRequest: request).data
         }
+        // MARK: - 반환
         return PokemonListClient(fetchPokemons: pokemons)
     }
 }
