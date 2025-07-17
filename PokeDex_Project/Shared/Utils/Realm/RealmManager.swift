@@ -9,7 +9,9 @@ import Foundation
 import RealmSwift
 
 class RealmManager{
+    
     static let realm = try! Realm()
+    
     static func storePokemon(pokemon:RealmObject){
         try? realm.write {
           realm.add(pokemon)
