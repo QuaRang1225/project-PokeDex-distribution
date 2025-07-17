@@ -6,15 +6,33 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 @main
 struct PokeDex_ProjectApp: App {
+    
+    @State var start = false
+    let store = Store(initialState: TabBarFeature.State()) { TabBarFeature() }
+    
     var body: some Scene {
         WindowGroup {
             NavigationStack{
-                ContentView()
-                    .navigationViewStyle(StackNavigationViewStyle())
+                ZStack{
+                    if start{
+                        TabBarView(store: store)
+                    }else{
+                        StartView()
+                    }
+                }
             }
+            .onAppear{
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    withAnimation(.easeInOut(duration: 1.0)){
+                        start = true
+                    }
+                }
+            }
+            .navigationViewStyle(StackNavigationViewStyle())
         }
     }
 }
