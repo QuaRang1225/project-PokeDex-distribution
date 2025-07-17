@@ -9,9 +9,9 @@ import Foundation
 
 /// 포켓몬 리스트 요청 라우터
 enum PokemonListRouter: Router {
-    
+
     /// 포켓몬 리스트요청 (페이지, 지방, 타입1, 타입2, 이름)
-    case pokemons(page: Int, region: String, type_1: String, type_2: String, query: String)
+    case pokemons(page: Int, region: String, types: Types, query: String)
     
     var baseUrl: URL {
         return URL(string: Config.awsURL)!
@@ -26,12 +26,12 @@ enum PokemonListRouter: Router {
     
     var parameters: [String: String] {
         switch self {
-        case let .pokemons(page, region, type_1, type_2, query):
+        case let .pokemons(page, region, types, query):
             return [
                 "page": "\(page)",
                 "region": region,
-                "types_1": type_1,
-                "types_2": type_2,
+                "types_1": types.0,
+                "types_2": types.1,
                 "query": query
             ]
         }
