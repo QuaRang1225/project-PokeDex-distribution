@@ -12,6 +12,6 @@ protocol Router {
     var baseUrl: URL { get }
     var endPoint: String { get }
     var parameters: [String: String] { get }
-    func addQuery(_ url: URL) -> URL?
+    func addQuery(_ url: URL) -> URL
     func makeURLRequest() -> URLRequest
 }

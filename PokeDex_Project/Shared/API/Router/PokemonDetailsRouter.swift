@@ -1,15 +1,20 @@
 //
-//  VarietiesRouter.swift
+//  EvolutionRouter.swift
 //  PokeDex_Project
 //
-//  Created by 유영웅 on 5/17/24.
+//  Created by 유영웅 on 5/20/24.
 //
 
 import Foundation
+import Alamofire
 
-/// 다른 모습 - (리전폼, 메가진화 등) 요청 라우터
-enum VarietiesRouter: Router {
+/// 진화 트리 요청 라우터
+enum PokemonDetailsRouter: Router {
     
+    /// 단일 요청 - 전국도감 번호로 요청
+    case pokemon(id: Int)
+    /// 진화 트리 요청
+    case evolutuon(num:Int)
     /// 다른 모습 - 영문 이름으로 요청
     case variety(name:String)
     
@@ -19,6 +24,10 @@ enum VarietiesRouter: Router {
     
     var endPoint:String{
         switch self{
+        case let .pokemon(id):
+            return "/pokemon/\(id)"
+        case let .evolutuon(num):
+            return "/tree/\(num)"
         case let .variety(name):
             return "/variety/\(name)"
         }
@@ -28,18 +37,14 @@ enum VarietiesRouter: Router {
         return [:]
     }
     
-    func addQuery(_ url: URL) -> URL? {
-        return nil
+    func addQuery(_ url: URL) -> URL {
+        return url
     }
     
     func makeURLRequest() -> URLRequest {
         var url = baseUrl.appendingPathComponent(endPoint)
         
-        if let addedQueryUrl = addQuery(url) {
-            url = addedQueryUrl
-        }
-        
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: addQuery(url))
         request.httpMethod = HTTPMethod.get.rawValue
         
         return request
