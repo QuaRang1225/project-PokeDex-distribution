@@ -11,4 +11,9 @@ import Foundation
 struct Types: Equatable {
     var first: String       // 첫번째
     var last: String        // 두번째
+    
+    init(first: String = "", last: String = "") {
+        self.first = first
+        self.last = last
+    }
 }
