@@ -10,26 +10,10 @@ import ComposableArchitecture
 
 /// 탭바 Feature
 struct TabBarFeature: Reducer {
-    enum Tab {
-        case home, my
-        
-        var name: String {
-            switch self {
-            case .home: "도감"
-            case .my: "북마크"
-            }
-        }
-        
-        var image: String {
-            switch self {
-            case .home: "book.closed.fill"
-            case .my: "bookmark"
-            }
-        }
-    }
+    
     
     struct State: Equatable {
-        var selectedTab: Tab = .home
+        var selectedTab: TabFilter = .home
         var showRegionList = false                                                  // 지역 리스트 표시
         
         // 하위 Feature 상태 정의
@@ -38,7 +22,7 @@ struct TabBarFeature: Reducer {
     }
     
     @CasePathable enum Action: Equatable {
-        case selectTab(tab: Tab)
+        case selectTab(tab: TabFilter)
         case didTapFloatingButton                                   // 플로팅 버튼 액션 추가
         
         case regionListAction(RegionListFeature.Action)             // 하위 Feature 액션
@@ -63,7 +47,7 @@ struct TabBarFeature: Reducer {
     }
     
     /// 탭 선택
-    private func setTab(_ state: inout State, tab: Tab) -> Effect<Action>{
+    private func setTab(_ state: inout State, tab: TabFilter) -> Effect<Action>{
         state.selectedTab = tab
         return .none
     }

@@ -43,6 +43,11 @@
 		8149E59F2E2B545800B78CB2 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8149E59B2E2B545800B78CB2 /* Config.xcconfig */; };
 		8149E5A02E2B545800B78CB2 /* PokeDex-Project-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8149E59C2E2B545800B78CB2 /* PokeDex-Project-Info.plist */; };
 		8149E5A12E2B545800B78CB2 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E59A2E2B545800B78CB2 /* Config.swift */; };
+		8149E5C72E2B88D900B78CB2 /* RegionListFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5BE2E2B88D900B78CB2 /* RegionListFeature.swift */; };
+		8149E5C82E2B88D900B78CB2 /* TabBarFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5BF2E2B88D900B78CB2 /* TabBarFeature.swift */; };
+		8149E5C92E2B88D900B78CB2 /* TabFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5C12E2B88D900B78CB2 /* TabFilter.swift */; };
+		8149E5CA2E2B88D900B78CB2 /* RegionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5C32E2B88D900B78CB2 /* RegionListView.swift */; };
+		8149E5CB2E2B88D900B78CB2 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5C42E2B88D900B78CB2 /* TabBarView.swift */; };
 		815C57E22DDC120700FC3F18 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815C57E12DDC120700FC3F18 /* StartView.swift */; };
 		81E3AFC32E2781F7009B579C /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 81E3AFC22E2781F7009B579C /* ComposableArchitecture */; };
 		D639CDEC2BEDF3FB002E0B5D /* PokemonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639CDEB2BEDF3FB002E0B5D /* PokemonViewModel.swift */; };
@@ -130,6 +135,11 @@
 		8149E59A2E2B545800B78CB2 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		8149E59B2E2B545800B78CB2 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		8149E59C2E2B545800B78CB2 /* PokeDex-Project-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PokeDex-Project-Info.plist"; sourceTree = "<group>"; };
+		8149E5BE2E2B88D900B78CB2 /* RegionListFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionListFeature.swift; sourceTree = "<group>"; };
+		8149E5BF2E2B88D900B78CB2 /* TabBarFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarFeature.swift; sourceTree = "<group>"; };
+		8149E5C12E2B88D900B78CB2 /* TabFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabFilter.swift; sourceTree = "<group>"; };
+		8149E5C32E2B88D900B78CB2 /* RegionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionListView.swift; sourceTree = "<group>"; };
+		8149E5C42E2B88D900B78CB2 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		815C57E12DDC120700FC3F18 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		D639CDEB2BEDF3FB002E0B5D /* PokemonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonViewModel.swift; sourceTree = "<group>"; };
 		D639CE142BF4CCD1002E0B5D /* CustomData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomData.swift; sourceTree = "<group>"; };
@@ -156,7 +166,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		8149E5AC2E2B81AA00B78CB2 /* TabBar */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TabBar; sourceTree = "<group>"; };
+		8149E5CC2E2B898400B78CB2 /* SubView */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SubView; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -459,6 +469,7 @@
 		8149E58A2E296B8300B78CB2 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8149E5CC2E2B898400B78CB2 /* SubView */,
 				8149E5872E296B8300B78CB2 /* MainView.swift */,
 				8149E5892E296B8300B78CB2 /* SearchBoardView.swift */,
 			);
@@ -482,7 +493,7 @@
 				8149E57F2E296B8300B78CB2 /* Calculator */,
 				8149E5802E296B8300B78CB2 /* Details */,
 				8149E58B2E296B8300B78CB2 /* Main */,
-				8149E5AC2E2B81AA00B78CB2 /* TabBar */,
+				8149E5C62E2B88D900B78CB2 /* TabBar */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -496,6 +507,42 @@
 				8149E59C2E2B545800B78CB2 /* PokeDex-Project-Info.plist */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		8149E5C02E2B88D900B78CB2 /* Feature */ = {
+			isa = PBXGroup;
+			children = (
+				8149E5BE2E2B88D900B78CB2 /* RegionListFeature.swift */,
+				8149E5BF2E2B88D900B78CB2 /* TabBarFeature.swift */,
+			);
+			path = Feature;
+			sourceTree = "<group>";
+		};
+		8149E5C22E2B88D900B78CB2 /* Filter */ = {
+			isa = PBXGroup;
+			children = (
+				8149E5C12E2B88D900B78CB2 /* TabFilter.swift */,
+			);
+			path = Filter;
+			sourceTree = "<group>";
+		};
+		8149E5C52E2B88D900B78CB2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8149E5C32E2B88D900B78CB2 /* RegionListView.swift */,
+				8149E5C42E2B88D900B78CB2 /* TabBarView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8149E5C62E2B88D900B78CB2 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				8149E5C02E2B88D900B78CB2 /* Feature */,
+				8149E5C52E2B88D900B78CB2 /* View */,
+				8149E5C22E2B88D900B78CB2 /* Filter */,
+			);
+			path = TabBar;
 			sourceTree = "<group>";
 		};
 		D639CDD72BEDEB31002E0B5D /* View */ = {
@@ -610,7 +657,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				8149E5AC2E2B81AA00B78CB2 /* TabBar */,
+				8149E5CC2E2B898400B78CB2 /* SubView */,
 			);
 			name = PokeDex_Project;
 			packageProductDependencies = (
@@ -750,6 +797,11 @@
 				D679C12E2BFEFBE400223D6D /* DefenseView.swift in Sources */,
 				D679C1302BFF13BF00223D6D /* IndividualFilter.swift in Sources */,
 				D679C10B2BFB410700223D6D /* EvolTreeNodeView.swift in Sources */,
+				8149E5C72E2B88D900B78CB2 /* RegionListFeature.swift in Sources */,
+				8149E5C82E2B88D900B78CB2 /* TabBarFeature.swift in Sources */,
+				8149E5C92E2B88D900B78CB2 /* TabFilter.swift in Sources */,
+				8149E5CA2E2B88D900B78CB2 /* RegionListView.swift in Sources */,
+				8149E5CB2E2B88D900B78CB2 /* TabBarView.swift in Sources */,
 				D639CDEC2BEDF3FB002E0B5D /* PokemonViewModel.swift in Sources */,
 				D639CE1C2BF702ED002E0B5D /* TypeFilter.swift in Sources */,
 				D679C1202BFCBC9800223D6D /* StatsFilter.swift in Sources */,
