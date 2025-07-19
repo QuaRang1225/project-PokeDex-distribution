@@ -13,7 +13,7 @@ struct PokemonList: Codable, Hashable, Equatable {
     let totalPages: Int         // 총 페이지 수
     let currentPage: Int        // 현재 페이지
     let perPage: Int            // 이전 페이지
-    let pokemons: [Pokemon]      // 포켓몬 리스트
+    var pokemons: [Pokemon]      // 포켓몬 리스트
     
     enum CodingKeys: String, CodingKey {
         case totalCount = "total_count"

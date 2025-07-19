@@ -8,7 +8,7 @@
 import Foundation
 
 /// 포켓몬 상세정보
-struct Pokemon: Codable, Hashable, Equatable {
+struct Pokemon: Codable, Hashable, Equatable, Identifiable {
     var id: Int                      // ID - 전국도감 번호
     var color: String?               // 색상 - 포켓몬 고유 색상
     var base: Base?                  // 기본 모습정보 (이미지, 타입)
