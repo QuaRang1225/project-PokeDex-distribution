@@ -12,8 +12,8 @@ import ComposableArchitecture
 struct MainView: View {
     typealias MainStore = ViewStoreOf<MainFeature>
     let store: StoreOf<MainFeature>
-    let columns =  [GridItem(.flexible()),GridItem(.flexible()),GridItem(.flexible())]
-    let typeColumns =  [GridItem(.flexible()),GridItem(.flexible()),GridItem(.flexible()),GridItem(.flexible())]
+    
+    
     let monsterball = "https://github.com/PokeAPI/sprites/blob/master/sprites/items/poke-ball.png?raw=true"
     
     @State var query = ""
@@ -25,91 +25,64 @@ struct MainView: View {
     @State var type_2 = ""
     @State private var hasAppeared = false
     
-    //    @StateObject var vm = PokemonViewModel(pokemonList: [], pokemon: nil)
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
-//            ZStack{
-//                TabView{
-//                    
-//                    illustratedView
-//                        .tabItem {
-//                            VStack{
-//                                Image(systemName: "book.closed")
-//                                Text("도감 ")
-//                            }
-//                        }
-//                    BookmarkView()
-//                        .tabItem {
-//                            VStack{
-//                                Image(systemName: "bookmark")
-//                                Text("내 포켓몬")
-//                            }
-//                        }
-//                }
-//                .accentColor(.primary)
-//                if regionChange{
-//                    filterView
-//                }
-//            }
-            VStack {
-                HStack {
-                    titleButton(viewStore: viewStore)
-                    Spacer()
-                    searchButton(viewStore: viewStore)
+            ZStack {
+                VStack {
+                    HStack {
+                        titleLabel(viewStore: viewStore)
+                        Spacer()
+                        searchButton(viewStore: viewStore)
+                    }
+                    pokemonListView(viewStore: viewStore)
                 }
-                pokemonListView(viewStore: viewStore)
+                
+                if viewStore.state.isLoading {
+                    ProgressView()
+                        .scaleEffect(2.0)
+                }
             }
             .onAppear {
-                let types = Types(first: "", last: "")
-                viewStore.send(.viewDidLoad(page: 1, region: "전국", types: types, query: ""))
+                viewStore.send(.viewDidLoad)
             }
-            //            .sheet(isPresented: $search){
-            //                if UIDevice.current.userInterfaceIdiom == .pad {
-            //                    // iPad일 때 실행할 코드
-            //                    serachView
-            //                } else {
-            //                    serachView
-            //                        .presentationDetents([.fraction(0.6)])
-            //                }
-            //            }
         }
-//        .onAppear{
-//            if !hasAppeared{
-                //                vm.fetchPokemonList(page: vm.currentPage, region: filter.rawValue, type_1: type_1 , type_2: type_2, query: query)
-                
-//            }
-//        }
-        
     }
 }
 
 extension MainView {
-    /// 타이틀 버튼 - 도감 선택용
-    private func titleButton(viewStore: MainStore) -> some View {
-        Button {
-            // 도감 선택
-        } label: {
-            // 도감 라벨
-        }
+    private func titleLabel(viewStore: MainStore) -> some View {
+        Text(viewStore.state.regionTitle + "도감")
+            .bold()
+            .font(.largeTitle)
+            .padding(.leading)
     }
     /// 검색 버튼
     private func searchButton(viewStore: MainStore) -> some View {
         Button {
-            
+            viewStore.send(.didTappedSearchButton)
         } label: {
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 17))
         }
+        .foregroundStyle(.primary)
+        .padding(.trailing)
     }
     /// 리스트 뷰
     private func pokemonListView(viewStore: MainStore) -> some View {
+        
         let pokemons: [Pokemon] = viewStore.pokemons?.pokemons ?? []
-        return List(pokemons, id: \.id) { pokemon in
-            VStack {
-                KFImage(URL(string: pokemon.base?.image ?? "")!)
-                    .resizable()
-                    .frame(width: 300, height: 300)
-                Text(pokemon.name ?? "")
+        let columns = Array(repeating: GridItem(.flexible()), count: 3)
+        
+        return ScrollView(.vertical, showsIndicators: true) {
+            LazyVGrid(columns: columns) {
+                ForEach(pokemons, id: \.id) { pokemon in
+                    VStack {
+                        KFImage(URL(string: pokemon.base?.image ?? "")!)
+                            .resizable()
+                            .frame(width: 300, height: 300)
+                        Text(pokemon.name ?? "")
+                    }
+                }
             }
         }
     }
@@ -118,7 +91,7 @@ extension MainView {
 #Preview {
     NavigationStack{
         let store = Store(initialState: MainFeature.State(pokemons: nil, isLoading: false)) { MainFeature() }
-//        MainView(store: store)
+        MainView(store: store)
     }
 }
 
