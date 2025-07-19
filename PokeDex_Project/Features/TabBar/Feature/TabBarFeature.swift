@@ -12,6 +12,20 @@ import ComposableArchitecture
 struct TabBarFeature: Reducer {
     enum Tab {
         case home, my
+        
+        var name: String {
+            switch self {
+            case .home: "도감"
+            case .my: "북마크"
+            }
+        }
+        
+        var image: String {
+            switch self {
+            case .home: "book.closed.fill"
+            case .my: "bookmark"
+            }
+        }
     }
     
     struct State: Equatable {
@@ -38,12 +52,12 @@ struct TabBarFeature: Reducer {
         Reduce { state, action in
             switch action {
             case let .selectTab(tab):
-                setTab(&state, tab: tab)
+                return setTab(&state, tab: tab)
             case .didTapFloatingButton:
-                didTapFloatingButton(&state)
+                return didTapFloatingButton(&state)
             case let .regionListAction(action):
-                executeRegionListFeature(&state, action: action)
-            default: .none
+                return executeRegionListFeature(&state, action: action)
+            default: return .none
             }
         }
     }
@@ -77,8 +91,6 @@ extension TabBarFeature {
             let region = state.regionListState.region.rawValue        // 지역 리스트 피쳐의 state 값 가져옴
             state.showRegionList = false
             return .send(.mainAction(.delegate(.selectedRegion(region: region))))
-            // 메인피쳐에 특정 메서드를 실행시켜야 함
-            //return fetchPokemons(&state, page: 1, region: region, types: Types(), query: "")
         }
         
         /// 지역리스트 뷰 닫기 이벤트
