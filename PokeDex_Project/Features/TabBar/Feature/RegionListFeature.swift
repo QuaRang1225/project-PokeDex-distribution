@@ -30,11 +30,11 @@ struct RegionListFeature: Reducer {
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case let .didTapRegion(region):
-            return didTapRegion(&state, region: region)
+            didTapRegion(&state, region: region)
         case .didTappedDismissButton:
-            return didTapDismissButton(&state)
+            didTapDismissButton(&state)
         case .delegate:
-            return .none
+            .none
         }
     }
     

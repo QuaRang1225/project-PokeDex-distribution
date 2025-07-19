@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -35,14 +35,10 @@
 		8149E57C2E296B8000B78CB2 /* RealmError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5622E296B8000B78CB2 /* RealmError.swift */; };
 		8149E57D2E296B8000B78CB2 /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5642E296B8000B78CB2 /* URLSession+Extension.swift */; };
 		8149E5902E296B8300B78CB2 /* MainFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5812E296B8300B78CB2 /* MainFeature.swift */; };
-		8149E5912E296B8300B78CB2 /* RegionListFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5822E296B8300B78CB2 /* RegionListFeature.swift */; };
 		8149E5922E296B8300B78CB2 /* SearchBoardFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5832E296B8300B78CB2 /* SearchBoardFeature.swift */; };
 		8149E5932E296B8300B78CB2 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5852E296B8300B78CB2 /* Types.swift */; };
 		8149E5942E296B8300B78CB2 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5872E296B8300B78CB2 /* MainView.swift */; };
-		8149E5952E296B8300B78CB2 /* RegionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5882E296B8300B78CB2 /* RegionListView.swift */; };
 		8149E5962E296B8300B78CB2 /* SearchBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5892E296B8300B78CB2 /* SearchBoardView.swift */; };
-		8149E5972E296B8300B78CB2 /* TabBarFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E58C2E296B8300B78CB2 /* TabBarFeature.swift */; };
-		8149E5982E296B8300B78CB2 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E58D2E296B8300B78CB2 /* TabBarView.swift */; };
 		8149E59E2E2B545800B78CB2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8149E5992E2B545800B78CB2 /* Assets.xcassets */; };
 		8149E59F2E2B545800B78CB2 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8149E59B2E2B545800B78CB2 /* Config.xcconfig */; };
 		8149E5A02E2B545800B78CB2 /* PokeDex-Project-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8149E59C2E2B545800B78CB2 /* PokeDex-Project-Info.plist */; };
@@ -126,14 +122,10 @@
 		8149E5622E296B8000B78CB2 /* RealmError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmError.swift; sourceTree = "<group>"; };
 		8149E5642E296B8000B78CB2 /* URLSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extension.swift"; sourceTree = "<group>"; };
 		8149E5812E296B8300B78CB2 /* MainFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeature.swift; sourceTree = "<group>"; };
-		8149E5822E296B8300B78CB2 /* RegionListFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionListFeature.swift; sourceTree = "<group>"; };
 		8149E5832E296B8300B78CB2 /* SearchBoardFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBoardFeature.swift; sourceTree = "<group>"; };
 		8149E5852E296B8300B78CB2 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		8149E5872E296B8300B78CB2 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		8149E5882E296B8300B78CB2 /* RegionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionListView.swift; sourceTree = "<group>"; };
 		8149E5892E296B8300B78CB2 /* SearchBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBoardView.swift; sourceTree = "<group>"; };
-		8149E58C2E296B8300B78CB2 /* TabBarFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarFeature.swift; sourceTree = "<group>"; };
-		8149E58D2E296B8300B78CB2 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		8149E5992E2B545800B78CB2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8149E59A2E2B545800B78CB2 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		8149E59B2E2B545800B78CB2 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -162,6 +154,10 @@
 		D6E331D22C0483DF00C79D22 /* AddBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBannerView.swift; sourceTree = "<group>"; };
 		D6E331D42C0605F100C79D22 /* SilverDFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SilverDFilter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		8149E5AC2E2B81AA00B78CB2 /* TabBar */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TabBar; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		8123985129F2865A00B7D560 /* Frameworks */ = {
@@ -447,7 +443,6 @@
 			isa = PBXGroup;
 			children = (
 				8149E5812E296B8300B78CB2 /* MainFeature.swift */,
-				8149E5822E296B8300B78CB2 /* RegionListFeature.swift */,
 				8149E5832E296B8300B78CB2 /* SearchBoardFeature.swift */,
 			);
 			path = Feature;
@@ -465,7 +460,6 @@
 			isa = PBXGroup;
 			children = (
 				8149E5872E296B8300B78CB2 /* MainView.swift */,
-				8149E5882E296B8300B78CB2 /* RegionListView.swift */,
 				8149E5892E296B8300B78CB2 /* SearchBoardView.swift */,
 			);
 			path = View;
@@ -481,15 +475,6 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
-		8149E58E2E296B8300B78CB2 /* TabBar */ = {
-			isa = PBXGroup;
-			children = (
-				8149E58C2E296B8300B78CB2 /* TabBarFeature.swift */,
-				8149E58D2E296B8300B78CB2 /* TabBarView.swift */,
-			);
-			path = TabBar;
-			sourceTree = "<group>";
-		};
 		8149E58F2E296B8300B78CB2 /* Features */ = {
 			isa = PBXGroup;
 			children = (
@@ -497,7 +482,7 @@
 				8149E57F2E296B8300B78CB2 /* Calculator */,
 				8149E5802E296B8300B78CB2 /* Details */,
 				8149E58B2E296B8300B78CB2 /* Main */,
-				8149E58E2E296B8300B78CB2 /* TabBar */,
+				8149E5AC2E2B81AA00B78CB2 /* TabBar */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -623,6 +608,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				8149E5AC2E2B81AA00B78CB2 /* TabBar */,
 			);
 			name = PokeDex_Project;
 			packageProductDependencies = (
@@ -795,15 +783,11 @@
 				8149E57C2E296B8000B78CB2 /* RealmError.swift in Sources */,
 				8149E57D2E296B8000B78CB2 /* URLSession+Extension.swift in Sources */,
 				8149E5902E296B8300B78CB2 /* MainFeature.swift in Sources */,
-				8149E5912E296B8300B78CB2 /* RegionListFeature.swift in Sources */,
 				8149E5922E296B8300B78CB2 /* SearchBoardFeature.swift in Sources */,
 				8149E5932E296B8300B78CB2 /* Types.swift in Sources */,
 				8149E5942E296B8300B78CB2 /* MainView.swift in Sources */,
-				8149E5952E296B8300B78CB2 /* RegionListView.swift in Sources */,
 				8149E5A12E2B545800B78CB2 /* Config.swift in Sources */,
 				8149E5962E296B8300B78CB2 /* SearchBoardView.swift in Sources */,
-				8149E5972E296B8300B78CB2 /* TabBarFeature.swift in Sources */,
-				8149E5982E296B8300B78CB2 /* TabBarView.swift in Sources */,
 				D679C1242BFEFAB000223D6D /* CalculateFilter.swift in Sources */,
 				D639CE152BF4CCD1002E0B5D /* CustomData.swift in Sources */,
 				D679C1322BFF13D900223D6D /* EffortFilter.swift in Sources */,
