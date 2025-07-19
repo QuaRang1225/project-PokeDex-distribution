@@ -48,7 +48,7 @@ enum PokemonListRouter: Router {
     }
     
     func makeURLRequest() -> URLRequest {
-        var url = baseUrl.appendingPathComponent(endPoint)
+        let url = baseUrl.appendingPathComponent(endPoint)
         
         var request = URLRequest(url: addQuery(url))
         request.httpMethod = HTTPMethod.get.rawValue
