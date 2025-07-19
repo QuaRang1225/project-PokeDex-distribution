@@ -8,10 +8,12 @@
 import Foundation
 import ComposableArchitecture
 
+/// 포켓몬 리스트 셀 Feature
 struct PokemonCellFeature: Reducer {
     
-    struct State: Equatable {
-        var state: Pokemon? = nil
+    struct State: Equatable, Identifiable {
+        var id: Pokemon.ID { pokemon.id }
+        var pokemon: Pokemon
     }
     
     enum Action: Equatable {
