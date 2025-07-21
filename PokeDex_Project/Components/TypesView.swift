@@ -22,7 +22,7 @@ struct TypesView: View {
             .overlay {
                 Text(type)
                     .font(font)
-                    .padding(.horizontal, 15)
+                    .padding(.horizontal, 5)
                     .foregroundColor(.white)
                     .shadow(color:.black, radius: 0.5)
             }
