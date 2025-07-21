@@ -11,7 +11,7 @@ import Foundation
 struct PokemonList: Codable, Hashable, Equatable {
     let totalCount: Int         // 총 개수
     let totalPages: Int         // 총 페이지 수
-    let currentPage: Int        // 현재 페이지
+    var currentPage: Int        // 현재 페이지
     let perPage: Int            // 이전 페이지
     var pokemons: [Pokemon]      // 포켓몬 리스트
     
