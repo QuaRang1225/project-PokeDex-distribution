@@ -40,7 +40,7 @@ extension PokemonCellView {
                 .frame(width: 25,height: 25)
             Text(String(format: "%04d", viewStore.state.pokemon.id))
                 .font(.headline)
-                .foregroundStyle(.black)
+                .foregroundColor(.primary)
                 .bold()
         }
         .offset(x: -5)
@@ -60,14 +60,14 @@ extension PokemonCellView {
     private func pokemonNameLabel(viewStore: PokemonCellStore) -> some View {
         Text(viewStore.state.pokemon.name ?? "")
             .font(.headline)
-            .foregroundStyle(.black)
+            .foregroundColor(.primary)
             .bold()
     }
     /// 포켓몬 타입
     private func pokemonTypesLabels(viewStore: PokemonCellStore) -> some View {
         HStack(spacing: 5){
             ForEach(viewStore.pokemon.base?.types ?? [], id:\.self){ type in
-                TypesView(type: type, width: .infinity, height: 20, font: .subheadline)
+                TypesView(type: type, width: .infinity, height: 20, font: .caption)
             }
         }
         .fontWeight(.black)
