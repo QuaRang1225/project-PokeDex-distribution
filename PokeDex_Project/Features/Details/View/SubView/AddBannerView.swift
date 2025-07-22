@@ -9,14 +9,18 @@ import Foundation
 import GoogleMobileAds
 import SwiftUI
 
+/// 구글 AdsMob 뷰
 struct AdBannerView: UIViewRepresentable {
     let adUnitID: String
 
     func makeUIView(context: Context) -> GADBannerView {
-        let bannerView = GADBannerView(adSize: GADAdSizeFromCGSize(CGSize(width: 320, height: 50))) // Set your desired banner ad size
-        bannerView.adUnitID = adUnitID
-        bannerView.rootViewController = UIApplication.shared.windows.first?.rootViewController
+        let bannerView = GADBannerView(adSize: GADAdSizeFromCGSize(CGSize(width: UIScreen.main.bounds.width, height: 50)))
+        let viewController = UIViewController()
+        
+        bannerView.rootViewController = viewController
         bannerView.load(GADRequest())
+        bannerView.adUnitID = adUnitID
+        
         return bannerView
     }
     
