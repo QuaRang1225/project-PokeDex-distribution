@@ -193,6 +193,14 @@ struct MainFeature: Reducer {
 extension MainFeature {
     /// 검색보드 이벤트 실행자
     private func executeSearchBoardFeature(_ state: inout State, action: SearchBoardFeature.Action) -> Effect<Action> {
-        
+        switch action {
+        case .delegate(.didTappedSearchButton):
+            state.showSearchBoard = false
+            let query = state.searchBoardState.query
+            let types = Types(first: state.searchBoardState.types.first, last: state.searchBoardState.types.last)
+            let pokemon = PokemonsQuery(types: types, query: query)
+            return fetchPokemons(&state, query: pokemon)
+        default: return .none
+        }
     }
 }
