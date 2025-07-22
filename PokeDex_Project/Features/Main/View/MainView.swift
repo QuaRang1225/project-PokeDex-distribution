@@ -49,7 +49,7 @@ struct MainView: View {
                     send: { _ in .dismissPokemonDetail } // nil로 바꿀 때 액션 전달
                 )
             ) { id in
-                Text("\(id)")
+                pokemonDetailsView
             }
         }
     }
@@ -111,6 +111,13 @@ extension MainView {
         )
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
+    }
+    /// 포켓몬 상세 뷰
+    private var pokemonDetailsView: some View {
+        PokemonDetailsView(store: store.scope(
+            state: \.pokemonDetailsState,
+            action: \.pokemonDetailsAction)
+        )
     }
 }
 

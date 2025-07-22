@@ -33,6 +33,7 @@ struct MainFeature: Reducer {
         
         // 하위 Feature 상태 정의
         var searchBoardState = SearchBoardFeature.State()                           // 검색보드 상태
+        var pokemonDetailsState = PokemonDetailsFeature.State()                      // 포켓몬 상세 뷰 상태
     }
     
     @CasePathable enum Action: Equatable {
@@ -45,6 +46,7 @@ struct MainFeature: Reducer {
         
         // 하위 Feature 액션 정의
         case searchBoardAction(action: SearchBoardFeature.Action)                   // 검색보드 액션
+        case pokemonDetailsAction(action: PokemonDetailsFeature.Action)             // 포켓몬 상세 뷰 액션
         
         // 포켓몬 선택 관련 액션 정의
         case pokemonCellFeature(IdentifiedActionOf<PokemonCellFeature>)             // 포켓몬 셀 상태, 액션 정의
@@ -61,6 +63,7 @@ struct MainFeature: Reducer {
     var body: some ReducerOf<Self> {
         // 하위 이벤트 연결
         Scope(state: \.searchBoardState, action: \.searchBoardAction) { SearchBoardFeature() }
+        Scope(state: \.pokemonDetailsState, action: \.pokemonDetailsAction) { PokemonDetailsFeature() }
         
         Reduce { state, action in
             switch action {
