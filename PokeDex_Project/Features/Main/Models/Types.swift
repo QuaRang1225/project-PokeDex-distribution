@@ -12,8 +12,8 @@ struct Types: Equatable {
     var first: String       // 첫번째
     var last: String        // 두번째
     
-    init(first: String = "", last: String = "") {
-        self.first = first
-        self.last = last
+    init(first: String? = nil, last: String? = nil) {
+        self.first = first ?? ""
+        self.last = last ?? ""
     }
 }
