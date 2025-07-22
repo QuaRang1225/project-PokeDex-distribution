@@ -9,10 +9,10 @@ import SwiftUI
 
 /// 타입 뷰
 struct TypesView: View {
-    let type:String
-    let width:CGFloat?
-    let height:CGFloat
-    let font:Font
+    let type: String
+    var width: CGFloat? = .infinity
+    let height: CGFloat
+    let font: Font
     
     var body: some View {
         Capsule()
