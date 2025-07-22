@@ -10,7 +10,7 @@ import SwiftUI
 
 /// 검색바 구현
 struct SearchBar: View {
-    @State var text = ""
+    @Binding var text: String
     
     var body: some View {
         HStack {
@@ -56,5 +56,5 @@ extension SearchBar {
 }
 
 #Preview {
-    SearchBar(text: "")
+    SearchBar(text: .constant(""))
 }
