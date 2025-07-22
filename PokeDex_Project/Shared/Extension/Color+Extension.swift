@@ -8,7 +8,9 @@
 import Foundation
 import SwiftUI
 
+// MARK: - Color
 extension Color{
+    /// 타입 -> 색상
     static func typeColor(_ types:String)->Color{
         return Color(types)
     }
