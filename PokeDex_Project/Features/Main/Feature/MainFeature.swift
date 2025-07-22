@@ -13,7 +13,7 @@ struct MainFeature: Reducer {
     typealias PokemonResult = Result<PokemonList, NetworkError>
     
     /// 포켓몬 쿼리 구조체
-    struct PoekmonsQuery {
+    struct PokemonsQuery: Equatable {
         var page: Int = 1
         var region: String = RegionFilter.national.rawValue
         var types: Types = Types()
@@ -25,8 +25,10 @@ struct MainFeature: Reducer {
         var isLoading: Bool = false                                                 // 로딩 중
         var showSearchBoard = false                                                 // 검색 보드뷰 표시
         var regionTitle: String = RegionFilter.national.rawValue                    // 지방 이름
+        var currentQuery = PokemonsQuery()                                          // 현재 쿼리 상태
+        var isLastPokemonReached: Bool = true
         
-        var selectedPokemon: Pokemon? = nil                                         // 선택한 포켓몬(상세 뷰를 위함)
+        var selectedPokemonId: Int? = nil                                           // 선택한 포켓몬(상세 뷰를 위함)
         var pokemonCellStates: IdentifiedArrayOf<PokemonCellFeature.State> = []     // 포켓몬 리스트 셀 상태 배열
         
         // 하위 Feature 상태 정의
@@ -35,8 +37,10 @@ struct MainFeature: Reducer {
     
     @CasePathable enum Action: Equatable {
         case viewDidLoad                                                            // 뷰 로드 후
-        case recievedPokemons(result: PokemonResult)                                // 데이터 요청 후
+        case recievedPokemons(result: PokemonResult, isAppend: Bool)                // 데이터 요청 후
         case didTappedSearchButton                                                  // 검색 버튼 터치
+        case scrollUpList
+        case lastPokemonReached
         case delegate(Delegate)                                                     // 상위 Feature에서 구현할 액션
         
         // 하위 Feature 액션 정의
@@ -44,7 +48,7 @@ struct MainFeature: Reducer {
         
         // 포켓몬 선택 관련 액션 정의
         case pokemonCellFeature(IdentifiedActionOf<PokemonCellFeature>)             // 포켓몬 셀 상태, 액션 정의
-        case didTappedPokemonCell(Pokemon)                                          // 상세화면 열기
+        case dismissSearchView// 상세화면 열기
         case dismissPokemonDetail                                                   // 상세화면 닫기
         
         enum Delegate: Equatable {
@@ -62,20 +66,24 @@ struct MainFeature: Reducer {
             switch action {
             case .viewDidLoad:
                 return fetchPokemons(&state)
-            case let .recievedPokemons(result):
-                return setPokemons(&state, result: result)
+            case let .recievedPokemons(result, isAppend):
+                return setPokemons(&state, result: result, isAppend: isAppend)
             case .didTappedSearchButton:
                 return showSearchBoard(&state)
             case let .searchBoardAction(action):
                 return executeSearchBoardFeature(&state, action: action)
+            case .scrollUpList:
+                return fetchNextPokemons(&state)
+            case .lastPokemonReached:
+                return lastPokemonReached(&state)
             case let .delegate(.selectedRegion(region)):
-                return fetchPokemons(&state, query: PoekmonsQuery(region: region))
-            case let .didTappedPokemonCell(pokemon):
-                return movePokemonDetailsView(&state, pokemon: pokemon)
+                return fetchPokemons(&state, query: PokemonsQuery(region: region))
+            case let .pokemonCellFeature(.element(id, .delegate(.didTapCell))):
+                return movePokemonDetailsView(&state, id: id)
             case .dismissPokemonDetail:
                 return dismissPokemonDetailsView(&state)
-            default:
-                return .none
+            case .dismissSearchView:
+                return dismissSearchBoard(&state)
             }
         }
         .forEach(\.pokemonCellStates, action: \.pokemonCellFeature) {
@@ -84,50 +92,98 @@ struct MainFeature: Reducer {
     }
     
     /// 포켓몬 리스트 요청
-    private func fetchPokemons(_ state: inout State, query: PoekmonsQuery = PoekmonsQuery()) -> Effect<Action> {
+    private func fetchPokemons(_ state: inout State, query: PokemonsQuery = PokemonsQuery()) -> Effect<Action> {
         state.isLoading = true
         state.pokemons = nil
         state.regionTitle = query.region
+        state.currentQuery = query
         return .run { send in
             do {
                 let pokemons = try await pokemonListClient.fetchPokemons(query.page, query.region, query.types, query.query)
-                await send(.recievedPokemons(result: .success(pokemons)))
+                await send(.recievedPokemons(result: .success(pokemons), isAppend: false))
             } catch let error as NetworkError {
-                await send(.recievedPokemons(result: .failure(error)))
+                await send(.recievedPokemons(result: .failure(error), isAppend: false))
             }
         }
     }
-
+    
     /// 포켓몬 리스트  업데이트 및 에러 핸들링
-    private func setPokemons(_ state: inout State, result: PokemonResult) -> Effect<Action> {
+    private func setPokemons(_ state: inout State, result: PokemonResult, isAppend: Bool = false) -> Effect<Action> {
         state.isLoading = false
-
+        
         switch result {
         case let .success(pokemons):
-            state.pokemons = pokemons
-            state.pokemonCellStates = IdentifiedArray(uniqueElements: pokemons.pokemons.map { PokemonCellFeature.State(pokemon: $0) })
+            if isAppend {
+                // 기존 pokemons 리스트에 새 데이터 append
+                state.pokemons?.pokemons.append(contentsOf: pokemons.pokemons)
+                
+                // 기존 셀 상태 배열에 새 셀 추가
+                state.pokemonCellStates.append(
+                    contentsOf: pokemons.pokemons.map { PokemonCellFeature.State(pokemon: $0) }
+                )
+            } else {
+                state.pokemons = pokemons
+                state.pokemonCellStates = IdentifiedArray(
+                    uniqueElements: pokemons.pokemons.map { PokemonCellFeature.State(pokemon: $0) }
+                )
+            }
         case let .failure(error):
             print(error.errorMessage)
         }
-
+        
+        return .none
+    }
+    
+    /// 포켓몬 리스트 다음 요청
+    private func fetchNextPokemons(_ state: inout State) -> Effect<Action> {
+        // 현재 페이지가 총 페이지 수보다 작을 때만 실행
+        guard let currentPage = state.pokemons?.currentPage,
+              let totalPage = state.pokemons?.totalPages,
+              currentPage < totalPage else {
+            // 아닐 경우 마지막이라는 이벤트 방출
+            return .send(.lastPokemonReached)
+        }
+        state.currentQuery.page += 1
+        state.pokemons?.currentPage += 1
+        let query = state.currentQuery
+        
+        return .run { send in
+            do {
+                let pokemons = try await pokemonListClient.fetchPokemons(query.page, query.region, query.types, query.query)
+                await send(.recievedPokemons(result: .success(pokemons), isAppend: true))
+            } catch let error as NetworkError {
+                await send(.recievedPokemons(result: .failure(error), isAppend: true))
+            }
+        }
+    }
+    
+    /// 마지막 이벤트의 경우 ProgressView를 끄기 위한 이벤트
+    private func lastPokemonReached(_ state: inout State) -> Effect<Action> {
+        state.isLastPokemonReached = false
         return .none
     }
     
     /// 검색 보드 표시
     private func showSearchBoard(_ state: inout State) -> Effect<Action> {
-        state.showSearchBoard.toggle()
+        state.showSearchBoard = true
+        return .none
+    }
+    
+    /// 검색 보드 닫기
+    private func dismissSearchBoard(_ state: inout State) -> Effect<Action> {
+        state.showSearchBoard = false
         return .none
     }
     
     /// 포켓몬 상세 뷰 이동
-    private func movePokemonDetailsView(_ state: inout State, pokemon: Pokemon) -> Effect<Action> {
-        state.selectedPokemon = pokemon
+    private func movePokemonDetailsView(_ state: inout State, id: Int) -> Effect<Action> {
+        state.selectedPokemonId = id
         return .none
     }
     
     /// 포켓몬 상세 뷰 닫기
     private func dismissPokemonDetailsView(_ state: inout State) -> Effect<Action> {
-        state.selectedPokemon = nil
+        state.selectedPokemonId = nil
         return .none
     }
 }
