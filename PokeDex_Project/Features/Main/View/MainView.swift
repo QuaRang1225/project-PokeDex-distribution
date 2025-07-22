@@ -41,9 +41,7 @@ struct MainView: View {
                     send: { _ in .dismissSearchView }
                 )
             ) {
-                Text("asdasdasd")
-                    .presentationDetents([.medium, .large])
-                    .presentationDragIndicator(.visible)
+                searchBoadView
             }
             .navigationDestination(
                 item: viewStore.binding(
@@ -104,6 +102,15 @@ extension MainView {
             }
             .padding(.horizontal)
         }
+    }
+    /// 검색 보드 뷰
+    private var searchBoadView: some View {
+        SearchBoardView(store: store.scope(
+            state: \.searchBoardState,
+            action: \.searchBoardAction)
+        )
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
     }
 }
 
