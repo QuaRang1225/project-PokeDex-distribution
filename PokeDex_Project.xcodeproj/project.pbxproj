@@ -17,6 +17,7 @@
 		8127AC862E2F84A00020D7B3 /* VisibleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8127AC832E2F84A00020D7B3 /* VisibleModifier.swift */; };
 		8127AC882E2F862B0020D7B3 /* PokemonDetailsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8127AC872E2F862B0020D7B3 /* PokemonDetailsFeature.swift */; };
 		8127AC8A2E2FA2B80020D7B3 /* InfoRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8127AC892E2FA2B80020D7B3 /* InfoRowView.swift */; };
+		8127AC8C2E2FC7EB0020D7B3 /* KeyValueListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8127AC8B2E2FC7EB0020D7B3 /* KeyValueListView.swift */; };
 		8149E53F2E296B7C00B78CB2 /* PokeDex_ProjectApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E53D2E296B7C00B78CB2 /* PokeDex_ProjectApp.swift */; };
 		8149E5682E296B8000B78CB2 /* EvolutionTo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5402E296B8000B78CB2 /* EvolutionTo.swift */; };
 		8149E5692E296B8000B78CB2 /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5422E296B8000B78CB2 /* Base.swift */; };
@@ -118,6 +119,7 @@
 		8127AC832E2F84A00020D7B3 /* VisibleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibleModifier.swift; sourceTree = "<group>"; };
 		8127AC872E2F862B0020D7B3 /* PokemonDetailsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailsFeature.swift; sourceTree = "<group>"; };
 		8127AC892E2FA2B80020D7B3 /* InfoRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoRowView.swift; sourceTree = "<group>"; };
+		8127AC8B2E2FC7EB0020D7B3 /* KeyValueListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueListView.swift; sourceTree = "<group>"; };
 		8149E53D2E296B7C00B78CB2 /* PokeDex_ProjectApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeDex_ProjectApp.swift; sourceTree = "<group>"; };
 		8149E5402E296B8000B78CB2 /* EvolutionTo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionTo.swift; sourceTree = "<group>"; };
 		8149E5422E296B8000B78CB2 /* Base.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 			children = (
 				8127AC7B2E2F83C70020D7B3 /* AdBannerView.swift */,
 				8127AC892E2FA2B80020D7B3 /* InfoRowView.swift */,
+				8127AC8B2E2FC7EB0020D7B3 /* KeyValueListView.swift */,
 			);
 			path = SubView;
 			sourceTree = "<group>";
@@ -904,6 +907,7 @@
 				8149E5782E296B8000B78CB2 /* HTTPMethod.swift in Sources */,
 				8149E5792E296B8000B78CB2 /* RealmClient.swift in Sources */,
 				8149E57A2E296B8000B78CB2 /* RealmObject.swift in Sources */,
+				8127AC8C2E2FC7EB0020D7B3 /* KeyValueListView.swift in Sources */,
 				8149E57B2E296B8000B78CB2 /* NetworkError.swift in Sources */,
 				8149E57C2E296B8000B78CB2 /* RealmError.swift in Sources */,
 				8149E57D2E296B8000B78CB2 /* URLSession+Extension.swift in Sources */,
