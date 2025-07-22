@@ -32,7 +32,7 @@ struct MainView: View {
                         .scaleEffect(2.0)
                 }
             }
-            .onAppear {
+            .onDidLoad {
                 viewStore.send(.viewDidLoad)
             }
             .sheet(
