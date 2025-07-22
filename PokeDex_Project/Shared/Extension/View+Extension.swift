@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 /// View 관련 확장사항
 extension View {
