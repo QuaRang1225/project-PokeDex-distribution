@@ -20,6 +20,7 @@
 		8127AC8C2E2FC7EB0020D7B3 /* KeyValueListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8127AC8B2E2FC7EB0020D7B3 /* KeyValueListView.swift */; };
 		8127AC8E2E3155DC0020D7B3 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8127AC8D2E3155DC0020D7B3 /* Color+Extension.swift */; };
 		8127AC902E315A480020D7B3 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8127AC8F2E315A480020D7B3 /* Int+Extension.swift */; };
+		8127AC922E315BBF0020D7B3 /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8127AC912E315BBF0020D7B3 /* Optional+Extension.swift */; };
 		8149E53F2E296B7C00B78CB2 /* PokeDex_ProjectApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E53D2E296B7C00B78CB2 /* PokeDex_ProjectApp.swift */; };
 		8149E5682E296B8000B78CB2 /* EvolutionTo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5402E296B8000B78CB2 /* EvolutionTo.swift */; };
 		8149E5692E296B8000B78CB2 /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5422E296B8000B78CB2 /* Base.swift */; };
@@ -123,6 +124,7 @@
 		8127AC8B2E2FC7EB0020D7B3 /* KeyValueListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueListView.swift; sourceTree = "<group>"; };
 		8127AC8D2E3155DC0020D7B3 /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		8127AC8F2E315A480020D7B3 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
+		8127AC912E315BBF0020D7B3 /* Optional+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
 		8149E53D2E296B7C00B78CB2 /* PokeDex_ProjectApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeDex_ProjectApp.swift; sourceTree = "<group>"; };
 		8149E5402E296B8000B78CB2 /* EvolutionTo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionTo.swift; sourceTree = "<group>"; };
 		8149E5422E296B8000B78CB2 /* Base.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
@@ -469,6 +471,7 @@
 				8149E5D02E2B8B2B00B78CB2 /* String+Extension.swift */,
 				81A06DB12E2F419E00D830A8 /* View+Extension.swift */,
 				8127AC8F2E315A480020D7B3 /* Int+Extension.swift */,
+				8127AC912E315BBF0020D7B3 /* Optional+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -924,6 +927,7 @@
 				D679C1242BFEFAB000223D6D /* CalculateFilter.swift in Sources */,
 				D639CE152BF4CCD1002E0B5D /* CustomData.swift in Sources */,
 				D679C1322BFF13D900223D6D /* EffortFilter.swift in Sources */,
+				8127AC922E315BBF0020D7B3 /* Optional+Extension.swift in Sources */,
 				D679C1362BFF1D6B00223D6D /* PowerView.swift in Sources */,
 				D679C1172BFCAD8000223D6D /* CalculateView.swift in Sources */,
 				D6E331D52C0605F100C79D22 /* SilverDFilter.swift in Sources */,
