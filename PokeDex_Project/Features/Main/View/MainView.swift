@@ -100,7 +100,7 @@ extension MainView {
                     }
                 }
             }
-            .padding(.horizontal)
+            .padding()
         }
     }
     /// 검색 보드 뷰
@@ -118,6 +118,7 @@ extension MainView {
             state: \.pokemonDetailsState,
             action: \.pokemonDetailsAction)
         )
+        .navigationBarBackButtonHidden(true)
     }
 }
 
