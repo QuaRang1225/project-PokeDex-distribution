@@ -17,30 +17,39 @@ struct PokemonDetailsView: View {
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
-                HStack {
-                    dismissButton(viewStore: viewStore)
-                    Spacer()
-                    heartButton(viewStore: viewStore)
-                }
-                .padding(.horizontal)
-                .overlay {
-                    titleLabel(viewStore: viewStore)
-                }
-                adMobsView
-                ScrollView(.vertical, showsIndicators: false) {
+                if viewStore.state.isLoading {
+                    ProgressView()
+                        .scaleEffect(2.0)
+                } else {
                     HStack {
-                        previousPokemonButton(viewStore: viewStore)
-                        pokemonImageView(viewStore: viewStore)
-                        nextPokemonButton(viewStore: viewStore)
+                        dismissButton(viewStore: viewStore)
+                        Spacer()
+                        heartButton(viewStore: viewStore)
                     }
-                    typesView(viewStore: viewStore)
-                    pokemonInfoView(viewStore: viewStore)
-                    statsView(viewStore: viewStore)
-                    calculatorButton(viewStore: viewStore)
-                    passiveView(viewStore: viewStore)
-                    eveolutionTreeView(viewStore: viewStore)
-                    descroptionView(viewStore: viewStore)
+                    .padding(.horizontal)
+                    .overlay {
+                        titleLabel(viewStore: viewStore)
+                    }
+                    adMobsView
+                    ScrollView(.vertical, showsIndicators: false) {
+                        HStack {
+                            previousPokemonButton(viewStore: viewStore)
+                            pokemonImageView(viewStore: viewStore)
+                            nextPokemonButton(viewStore: viewStore)
+                        }
+                        typesView(viewStore: viewStore)
+                        formsView(viewStore: viewStore)
+                        pokemonInfoView(viewStore: viewStore)
+                        statsView(viewStore: viewStore)
+                        calculatorButton(viewStore: viewStore)
+                        passiveView(viewStore: viewStore)
+                        eveolutionTreeView(viewStore: viewStore)
+                        descriptionView(viewStore: viewStore)
+                    }
                 }
+            }
+            .onDidLoad {
+                viewStore.send(.viewDidLoad)
             }
         }
     }
@@ -51,12 +60,12 @@ extension PokemonDetailsView {
     /// 헤더 뷰
     private func dismissButton(viewStore: PokemonDetailsStore) -> some View {
         Button {
-            
+            viewStore.send(.didTappedBackButton)
         } label: {
             HStack(spacing: 0) {
                 Image(systemName: "chevron.left")
                 Label {
-                    Text("0040")
+                    Text(String(format: "%04d", viewStore.state.pokemon?.id ?? 0))
                 } icon: {
                     KFImage(URL(string: String.mosterBallImageURL))
                 }
@@ -66,7 +75,7 @@ extension PokemonDetailsView {
     }
     /// 포켓몬 이름
     private func titleLabel(viewStore: PokemonDetailsStore) -> some View {
-        Text("푸크린")
+        Text(viewStore.state.pokemon?.name ?? "")
             .bold()
     }
     /// 하트 버튼
@@ -93,12 +102,12 @@ extension PokemonDetailsView {
                 .overlay {
                     Rectangle()
                         .frame(height: 20)
-                        .foregroundColor(Color.typeColor("antiPrimary"))
+                        .foregroundColor(.systemBackground)
                     Circle()
-                        .foregroundColor(Color.typeColor("antiPrimary"))
+                        .foregroundColor(.systemBackground)
                         .frame(width: 60,height: 60)
                 }
-            KFImage(URL(string: CustomData.instance.pokemon.base?.image ?? ""))
+            KFImage(URL(string: viewStore.state.variety?.form.images.first ?? ""))
                 .resizable()
         }
         .frame(
@@ -130,8 +139,42 @@ extension PokemonDetailsView {
     /// 타입 뷰
     private func typesView(viewStore: PokemonDetailsStore) -> some View {
         HStack(spacing: 8) {
-            ForEach(CustomData.instance.pokemon.base?.types ?? [], id:\.self) { type in
-                TypesView(type: type, width: 100, height: 30, font: .body)
+            ForEach(viewStore.variety?.types ?? [], id:\.self) { type in
+                TypesView(type: type, width: 100, height: 25, font: .body)
+            }
+        }
+    }
+    /// 다른 폼 뷰
+    @ViewBuilder
+    private func formsView(viewStore: PokemonDetailsStore) -> some View {
+        if viewStore.state.varieties.count > 1 {
+            VStack(alignment: .leading) {
+                Text("다른 모습")
+                    .bold()
+                    .padding(.leading)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(viewStore.state.varieties, id: \.id) { variety in
+                            Button {
+                                viewStore.send(.didTappedVarietyCell(variety))
+                            } label: {
+                                VStack {
+                                    KFImage(URL(string: variety.form.images.first ?? ""))
+                                        .resizable()
+                                        .frame(width: 50, height: 50)
+                                    Text(variety.form.name.first.unWrapOrDefault("기본"))
+                                        .font(.caption)
+                                        .foregroundColor(.primary)
+                                }
+                                .opacity(
+                                    viewStore.state.variety == variety ?
+                                    1 : 0.5
+                                )
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
+                }
             }
         }
     }
@@ -139,17 +182,17 @@ extension PokemonDetailsView {
     private func pokemonInfoView(viewStore: PokemonDetailsStore) -> some View {
         VStack(spacing: 30) {
             InfoRowView(items: [
-                ("분류", ["풍선포켓몬"]),
-                ("키", ["1.0m"]),
-                ("무게", ["12.0kg"]),
-                ("포획률", ["50"])
-            ])
+                ("분류", [viewStore.state.pokemon?.genra ?? ""]),
+                ("키", ["\(viewStore.state.variety?.height ?? 0)m"]),
+                ("무게", ["\(viewStore.state.variety?.weight ?? 0)kg"]),
+                ("포획률", ["\(viewStore.state.pokemon?.captureRate ?? 0)"])
+            ], color: viewStore.state.variety?.types.first?.typeColor)
             
             InfoRowView(items: [
-                ("알그룹", ["요정"]),
-                ("성비", ["암컷: 100%", "수컷: 0%"]),
-                ("부화", ["70"])
-            ])
+                ("알그룹", viewStore.state.pokemon?.eggGroup ?? []),
+                ("성비", viewStore.state.pokemon?.genderRate?.genderRate ?? []),
+                ("부화수", ["\(viewStore.state.pokemon?.hatchCounter ?? 0)"])
+            ], color: viewStore.state.variety?.types.first?.typeColor)
         }
         .padding()
     }
@@ -160,14 +203,20 @@ extension PokemonDetailsView {
             Text("종족값")
                 .bold()
             HStack {
-                let stats = ["HP", "공격", "방어", "특공", "특방", "스피드"]
-                let statsValue = [100, 50, 200, 150, 100, 10]
-                ForEach(Array(zip(stats, statsValue)), id: \.0) { title, content in
+                let title = ["HP", "공격", "방어", "특공", "특방", "스피드", "합계"]
+                let content = viewStore.state.variety?.stats.addSum ?? []
+                
+                ForEach(Array(zip(title, content)), id: \.0) { title, content in
                     VStack(spacing: 5) {
                         Text(title)
+                            .font(.subheadline)
                             .bold()
                         Text("\(content)")
-                            .foregroundStyle(content >= 150 ? .red : .primary)
+                            .fontWeight(title == "합계" ? .heavy : .regular)
+                            .foregroundStyle(
+                                content >= 150 && title != "합계" ?
+                                    .red : .primary
+                            )
                             .font(.subheadline)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -188,11 +237,12 @@ extension PokemonDetailsView {
             
         } label: {
             Text("종족값 계산")
+                .shadow(radius: 1)
                 .fontWeight(.bold)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .frame(height: 44)
-                .background(CustomData.instance.pokemon.color.map { Color($0) })
+                .background(viewStore.state.variety?.types.first?.typeColor)
                 .cornerRadius(8)
         }
         .padding(.horizontal)
@@ -200,15 +250,11 @@ extension PokemonDetailsView {
     /// 특성 뷰
     @ViewBuilder
     private func passiveView(viewStore: PokemonDetailsStore) -> some View {
-        let passive = [
-            ("헤롱헤롱바디", "이 포켓몬과 성별이 다른 포켓몬이 이 포켓몬을 상대로 접촉 기술을 사용하면 30% 확률로 헤롱헤롱 상태에 빠지게 된다.", false),
-            ("승기", "능력치가 하락하면 특수공격이 2랭크 상승한다.", false),
-            ("통찰", "상대 포켓몬이 지닌 도구를 알 수 있다.", true)
-        ]
         KeyValueListView(
             title: "특성",
             description: "진한 글자로 표시된 특성은 숨겨진 특성입니다.",
-            items: passive
+            items: viewStore.state.variety?.abilites.items ?? [],
+            color: viewStore.state.variety?.types.first?.typeColor
         )
     }
     /// 진화 트리
@@ -217,28 +263,23 @@ extension PokemonDetailsView {
             Text("진화")
                 .bold()
                 .padding(.top)
-            EvolTreeNodeView(node: CustomData.instance.evolutionTree)
+            EvolTreeNodeView(node: viewStore.state.evolution)
         }
     }
     /// 도감 설명 뷰
     @ViewBuilder
-    private func descroptionView(viewStore: PokemonDetailsStore) -> some View {
-        let types: [(title: String, content: String)] = zip(
-            CustomData.instance.pokemon.textEntries?.version ?? [],
-            CustomData.instance.pokemon.textEntries?.text ?? []
-        ).map { ($0, $1) }
-        
-        let converted = types.map { ($0.title, $0.content, nil as Bool?) }
+    private func descriptionView(viewStore: PokemonDetailsStore) -> some View {
         KeyValueListView(
             title: "도감 설명",
-            items: converted
+            items: viewStore.state.pokemon?.textEntries?.items ?? [],
+            color: viewStore.state.variety?.types.first?.typeColor
         )
         .padding(.top)
     }
 }
 
 #Preview {
-    let store = Store(initialState: PokemonDetailsFeature.State()) { PokemonDetailsFeature() }
+    let store = Store(initialState: PokemonDetailsFeature.State(id: 456)) { PokemonDetailsFeature() }
     PokemonDetailsView(store: store)
 }
 
