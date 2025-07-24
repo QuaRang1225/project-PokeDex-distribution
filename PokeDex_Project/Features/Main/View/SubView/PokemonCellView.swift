@@ -67,7 +67,7 @@ extension PokemonCellView {
     private func pokemonTypesLabels(viewStore: PokemonCellStore) -> some View {
         HStack(spacing: 5){
             ForEach(viewStore.pokemon.base?.types ?? [], id:\.self){ type in
-                TypesView(type: type, width: .infinity, height: 20, font: .caption)
+                TypesView(type: type, width: 50, height: 20, font: .caption)
             }
         }
         .fontWeight(.black)
