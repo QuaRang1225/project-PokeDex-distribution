@@ -28,12 +28,12 @@ struct MainFeature: Reducer {
         var currentQuery = PokemonsQuery()                                          // 현재 쿼리 상태
         var isLastPokemonReached: Bool = true
         
-        var selectedPokemonId: Int? = nil                                           // 선택한 포켓몬(상세 뷰를 위함)
+//        var selectedPokemonId: Int? = nil                                           // 선택한 포켓몬(상세 뷰를 위함)
         var pokemonCellStates: IdentifiedArrayOf<PokemonCellFeature.State> = []     // 포켓몬 리스트 셀 상태 배열
         
         // 하위 Feature 상태 정의
         var searchBoardState = SearchBoardFeature.State()                           // 검색보드 상태
-        var pokemonDetailsState = PokemonDetailsFeature.State()                      // 포켓몬 상세 뷰 상태
+        var pokemonDetailsState: PokemonDetailsFeature.State? = nil                     // 포켓몬 상세 뷰 상태
     }
     
     @CasePathable enum Action: Equatable {
@@ -63,7 +63,6 @@ struct MainFeature: Reducer {
     var body: some ReducerOf<Self> {
         // 하위 이벤트 연결
         Scope(state: \.searchBoardState, action: \.searchBoardAction) { SearchBoardFeature() }
-        Scope(state: \.pokemonDetailsState, action: \.pokemonDetailsAction) { PokemonDetailsFeature() }
         
         Reduce { state, action in
             switch action {
@@ -87,10 +86,15 @@ struct MainFeature: Reducer {
                 return dismissPokemonDetailsView(&state)
             case .dismissSearchView:
                 return dismissSearchBoard(&state)
+            case let .pokemonDetailsAction(action):
+                return executePokemonDetailFeature(&state, action: action)
             }
         }
         .forEach(\.pokemonCellStates, action: \.pokemonCellFeature) {
             PokemonCellFeature()
+        }
+        .ifLet(\.pokemonDetailsState, action: \.pokemonDetailsAction) {
+            PokemonDetailsFeature()
         }
     }
     
@@ -180,13 +184,13 @@ struct MainFeature: Reducer {
     
     /// 포켓몬 상세 뷰 이동
     private func movePokemonDetailsView(_ state: inout State, id: Int) -> Effect<Action> {
-        state.selectedPokemonId = id
+        state.pokemonDetailsState = PokemonDetailsFeature.State(id: id)
         return .none
     }
     
     /// 포켓몬 상세 뷰 닫기
     private func dismissPokemonDetailsView(_ state: inout State) -> Effect<Action> {
-        state.selectedPokemonId = nil
+        state.pokemonDetailsState = nil
         return .none
     }
 }
@@ -203,6 +207,17 @@ extension MainFeature {
             let types = Types(first: state.searchBoardState.types.first, last: state.searchBoardState.types.last)
             let pokemon = PokemonsQuery(types: types, query: query)
             return fetchPokemons(&state, query: pokemon)
+        default: return .none
+        }
+    }
+}
+
+// MARK: - 포켓몬 상세 뷰 이벤트
+extension MainFeature {
+    private func executePokemonDetailFeature(_ state: inout State, action: PokemonDetailsFeature.Action) -> Effect<Action> {
+        switch action {
+        case .delegate(.dismissView):
+            return dismissPokemonDetailsView(&state)
         default: return .none
         }
     }

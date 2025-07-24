@@ -45,7 +45,7 @@ struct MainView: View {
             }
             .navigationDestination(
                 item: viewStore.binding(
-                    get: \.selectedPokemonId,
+                    get: \.pokemonDetailsState,
                     send: { _ in .dismissPokemonDetail } // nil로 바꿀 때 액션 전달
                 )
             ) { id in
@@ -114,11 +114,12 @@ extension MainView {
     }
     /// 포켓몬 상세 뷰
     private var pokemonDetailsView: some View {
-        PokemonDetailsView(store: store.scope(
-            state: \.pokemonDetailsState,
-            action: \.pokemonDetailsAction)
-        )
-        .navigationBarBackButtonHidden(true)
+        IfLetStore(
+            store.scope(state: \.pokemonDetailsState, action: \.pokemonDetailsAction)
+        ) { store in
+            PokemonDetailsView(store: store)
+                .navigationBarBackButtonHidden(true)
+        }
     }
 }
 
