@@ -17,4 +17,12 @@ struct Abilites: Codable, Hashable, Equatable {
         case isHidden = "is_hidden"
         case name, text
     }
+    
+    /// 튜플로 반환
+    var items: [(String, String, Bool)] {
+        return zip(zip(name, text), isHidden)
+            .map { abilites, isHidden in
+                (abilites.0, abilites.1, isHidden)
+            }
+    }
 }
