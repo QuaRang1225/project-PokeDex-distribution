@@ -59,7 +59,7 @@ extension KeyValueListView {
                 .frame(width: 120)
                 .frame(maxHeight: .infinity)
                 .padding(.vertical, 20)
-                .background(CustomData.instance.pokemon.color.map { Color($0).opacity(0.2) })
+                .background(color.opacity(0.2))
             HStack {
                 Text(value)
                     .font(.subheadline)

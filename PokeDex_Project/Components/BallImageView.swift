@@ -14,9 +14,9 @@ struct BallImageView: View {
                 .overlay {
                     Rectangle()
                         .frame(height: 20)
-                        .foregroundColor(Color.typeColor("antiPrimary"))
+                        .foregroundColor(.systemBackground)
                     Circle()
-                        .foregroundColor(Color.typeColor("antiPrimary"))
+                        .foregroundColor(.systemBackground)
                         .frame(width: 60,height: 60)
                 }
            

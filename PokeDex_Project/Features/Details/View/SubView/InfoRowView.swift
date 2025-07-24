@@ -27,7 +27,7 @@ struct InfoRowView: View {
                     .frame(maxWidth: .infinity)
                     .background(Color(UIColor.systemBackground).opacity(0.5))
                 }
-                .background(CustomData.instance.pokemon.color.map { Color($0).opacity(0.2) })
+                .background(color.opacity(0.2))
                 .cornerRadius(8)
             }
         }
