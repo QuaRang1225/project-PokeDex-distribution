@@ -22,10 +22,9 @@ struct RegionListView: View {
                     VStack {
                         titleLabel
                         subscriptLabel
-                        Divider()
                     }
+                    .padding(.bottom)
                     .frame(maxWidth: .infinity)
-                    .background(.background)
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(spacing: 10) {
                             regionListView(viewStore: viewStore)
