@@ -12,6 +12,7 @@ struct KeyValueListView: View {
     let title: String
     var description: String? = nil
     var items: [(String, String, Bool?)] = []
+    var color: Color?
     
     var body: some View {
         VStack(spacing: 10) {
@@ -55,7 +56,7 @@ extension KeyValueListView {
         HStack {
             Text(key)
                 .font(.subheadline)
-                .fontWeight((isHighlighted ?? false) ? .heavy : .medium)
+                .fontWeight((isHighlighted ?? false) ? .heavy : .regular)
                 .frame(width: 120)
                 .frame(maxHeight: .infinity)
                 .padding(.vertical, 20)

@@ -11,6 +11,7 @@ import SwiftUI
 struct InfoRowView: View {
     /// 타이틀, 내용
     let items: [(String, [String])]
+    var color: Color?
     
     var body: some View {
         HStack(alignment: .top, spacing: 5) {
@@ -40,6 +41,7 @@ extension InfoRowView {
     private func titleLabel(_ title: String) -> some View {
         Text(title)
             .bold()
+            .font(.subheadline)
             .padding(.top, 10)
     }
     /// 내용 라벨
