@@ -12,7 +12,7 @@ import ComposableArchitecture
 struct PokemonCellFeature: Reducer {
     
     struct State: Equatable, Identifiable {
-        var id: Pokemon.ID { pokemon.id }
+        var id: Pokemon.ID { pokemon.base?.num ?? 0 }
         var pokemon: Pokemon
     }
     
