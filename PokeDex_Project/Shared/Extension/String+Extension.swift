@@ -6,7 +6,12 @@
 //
 
 import Foundation
+import SwiftUI
 
 extension String {
     static let mosterBallImageURL: String = "https://github.com/PokeAPI/sprites/blob/master/sprites/items/poke-ball.png?raw=true"
+    
+    var typeColor: Color {
+        return Color(self)
+    }
 }

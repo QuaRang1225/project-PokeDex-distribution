@@ -18,7 +18,7 @@ struct TypesView: View {
         Capsule()
             .frame(height: height)
             .frame(maxWidth: width)
-            .foregroundColor(Color.typeColor(type))
+            .foregroundColor(type.typeColor)
             .overlay {
                 Text(type)
                     .font(font)

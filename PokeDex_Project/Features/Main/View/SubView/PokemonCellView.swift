@@ -49,7 +49,7 @@ extension PokemonCellView {
     private func pokemonImageView(viewStore: PokemonCellStore) -> some View {
         RoundedRectangle(cornerRadius: 20)
             .frame(height: UIScreen.main.bounds.width/3)
-            .foregroundColor(.typeColor(viewStore.state.pokemon.color ?? "").opacity(0.15))
+            .foregroundColor(viewStore.state.pokemon.color?.typeColor.opacity(0.15))
             .overlay {
                 KFImage(URL(string: viewStore.pokemon.base?.image ?? ""))
                     .resizable()

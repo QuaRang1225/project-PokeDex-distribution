@@ -56,6 +56,6 @@ extension InfoRowView {
         ("키", ["1.0m"]),
         ("무게", ["12.0kg"]),
         ("포획률", ["50"])
-    ])
+    ], color: "독".typeColor)
     .frame(height: 50)
 }
