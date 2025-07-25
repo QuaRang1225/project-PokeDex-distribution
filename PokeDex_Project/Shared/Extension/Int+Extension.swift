@@ -9,6 +9,8 @@ import Foundation
 
 // MARK: - Int
 extension Int {
+    static let firstPoekmonIndex: Int = 1
+    static let lastPoekmonIndex: Int = 1025
     /// 성비 반환
     var genderRate: [String] {
         var genderInfo: [String]
