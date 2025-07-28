@@ -88,7 +88,7 @@ extension SearchBoardView {
     private func typesList(viewStore: SearchBoardStore) -> some View {
         let columns = Array(repeating: GridItem(.flexible()), count: 4)
         LazyVGrid(columns: columns) {
-            ForEach(TypeFilter.allCases.filter{ $0 != .unknown }, id: \.self) { type in
+            ForEach(TypeFilter.allCases, id: \.self) { type in
                 Button {
                     viewStore.send(.didTappedTypeListCell(type.rawValue))
                 } label: {
