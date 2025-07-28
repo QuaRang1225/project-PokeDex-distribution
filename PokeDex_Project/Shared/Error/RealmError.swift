@@ -11,6 +11,7 @@ import Foundation
 enum RealmError: Error, Equatable {
     case notFound
     case deleteFailed
+    case storeFailed
 }
 
 // MARK: - 에러 메세지
@@ -21,6 +22,8 @@ extension RealmError {
             return "데이터를 찾을 수 없습니다."
         case .deleteFailed:
             return "데이터 삭제에 실패했습니다."
+        case .storeFailed:
+            return "데이터 저장에 실패했습니다."
         }
     }
 }
