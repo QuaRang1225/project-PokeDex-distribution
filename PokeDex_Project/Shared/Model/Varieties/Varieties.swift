@@ -23,3 +23,32 @@ struct Varieties: Codable, Hashable, Equatable {
     }
 }
 
+
+// MARK: - 내부 메서드
+extension Varieties {
+    /// 리전 폼 형식대로 변환
+    func makeVariety() -> [Self] {
+        let zip1 = zip(form.id, form.name)
+        let zip2 = zip(zip1, form.images).map { ($0.0, $0.1, $1) }
+        return zip2
+            .map { id, name, image in
+                var currentTypes: [String]
+                
+                if let types = TypeFilter(pokemonNumber: id, rawValue: name)?.rawValue {
+                    currentTypes = [types]
+                } else {
+                    currentTypes = self.types
+                }
+               
+                return Varieties(
+                    id: name,
+                    abilites: abilites,
+                    form: Form(id: [id], images: [image], name: [name]),
+                    height: height,
+                    stats: stats,
+                    types: currentTypes,
+                    weight: weight
+                    )
+            }
+    }
+}
