@@ -26,10 +26,9 @@ enum TypeFilter: String, CaseIterable {
     case rock = "바위"
     case steel = "강철"
     case water = "물"
-//    case unknown = "???"
 }
 
-// MARK: - 실버디
+// MARK: - 포켓몬에 따른 타입 필터
 extension TypeFilter {
     init?(pokemonNumber: Int, rawValue: String) {
         switch pokemonNumber {
