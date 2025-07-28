@@ -9,7 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 /// 북마크 Feature
-struct BookMarkFeature: Reducer {
+struct MyPokemonListFeature: Reducer {
     
     @ObservableState struct State: Equatable {
         
@@ -21,7 +21,9 @@ struct BookMarkFeature: Reducer {
     
     var body: some ReducerOf<Self> {
         Reduce { state, action in
-            
+            switch action {
+            default: return .none
+            }
         }
     }
 }
