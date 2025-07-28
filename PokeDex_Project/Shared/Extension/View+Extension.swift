@@ -18,4 +18,15 @@ extension View {
     func onDidLoad(_ action: @escaping () -> Void) -> some View {
         self.modifier(DidLoadModifier(action: action))
     }
+    /// 조건에 따라 LazyVGrid 반환
+    @ViewBuilder
+    func lazyVGrid(columns: [GridItem], condition: Bool = true) -> some View{
+        if condition {
+            LazyVGrid(columns: columns) {
+                self
+            }
+        } else {
+            self
+        }
+    }
 }
