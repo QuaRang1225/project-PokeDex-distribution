@@ -8,7 +8,7 @@
 import Foundation
 
 /// 진화트리 구조 요소
-struct EvolutionTo: Codable, Hashable, Equatable {
+struct EvolutionTo: Codable, Hashable, Equatable, Identifiable {
     
     var id: Int?    /// ID
     var evolTo: [EvolutionTo]   /// 진화할  포켓몬
