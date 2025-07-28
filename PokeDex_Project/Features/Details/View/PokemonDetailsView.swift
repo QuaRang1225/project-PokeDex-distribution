@@ -17,10 +17,7 @@ struct PokemonDetailsView: View {
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
-                if viewStore.state.isLoading {
-                    ProgressView()
-                        .scaleEffect(2.0)
-                } else {
+                if !viewStore.state.isLoading {
                     HStack {
                         dismissButton(viewStore: viewStore)
                         Spacer()
@@ -30,7 +27,14 @@ struct PokemonDetailsView: View {
                     .overlay {
                         titleLabel(viewStore: viewStore)
                     }
-                    adMobsView
+                }
+                adMobsView
+                if viewStore.state.isLoading {
+                    Spacer()
+                    ProgressView()
+                        .scaleEffect(2.0)
+                    Spacer()
+                } else {
                     ScrollView(.vertical, showsIndicators: false) {
                         HStack {
                             previousPokemonButton(viewStore: viewStore)
@@ -81,9 +85,9 @@ extension PokemonDetailsView {
     /// 하트 버튼
     private func heartButton(viewStore: PokemonDetailsStore) -> some View {
         Button {
-            
+            viewStore.send(.didTappedHeartButton)
         } label: {
-            Image(systemName: "heart")
+            Image(systemName: viewStore.state.isBookmarked ? "heart.fill" : "heart")
         }
         .foregroundStyle(.pink)
     }
@@ -119,7 +123,7 @@ extension PokemonDetailsView {
     /// 이전 포켓몬 이동 버튼
     private func previousPokemonButton(viewStore: PokemonDetailsStore) -> some View {
         Button {
-            
+            viewStore.send(.didTappedPrevious)
         } label: {
             Image(systemName: "chevron.backward.circle.fill")
                 .font(.title)
@@ -129,7 +133,7 @@ extension PokemonDetailsView {
     /// 다음 포켓몬 이동 버튼
     private func nextPokemonButton(viewStore: PokemonDetailsStore) -> some View {
         Button {
-            
+            viewStore.send(.didTappedNext)
         } label: {
             Image(systemName: "chevron.right.circle.fill")
                 .font(.title)
@@ -263,7 +267,12 @@ extension PokemonDetailsView {
             Text("진화")
                 .bold()
                 .padding(.top)
-            EvolTreeNodeView(node: viewStore.state.evolution)
+            IfLetStore(store.scope(
+                state: \.evoltionTreeState,
+                action: \.evoltionTreeAction)
+            ) { store in
+                EvolutionTreeNodeView(store: store)
+            }
         }
     }
     /// 도감 설명 뷰
@@ -279,7 +288,7 @@ extension PokemonDetailsView {
 }
 
 #Preview {
-    let store = Store(initialState: PokemonDetailsFeature.State(id: 456)) { PokemonDetailsFeature() }
+    let store = Store(initialState: PokemonDetailsFeature.State(id: 670)) { PokemonDetailsFeature() }
     PokemonDetailsView(store: store)
 }
 
