@@ -77,7 +77,7 @@ private extension MyPokemonListView {
                 Button {
                     viewStore.send(.didTappedPokemonCell(pokemon.num))
                 } label: {
-                    DexNumView(pokemon: pokemon)
+                    MyPokemonListCellView(pokemon: pokemon)
                 }
             }
             .onMove { fromOffset, toOffset in
