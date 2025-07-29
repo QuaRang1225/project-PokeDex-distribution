@@ -8,7 +8,9 @@
 import SwiftUI
 import ComposableArchitecture
 
+/// 탭바 뷰
 struct TabBarView: View {
+    typealias TabBarStore = ViewStoreOf<TabBarFeature>
     let store: StoreOf<TabBarFeature>
 
     var body: some View {
@@ -18,50 +20,70 @@ struct TabBarView: View {
                     get: \.selectedTab,
                     send: TabBarFeature.Action.selectTab
                 )) {
-                    MainView(
-                        store: store.scope(
-                            state: \.mainState,
-                            action: \.mainAction
-                        )
-                    )
-                    .tabItem {
-                        Label(TabFilter.home.name, systemImage: TabFilter.home.image)
-                    }
-                    .tag(TabFilter.home)
-                    
-                    MyPokemonListView(
-                        store: store.scope(
-                            state: \.myPokemonListState,
-                            action: \.myPokemonListAction
-                        )
-                    )
-                    .tabItem {
-                        Label(TabFilter.my.name, systemImage: TabFilter.my.image)
-                    }
-                    .tag(TabFilter.my)
+                    mainView
+                    myPokemonListView
                 }
                 .accentColor(.pink)
-                Button {
-                    viewStore.send(.didTapFloatingButton)
-                } label: {
-                    Image(systemName: "circle.grid.3x3")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundStyle(.white)
-                        .frame(width: 65, height: 65)
-                        .background(Color.pink)
-                        .clipShape(Circle())
-                        .shadow(radius: 4)
-                }
-                .padding(.bottom, 10)
-                
-                if viewStore.state.showRegionList {
-                    RegionListView(store: store.scope(state: \.regionListState, action: \.regionListAction))
-                }
+                floatingButton(viewStore: viewStore)
+                regionListView(viewStore: viewStore)
             }
         }
     }
 }
-
+// MARK: - 탭바 뷰 컴포넌트 정의
+private extension TabBarView {
+    /// 메인 화면
+    var mainView: some View {
+        MainView(
+            store: store.scope(
+                state: \.mainState,
+                action: \.mainAction
+            )
+        )
+        .tabItem {
+            Label(TabFilter.home.name, systemImage: TabFilter.home.image)
+        }
+        .tag(TabFilter.home)
+    }
+    /// 북마크 리스트 뷰
+    var myPokemonListView: some View {
+        MyPokemonListView(
+            store: store.scope(
+                state: \.myPokemonListState,
+                action: \.myPokemonListAction
+            )
+        )
+        .tabItem {
+            Label(TabFilter.my.name, systemImage: TabFilter.my.image)
+        }
+        .tag(TabFilter.my)
+    }
+    /// 플로팅 버튼
+    @ViewBuilder
+    func floatingButton(viewStore: TabBarStore) -> some View {
+        if viewStore.state.selectedTab == .home {
+            Button {
+                viewStore.send(.didTapFloatingButton)
+            } label: {
+                Image(systemName: "circle.grid.3x3")
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundStyle(.white)
+                    .frame(width: 65, height: 65)
+                    .background(Color.pink)
+                    .clipShape(Circle())
+                    .shadow(radius: 4)
+            }
+            .padding(.bottom, 10)
+        }
+    }
+    /// 지역리스트
+    @ViewBuilder
+    func regionListView(viewStore: TabBarStore) -> some View {
+        if viewStore.state.showRegionList {
+            RegionListView(store: store.scope(state: \.regionListState, action: \.regionListAction))
+        }
+    }
+}
 #Preview {
     let store = Store(initialState: TabBarFeature.State(selectedTab: .home)) { TabBarFeature() }
     TabBarView(store: store)
