@@ -25,4 +25,9 @@ extension String {
         }
         return nil
     }
+    
+    /// 괄호 삽입
+    var insertParentheses: String {
+        self.isEmpty ? "" : "(\(self))"
+    }
 }
