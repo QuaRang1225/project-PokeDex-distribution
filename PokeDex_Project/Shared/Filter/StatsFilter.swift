@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 스탯을 선택하기 위한 필터
 enum StatsFilter:String,CaseIterable{
     case hp = "HP"
     case attack  = "공격"

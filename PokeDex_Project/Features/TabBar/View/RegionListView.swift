@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 
+/// 지역 리스트 선택 뷰
 struct RegionListView: View {
     
     typealias RegionListStore = ViewStoreOf<RegionListFeature>
@@ -38,6 +39,7 @@ struct RegionListView: View {
     }
 }
 
+// MARK: - 지역 리스트 선택 뷰 컴포넌트 정의
 extension RegionListView {
     var titleLabel: some View {
         Text("도감 선택")

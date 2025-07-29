@@ -652,14 +652,6 @@
 			path = Feature;
 			sourceTree = "<group>";
 		};
-		8149E5C22E2B88D900B78CB2 /* Filter */ = {
-			isa = PBXGroup;
-			children = (
-				8149E5C12E2B88D900B78CB2 /* TabFilter.swift */,
-			);
-			path = Filter;
-			sourceTree = "<group>";
-		};
 		8149E5C52E2B88D900B78CB2 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -674,7 +666,6 @@
 			children = (
 				8149E5C02E2B88D900B78CB2 /* Feature */,
 				8149E5C52E2B88D900B78CB2 /* View */,
-				8149E5C22E2B88D900B78CB2 /* Filter */,
 			);
 			path = TabBar;
 			sourceTree = "<group>";
@@ -707,6 +698,7 @@
 		D639CE162BF4D698002E0B5D /* Filter */ = {
 			isa = PBXGroup;
 			children = (
+				8149E5C12E2B88D900B78CB2 /* TabFilter.swift */,
 				D639CE172BF4D6AC002E0B5D /* RegionFilter.swift */,
 				8136438A2E38E97400612EA9 /* StatsFilter.swift */,
 				813643812E38E96E00612EA9 /* CalculateFilter.swift */,

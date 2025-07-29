@@ -9,6 +9,7 @@ import Foundation
 import RealmSwift
 import ComposableArchitecture
 
+/// 포켓몬 상세 Feature
 struct PokemonDetailsFeature: Reducer {
     
     /// 포켓몬 상세정보 구조화

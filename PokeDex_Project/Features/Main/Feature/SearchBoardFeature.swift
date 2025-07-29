@@ -8,6 +8,7 @@
 import Foundation
 import ComposableArchitecture
 
+/// 검색 보드 Feature
 struct SearchBoardFeature: Reducer {
     
     @ObservableState struct State: Equatable {

@@ -9,6 +9,7 @@ import SwiftUI
 import Kingfisher
 import ComposableArchitecture
 
+/// 진화 트리 노드 뷰
 struct EvolutionTreeNodeView: View {
     typealias EvolutionTreeStore = ViewStoreOf<EvolutionTreeFeature>
     let store: StoreOf<EvolutionTreeFeature>
@@ -28,6 +29,7 @@ struct EvolutionTreeNodeView: View {
     }
 }
 
+// MARK: - 지놔 트리 노드 뷰 컴포넌트 정의
 extension EvolutionTreeNodeView {
     /// 이미지 버튼
     private func imageButton(viewStore: EvolutionTreeStore) -> some View {

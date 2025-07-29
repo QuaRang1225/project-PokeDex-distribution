@@ -7,8 +7,9 @@
 
 import Foundation
 
-// MARK: - API 요청 후 JSON 디코딩
+// MARK: - URLSession
 extension URLSession {
+    /// API 요청 후 JSON 디코딩
     func requestDecoding<T: Decodable>(_ type: T.Type, urlRequest: URLRequest) async throws -> T {
         do {
             let (data, response) = try await URLSession.shared.data(for: urlRequest)

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-// MARK: - 문자열 관련 메서드 추가 구현
+// MARK: - String
 extension String {
     static let mosterBallImageURL: String = "https://github.com/PokeAPI/sprites/blob/master/sprites/items/poke-ball.png?raw=true"
     

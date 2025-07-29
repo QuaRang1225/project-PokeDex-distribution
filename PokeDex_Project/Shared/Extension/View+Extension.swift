@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-/// View 관련 확장사항
+// MARK: - View
 extension View {
     /// 컴포넌트가 등장할 떄마다 실행
     func onVisible(_ action: @escaping () -> Void) -> some View {

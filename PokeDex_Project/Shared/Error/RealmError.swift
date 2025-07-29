@@ -14,7 +14,7 @@ enum RealmError: Error, Equatable {
     case storeFailed
 }
 
-// MARK: - 에러 메세지
+// MARK: - Realm 에러 메세지 정의
 extension RealmError {
     var errorMessage: String {
         switch self {

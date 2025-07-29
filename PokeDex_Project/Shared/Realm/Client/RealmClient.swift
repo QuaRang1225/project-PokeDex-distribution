@@ -118,6 +118,7 @@ extension RealmClient: DependencyKey {
     }
 }
 
+// MARK: - 외부에서 접근하기 위해 의존성 값 반환
 extension DependencyValues {
     var realmClient: RealmClient {
         get {

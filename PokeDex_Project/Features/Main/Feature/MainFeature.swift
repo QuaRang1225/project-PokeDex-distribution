@@ -28,7 +28,6 @@ struct MainFeature: Reducer {
         var currentQuery = PokemonsQuery()                                          // 현재 쿼리 상태
         var isLastPokemonReached: Bool = true
         
-//        var selectedPokemonId: Int? = nil                                           // 선택한 포켓몬(상세 뷰를 위함)
         var pokemonCellStates: IdentifiedArrayOf<PokemonCellFeature.State> = []     // 포켓몬 리스트 셀 상태 배열
         
         // 하위 Feature 상태 정의

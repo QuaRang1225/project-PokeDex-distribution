@@ -11,7 +11,6 @@ import ComposableArchitecture
 /// 탭바 Feature
 struct TabBarFeature: Reducer {
     
-    
     struct State: Equatable {
         var selectedTab: TabFilter = .home
         var showRegionList = false                                                  // 지역 리스트 표시

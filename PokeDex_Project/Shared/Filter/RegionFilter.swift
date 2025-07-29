@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 지역을 선택하기 위한 필터
 enum RegionFilter: String, CaseIterable {
     case national = "전국"
     case kanto = "관동"
