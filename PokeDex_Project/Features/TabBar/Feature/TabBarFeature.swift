@@ -19,6 +19,7 @@ struct TabBarFeature: Reducer {
         // 하위 Feature 상태 정의
         var regionListState = RegionListFeature.State()                             // 지역 리스트뷰 상태
         var mainState = MainFeature.State()
+        var myPokemonListState = MyPokemonListFeature.State()
     }
     
     @CasePathable enum Action: Equatable {
@@ -27,10 +28,12 @@ struct TabBarFeature: Reducer {
         
         case regionListAction(RegionListFeature.Action)             // 하위 Feature 액션
         case mainAction(MainFeature.Action)
+        case myPokemonListAction(MyPokemonListFeature.Action)
     }
     
     var body: some ReducerOf<Self> {
         Scope(state: \.mainState, action: \.mainAction) { MainFeature() }
+        Scope(state: \.myPokemonListState, action: \.myPokemonListAction) { MyPokemonListFeature() }
         Scope(state: \.regionListState, action: \.regionListAction) { RegionListFeature() }
 
         Reduce { state, action in
