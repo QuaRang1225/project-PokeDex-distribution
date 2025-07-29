@@ -122,7 +122,6 @@ struct PokemonDetailsFeature: Reducer {
             state.evoltionTreeState = EvolutionTreeFeature.State(node: details.evolution)
             state.varieties = (details.varieties.first?.makeVariety() ?? []) + details.varieties.dropFirst()
             state.variety = details.varieties.first?.makeVariety().first
-            
         case let .failure(error):
             print("포켓몬 요청 에러: " + error.errorMessage)
         }
@@ -158,7 +157,7 @@ struct PokemonDetailsFeature: Reducer {
         state.isBookmarked = true
         
         let num = state.pokemon?.id ?? 0
-        let name = (state.pokemon?.name ?? "") + (state.variety?.form.name.first ?? "")
+        let name = (state.pokemon?.name ?? "") + (state.variety?.form.name.first?.insertParentheses ?? "")
         let image = state.variety?.form.images.first ?? ""
         let types = state.variety?.types ?? []
         
@@ -185,7 +184,6 @@ struct PokemonDetailsFeature: Reducer {
         let id = state.pokemon?.id ?? 0
         return .run { send in
             do {
-                print(id)
                 try await realmClient.deletePokemon(id)
             } catch let error as RealmError {
                 print(error.errorMessage)
@@ -202,7 +200,6 @@ struct PokemonDetailsFeature: Reducer {
     }
     /// 북마크 상태 저장
     private func setBookmark(_ state: inout State, isBookmarked: Bool) -> Effect<Action> {
-        print(isBookmarked)
         state.isBookmarked = isBookmarked
         return .none
     }
