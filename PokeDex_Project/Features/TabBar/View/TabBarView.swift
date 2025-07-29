@@ -18,17 +18,27 @@ struct TabBarView: View {
                     get: \.selectedTab,
                     send: TabBarFeature.Action.selectTab
                 )) {
-                    MainView(store: store.scope(state: \.mainState, action: \.mainAction))
-                        .tabItem {
-                            Label(TabFilter.home.name, systemImage: TabFilter.home.image)
-                        }
-                        .tag(TabFilter.home)
+                    MainView(
+                        store: store.scope(
+                            state: \.mainState,
+                            action: \.mainAction
+                        )
+                    )
+                    .tabItem {
+                        Label(TabFilter.home.name, systemImage: TabFilter.home.image)
+                    }
+                    .tag(TabFilter.home)
                     
-                    Text("asdasd")
-                        .tabItem {
-                            Label(TabFilter.my.name, systemImage: TabFilter.my.image)
-                        }
-                        .tag(TabFilter.my)
+                    MyPokemonListView(
+                        store: store.scope(
+                            state: \.myPokemonListState,
+                            action: \.myPokemonListAction
+                        )
+                    )
+                    .tabItem {
+                        Label(TabFilter.my.name, systemImage: TabFilter.my.image)
+                    }
+                    .tag(TabFilter.my)
                 }
                 .accentColor(.pink)
                 Button {
