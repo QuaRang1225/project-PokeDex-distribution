@@ -59,14 +59,11 @@ struct MyPokemonListFeature: Reducer {
     }
     /// 포켓몬 요청
     private func fetchPokemons(_ state: inout State) -> Effect<Action> {
-        let currentPokemons = state.pokemons
         state.isLoading = true
         return .run { send in
             do {
                 let pokemons = try await realmClient.fetchPokemons()
-                if pokemons != currentPokemons {            // 현재 포켓몬과 같지 않을 때만 배열 업데이트
-                    await send(.setPokemons(pokemons))
-                }
+                await send(.setPokemons(pokemons))
             } catch let error as RealmError {
                 print(error.errorMessage)
             }
@@ -74,7 +71,10 @@ struct MyPokemonListFeature: Reducer {
     }
     /// 포켓몬 세팅
     private func setPokemons(_ state: inout State, pokemons: [RealmPokemon]) -> Effect<Action> {
-        state.pokemons = pokemons
+        let currentPokemons = state.pokemons
+        if pokemons != currentPokemons {            // 현재 포켓몬과 같지 않을 때만 배열 업데이트
+            state.pokemons = pokemons
+        }
         state.isLoading = false
         return .none
     }
