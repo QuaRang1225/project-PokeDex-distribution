@@ -55,6 +55,14 @@ struct PokemonDetailsView: View {
             .onDidLoad {
                 viewStore.send(.viewDidLoad)
             }
+            .navigationDestination(
+                store: store.scope(
+                    state: \.$calculatorState,
+                    action: \.calculatorAction
+                )
+            ) { calculatorStore in
+                calculatorView(calculatorStore: calculatorStore)
+            }
         }
     }
 }
@@ -238,7 +246,7 @@ extension PokemonDetailsView {
     /// 계산기 버튼
     private func calculatorButton(viewStore: PokemonDetailsStore) -> some View {
         Button {
-            
+            viewStore.send(.didTappedCalculatorButton)
         } label: {
             Text("종족값 계산")
                 .shadow(radius: 1)
@@ -284,6 +292,11 @@ extension PokemonDetailsView {
             color: viewStore.state.variety?.types.first?.typeColor
         )
         .padding(.top)
+    }
+    /// 계산기 뷰
+    private func calculatorView(calculatorStore: Store<CalculatorFeature.State, CalculatorFeature.Action>) -> some View {
+        CalculateView(store: calculatorStore)
+            .navigationBarBackButtonHidden(true)
     }
 }
 
