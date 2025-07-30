@@ -28,6 +28,7 @@ struct PokemonDetailsFeature: Reducer {
         var isLoading: Bool = false                 // 로딩 중
         
         var evoltionTreeState: EvolutionTreeFeature.State? = nil
+        @Presents var calculatorState: CalculatorFeature.State? = nil
     }
     
     @CasePathable enum Action: Equatable {
@@ -38,10 +39,12 @@ struct PokemonDetailsFeature: Reducer {
         case didTappedNext
         case didTappedPrevious
         case didTappedEvolution(_ id: Int)
+        case didTappedCalculatorButton
         case evoltionTreeAction(_ action: EvolutionTreeFeature.Action)
-        case evolutionTreeDelegate(EvolutionTreeFeature.Action.Delegate)
+        case calculatorAction(_ action: PresentationAction<CalculatorFeature.Action>)
         case didTappedHeartButton
         case setBookmark(_ isBookmarked: Bool)                                      // 북마크 상태 저장
+        case dismissCalculatorView                                                            
         case delegate(_ delegate: Delegate)                                         // delegate
         
         enum Delegate: Equatable {
@@ -75,11 +78,18 @@ struct PokemonDetailsFeature: Reducer {
                 return toggleHeart(&state)
             case let .setBookmark(isBookmark):
                 return setBookmark(&state, isBookmarked: isBookmark)
+            case let .calculatorAction(action):
+                return executeCalculatorAction(&state, action: action)
+            case .didTappedCalculatorButton:
+                return moveCalculatorView(&state)
             default: return .none
             }
         }
         .ifLet(\.evoltionTreeState, action: \.evoltionTreeAction) {
             EvolutionTreeFeature()
+        }
+        .ifLet(\.$calculatorState, action: \.calculatorAction) {
+            CalculatorFeature()
         }
     }
     
@@ -204,15 +214,40 @@ struct PokemonDetailsFeature: Reducer {
         state.isBookmarked = isBookmarked
         return .none
     }
+    /// 계산기 뷰로 이동
+    private func moveCalculatorView(_ state: inout State) -> Effect<Action> {
+        let pokemonInfo = PokemonInfo(
+            id: state.pokemon?.id ?? 0,
+            name: (state.pokemon?.name ?? "") + (state.variety?.form.name.first?.insertParentheses ?? ""),
+            image: state.variety?.form.images.first ?? "",
+            stats: state.variety?.stats ?? [],
+            types: state.variety?.types ?? []
+        )
+        state.calculatorState = CalculatorFeature.State(pokemonInfo: pokemonInfo)
+        return .none
+    }
 }
 
 // MARK: - 진화트리 액션
-extension PokemonDetailsFeature {
+private extension PokemonDetailsFeature {
     /// 진화트리 이벤트 실행
-    private func executeEvolutionTreeAction(_ state: inout State, action: EvolutionTreeFeature.Action) -> Effect<Action> {
+    func executeEvolutionTreeAction(_ state: inout State, action: EvolutionTreeFeature.Action) -> Effect<Action> {
         switch action {
         case let .delegate(.eventEvolution(id)):
             return fetchPokemonDetails(&state, id: id ?? 0)
+        default: return .none
+        }
+    }
+}
+
+// MARK: - 계산기 액션
+private extension PokemonDetailsFeature {
+    /// 계산기 이벤트 실행
+    func executeCalculatorAction(_ state: inout State, action: PresentationAction<CalculatorFeature.Action>) -> Effect<Action> {
+        switch action {
+        case .presented(.delegate(.didTappedDismissButton)):
+            state.calculatorState = nil
+            return .none
         default: return .none
         }
     }
