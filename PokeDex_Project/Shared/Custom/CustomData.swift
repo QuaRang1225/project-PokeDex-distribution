@@ -75,4 +75,11 @@ class CustomData{
             )
         ]
     )
+    let pokemonInfo = PokemonInfo(
+        id: 6,
+        name: "리자몽",
+        image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/6.png",
+        stats: [78, 84, 78, 109, 85, 100],
+        types: ["불꽃", "비행"]
+    )
 }
