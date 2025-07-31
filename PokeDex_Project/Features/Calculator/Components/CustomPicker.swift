@@ -5,7 +5,7 @@
 //  Created by Quarang on 7/31/25.
 //
 
-import Foundation
+import SwiftUI
 
 /// 커스텀 Picker
 struct CustomPicker<T: Hashable & LosslessStringConvertible>: View {
