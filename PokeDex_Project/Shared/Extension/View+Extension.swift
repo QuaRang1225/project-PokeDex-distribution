@@ -29,4 +29,21 @@ extension View {
             self
         }
     }
+    /// 뒷 배경 테투리
+    func borderSection(title: String) -> some View {
+        self
+            .overlay(alignment: .topLeading) {
+                Text(title)
+                    .foregroundStyle(.pink)
+                    .font(.caption)
+                    .padding(.horizontal, 5)
+                    .background(.background)
+                    .fontWeight(.black)
+                    .offset(x: 19, y: -8)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.gray)
+            )
+    }
 }
