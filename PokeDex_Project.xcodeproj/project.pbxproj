@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -194,6 +194,10 @@
 		D679C10A2BFB410700223D6D /* EvolutionTreeNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionTreeNodeView.swift; sourceTree = "<group>"; };
 		D679C1162BFCAD8000223D6D /* CalculateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		813643A92E3BA5B600612EA9 /* Components */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Components; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		8123985129F2865A00B7D560 /* Frameworks */ = {
@@ -594,6 +598,7 @@
 		8149E57F2E296B8300B78CB2 /* Calculator */ = {
 			isa = PBXGroup;
 			children = (
+				813643A92E3BA5B600612EA9 /* Components */,
 				813643992E3A0DC600612EA9 /* Model */,
 				813643782E38E91100612EA9 /* Feature */,
 				8136437C2E38E91400612EA9 /* View */,
@@ -767,6 +772,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				813643A92E3BA5B600612EA9 /* Components */,
 			);
 			name = PokeDex_Project;
 			packageProductDependencies = (
