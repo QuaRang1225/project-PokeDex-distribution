@@ -39,6 +39,7 @@
 		813643A52E3A3B8000612EA9 /* DefenseFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643A22E3A3B8000612EA9 /* DefenseFeature.swift */; };
 		813643A62E3A3B8000612EA9 /* PowerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643A32E3A3B8000612EA9 /* PowerFeature.swift */; };
 		813643B12E3BA70D00612EA9 /* AttackFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643B02E3BA70D00612EA9 /* AttackFilter.swift */; };
+		813643B92E3BA7A800612EA9 /* StatusFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643B82E3BA7A800612EA9 /* StatusFilter.swift */; };
 		8149E53F2E296B7C00B78CB2 /* PokeDex_ProjectApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E53D2E296B7C00B78CB2 /* PokeDex_ProjectApp.swift */; };
 		8149E5682E296B8000B78CB2 /* EvolutionTo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5402E296B8000B78CB2 /* EvolutionTo.swift */; };
 		8149E5692E296B8000B78CB2 /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8149E5422E296B8000B78CB2 /* Base.swift */; };
@@ -147,6 +148,7 @@
 		813643A22E3A3B8000612EA9 /* DefenseFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefenseFeature.swift; sourceTree = "<group>"; };
 		813643A32E3A3B8000612EA9 /* PowerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerFeature.swift; sourceTree = "<group>"; };
 		813643B02E3BA70D00612EA9 /* AttackFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttackFilter.swift; sourceTree = "<group>"; };
+		813643B82E3BA7A800612EA9 /* StatusFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusFilter.swift; sourceTree = "<group>"; };
 		8149E53D2E296B7C00B78CB2 /* PokeDex_ProjectApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeDex_ProjectApp.swift; sourceTree = "<group>"; };
 		8149E5402E296B8000B78CB2 /* EvolutionTo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionTo.swift; sourceTree = "<group>"; };
 		8149E5422E296B8000B78CB2 /* Base.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
@@ -742,6 +744,7 @@
 				813643842E38E96E00612EA9 /* RankFilter.swift */,
 				D639CE1B2BF702ED002E0B5D /* TypeFilter.swift */,
 				813643B02E3BA70D00612EA9 /* AttackFilter.swift */,
+				813643B82E3BA7A800612EA9 /* StatusFilter.swift */,
 			);
 			path = Filter;
 			sourceTree = "<group>";
@@ -968,6 +971,7 @@
 				8136438C2E38E97400612EA9 /* StatsFilter.swift in Sources */,
 				813643B12E3BA70D00612EA9 /* AttackFilter.swift in Sources */,
 				8149E5902E296B8300B78CB2 /* MainFeature.swift in Sources */,
+				813643B92E3BA7A800612EA9 /* StatusFilter.swift in Sources */,
 				8149E5922E296B8300B78CB2 /* SearchBoardFeature.swift in Sources */,
 				8149E5932E296B8300B78CB2 /* Types.swift in Sources */,
 				813643862E38E96E00612EA9 /* CalculateFilter.swift in Sources */,
