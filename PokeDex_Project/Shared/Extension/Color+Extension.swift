@@ -8,8 +8,16 @@
 import Foundation
 import SwiftUI
 
-// MARK: - Color
+// MARK: - Color?
 extension Color? {
+    /// 라이트 모드 -> white
+    static var systemBackground: Self {
+        Color(UIColor.systemBackground)
+    }
+}
+
+// MARK: - Color
+extension Color {
     /// 라이트 모드 -> white
     static var systemBackground: Self {
         Color(UIColor.systemBackground)
