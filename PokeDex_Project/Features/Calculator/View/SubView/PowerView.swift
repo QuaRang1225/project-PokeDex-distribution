@@ -36,9 +36,18 @@ struct PowerView: View {
                 }
                 .padding(.vertical)
                 Divider()
+                HStack {
+                    abilityPicker(viewStore: viewStore)
+                    weatherPicker(viewStore: viewStore)
+                }
+                HStack {
+                    itemPicker(viewStore: viewStore)
+                    fieldPicker(viewStore: viewStore)
+                }
+                otherOptionChckboxs(viewStore: viewStore)
+                damageLabel(viewStore: viewStore)
             }
             .padding(.horizontal)
-            .padding(.vertical, 20)
         }
     }
 }
@@ -74,7 +83,7 @@ private extension PowerView {
     /// 물리/특수 선택 버튼
     func formOfAttack(viewStore: PowerStore) -> some View {
         HStack {
-            ForEach(AttackFilter.allCases, id: \.rawValue) { filter in
+            ForEach(AttackCategory.allCases, id: \.rawValue) { filter in
                 Button {
                     viewStore.send(.selectedAttack(filter))
                 } label: {
@@ -99,7 +108,10 @@ private extension PowerView {
     }
     /// 테라스탈 여부 체크 박스
     func therastalStatusCheckBox(viewStore: PowerStore) -> some View {
-        CheckBox(label: "테라스탈", color: viewStore.value.type[0].typeColor, isChecked: viewStore.isChecked) {
+        CheckBox(
+            label: "테라스탈",
+            color: viewStore.value.type[0].typeColor,
+            isChecked: viewStore.isChecked) {
             viewStore.send(.checkedTherastal)
         }
         .padding(.leading)
@@ -165,10 +177,13 @@ private extension PowerView {
         HStack {
             ForEach([0.9, 1, 1.1], id: \.self) { value in
                 Button {
-                    
+                    viewStore.send(.changedPersonality(value))
                 } label: {
                     Text(String(format: "%.1f", value))
                         .foregroundColor(.primary)
+                        .fontWeight(viewStore.personality == value
+                                    ? .heavy
+                                    : .regular)
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -194,15 +209,89 @@ private extension PowerView {
                 get: \.selectedStatus,
                 send: { .selectedStatus($0) }
             ),
-            options: StatusFilter.allCases.map(\.rawValue),
+            options: StatusCondition.allCases.map(\.rawValue),
             color: viewStore.value.type[0].typeColor
         )
         .borderSection(title: "상태 이상")
     }
+    /// 특성 피커
+    func abilityPicker(viewStore: PowerStore) -> some View {
+        CustomPicker(
+            selected: viewStore.binding(
+                get: \.selectedAbility,
+                send: { .selectedAbility($0) }
+            ),
+            options: PokemonAbility.allCases.map(\.rawValue),
+            color: viewStore.value.type[0].typeColor
+        )
+        .borderSection(title: "특성")
+    }
+    /// 날씨 피커
+    func weatherPicker(viewStore: PowerStore) -> some View {
+        CustomPicker(
+            selected: viewStore.binding(
+                get: \.selectedWeather,
+                send: { .selectedWeather($0) }
+            ),
+            options: WeatherCondition.allCases.map(\.rawValue),
+            color: viewStore.value.type[0].typeColor
+        )
+        .borderSection(title: "날씨")
+    }
+    /// 아이템 피커
+    func itemPicker(viewStore: PowerStore) -> some View {
+        CustomPicker(
+            selected: viewStore.binding(
+                get: \.selectedItem,
+                send: { .selectedItem($0) }
+            ),
+            options: PokemonItem.allCases.map(\.rawValue),
+            color: viewStore.value.type[0].typeColor
+        )
+        .borderSection(title: "도구")
+    }
+    /// 필드 피커
+    func fieldPicker(viewStore: PowerStore) -> some View {
+        CustomPicker(
+            selected: viewStore.binding(
+                get: \.selectedField,
+                send: { .selectedField($0) }
+            ),
+            options: TerrainCondition.allCases.map(\.rawValue),
+            color: viewStore.value.type[0].typeColor
+        )
+        .borderSection(title: "필드")
+    }
+    /// 옵션 선택 체크 박스
+    func otherOptionChckboxs(viewStore: PowerStore) -> some View {
+        VStack {
+            let columns = Array(repeating: GridItem(.flexible()), count: 3)
+            LazyVGrid(columns: columns, alignment: .leading) {
+                ForEach(BattleModifierType.allCases, id: \.rawValue) { option in
+                    if let checkbox = viewStore.selectedCheckbox[option] {
+                        CheckBox(
+                            label: option.koreanName,
+                            color: viewStore.value.type[0].typeColor,
+                            isChecked: checkbox) {
+                                viewStore.send(.checkedOhter(option))
+                            }
+                    }
+                }
+            }
+        }
+    }
+    /// 결정력 라벨
+    func damageLabel(viewStore: PowerStore) -> some View {
+        Text("\(viewStore.damange)")
+            .font(.title3)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical)
+            .borderSection(title: "결정력")
+    }
 }
 
 #Preview {
-    let value = PowerValue(type: ["드래곤", "비행"], power: 81, special_attack: 74)
+    let value = PokemonValue(type: ["드래곤", "비행"], pysical: 81, special: 74)
     let store = Store(initialState: PowerFeature.State(value: value)) { PowerFeature() }
     ScrollView {
         PowerView(store: store)
