@@ -34,6 +34,7 @@
 		812E71132E40726800122931 /* StatusCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E710D2E40726800122931 /* StatusCondition.swift */; };
 		812E71142E40726800122931 /* WeatherCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E710E2E40726800122931 /* WeatherCondition.swift */; };
 		812E71162E4072B300122931 /* TerrainCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E71152E4072B300122931 /* TerrainCondition.swift */; };
+		812E71182E40762900122931 /* BattleModifierType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E71172E40762900122931 /* BattleModifierType.swift */; };
 		813643772E38E90D00612EA9 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643752E38E90D00612EA9 /* SplashView.swift */; };
 		8136437D2E38E91400612EA9 /* DefenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643792E38E91400612EA9 /* DefenseView.swift */; };
 		8136437E2E38E91400612EA9 /* PowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8136437A2E38E91400612EA9 /* PowerView.swift */; };
@@ -150,6 +151,7 @@
 		812E710D2E40726800122931 /* StatusCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCondition.swift; sourceTree = "<group>"; };
 		812E710E2E40726800122931 /* WeatherCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCondition.swift; sourceTree = "<group>"; };
 		812E71152E4072B300122931 /* TerrainCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainCondition.swift; sourceTree = "<group>"; };
+		812E71172E40762900122931 /* BattleModifierType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleModifierType.swift; sourceTree = "<group>"; };
 		813643752E38E90D00612EA9 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		813643792E38E91400612EA9 /* DefenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefenseView.swift; sourceTree = "<group>"; };
 		8136437A2E38E91400612EA9 /* PowerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerView.swift; sourceTree = "<group>"; };
@@ -383,6 +385,7 @@
 				812E71152E4072B300122931 /* TerrainCondition.swift */,
 				812E710B2E40726800122931 /* PokemonAbility.swift */,
 				812E710C2E40726800122931 /* PokemonItem.swift */,
+				812E71172E40762900122931 /* BattleModifierType.swift */,
 			);
 			path = Option;
 			sourceTree = "<group>";
@@ -994,6 +997,7 @@
 				8149E5762E296B8000B78CB2 /* PokemonDetailsRouter.swift in Sources */,
 				8127AC852E2F84A00020D7B3 /* DidLoadModifier.swift in Sources */,
 				8136439A2E3A0DC600612EA9 /* PokemonInfo.swift in Sources */,
+				812E71182E40762900122931 /* BattleModifierType.swift in Sources */,
 				8127AC862E2F84A00020D7B3 /* VisibleModifier.swift in Sources */,
 				813643922E38EAF400612EA9 /* MyPokemonListCellView.swift in Sources */,
 				8149E5772E296B8000B78CB2 /* PokemonListRouter.swift in Sources */,
