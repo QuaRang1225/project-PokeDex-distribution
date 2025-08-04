@@ -10,6 +10,7 @@ import Foundation
 /// 포켓몬의 주요 상태 이상을 나타내는 열거형
 enum StatusCondition: String, CaseIterable {
     
+    case none = "없음"
     /// 독 상태
     case poison = "독"
     

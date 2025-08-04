@@ -11,7 +11,7 @@ import Foundation
 enum PokemonItem: String, CaseIterable {
     
     // MARK: - Type-Boosting Items (1.2x)
-    
+    case none = "없음"
     case muscleBand = "힘의머리띠"
     case wiseGlasses = "박식안경"
     case silkScarf = "실크스카프"

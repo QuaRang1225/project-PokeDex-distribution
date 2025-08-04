@@ -10,6 +10,7 @@ import Foundation
 /// 게임 필드의 날씨 상태를 나타내는 열거형
 enum WeatherCondition: String, CaseIterable {
     
+    case none = "없음"
     /// 모래바람이 부는 상태
     case sandstorm = "모래바람"
     

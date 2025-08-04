@@ -11,7 +11,7 @@ import Foundation
 enum PokemonAbility: String, CaseIterable {
 
     // MARK: - Power Boosting Abilities
-    
+    case none = "없음"
     case reckless = "이판사판"
     case ironFist = "철주먹"
     case technician = "테크니션"

@@ -10,6 +10,7 @@ import Foundation
 /// 포켓몬 배틀 필드의 상태를 나타내는 열거형
 enum TerrainCondition: String, CaseIterable {
     
+    case none = "없음"
     /// 그래스필드
     case grassy = "그래스필드"
     
