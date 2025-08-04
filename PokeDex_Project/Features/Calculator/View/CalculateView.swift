@@ -149,6 +149,7 @@ private extension CalculateView{
         )) { store in
             PowerView(store: store)
         }
+        .padding(.top, 30)
     }
     func defenseView() -> some View {
         IfLetStore(store.scope(
