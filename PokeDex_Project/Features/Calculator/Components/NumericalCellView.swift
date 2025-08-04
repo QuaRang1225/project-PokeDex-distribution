@@ -18,6 +18,7 @@ struct NumericalCellView : View {
         HStack {
             TextField("", text: $value)
                 .padding()
+                .keyboardType(.numberPad)
                 .borderSection(title: title)
             Spacer()
             VStack {
