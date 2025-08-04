@@ -5,240 +5,206 @@
 //  Created by 유영웅 on 5/23/24.
 //
 import SwiftUI
+import Kingfisher
+import ComposableArchitecture
 
+/// 공격 결정력 뷰
 struct PowerView: View {
-    let stats:(attack:Int,sAttack:Int)
-    @State var ac = false
-    @State var individual = "\(31)"
-    @State var effort = "\(252)"
-    
-    @State var value = ""
-    @State var error = true
-    
-    
-    @State var sameType = false
-    @State var adaptability = false
-    @State var option = ("\(0)","\(1)")
-    
-    
-    @State var skill = "\(0)"
-    @State var char:CharacterFilter = .none
-    @State var rank:RankFilter = .none
+    typealias PowerStore = ViewStoreOf<PowerFeature>
+    let store: StoreOf<PowerFeature>
     
     var body: some View {
-        VStack(alignment: .leading){
-            resultView
-            ScrollView(showsIndicators: false){
-                powerType
-                raceValue
-                individualView
-                effortView
-                character
-                rankFlow
-                skillPower
+        WithViewStore(store, observe: { $0 }) { viewStore in
+            VStack(alignment: .leading, spacing: 15) {
+                HStack {
+                    skillPowerPicker(viewStore: viewStore)
+                    typePicker(viewStore: viewStore)
+                }
+                HStack {
+                    formOfAttack(viewStore: viewStore)
+                    therastalStatusCheckBox(viewStore: viewStore)
+                    Spacer()
+                    levelTextField(viewStore: viewStore)
+                }
+                effortsView(viewStore: viewStore)
+                objectsView(viewStore: viewStore)
+                rankUpView(viewStore: viewStore)
+                HStack {
+                    personalityView(viewStore: viewStore)
+                    multipleView(viewStore: viewStore)
+                    statusPicker(viewStore: viewStore)
+                }
+                .padding(.vertical)
+                Divider()
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 20)
+        }
+    }
+}
+
+// MARK: - 공격 결정력 뷰 컴포넌트 정의
+private extension PowerView {
+    /// 기술 위력 Picker
+    func skillPowerPicker(viewStore: PowerStore) -> some View {
+        CustomPicker(
+            selected: viewStore.binding(
+                get: \.selectedPower,
+                send: { .selectedPower($0) }
+            ),
+            options: Array(stride(from: 10, through: 250, by: 5).map{ "\($0)" }),
+            color: viewStore.value.type[0].typeColor
+        )
+        .borderSection(title: "기술 위력")
+        .frame(maxWidth: .infinity)
+    }
+    /// 타입 피커
+    func typePicker(viewStore: PowerStore) -> some View {
+        CustomPicker(
+            selected: viewStore.binding(
+                get: \.selectedType,
+                send: { .selectedType($0) }
+            ),
+            options: TypeFilter.allCases.map(\.rawValue),
+            color: viewStore.value.type[0].typeColor
+        )
+        .borderSection(title: "타입")
+        .frame(width: 120)
+    }
+    /// 물리/특수 선택 버튼
+    func formOfAttack(viewStore: PowerStore) -> some View {
+        HStack {
+            ForEach(AttackFilter.allCases, id: \.rawValue) { filter in
+                Button {
+                    viewStore.send(.selectedAttack(filter))
+                } label: {
+                    Image(filter.rawValue)
+                        .resizable()
+                        .frame(width: 30, height: 25)
+                        .shadow(color: .black, radius: 1)
+                        .padding(5)
+                        .background {
+                            Circle()
+                                .foregroundStyle(
+                                    viewStore.selectedAttack == filter
+                                    ? viewStore.value.type[0].typeColor
+                                    : .gray.opacity(0.5)
+                                )
+                        }
+                }
             }
         }
-        .padding(.horizontal)
+        .padding(.vertical, 10)
+        .zIndex(0)
+    }
+    /// 테라스탈 여부 체크 박스
+    func therastalStatusCheckBox(viewStore: PowerStore) -> some View {
+        CheckBox(label: "테라스탈", color: viewStore.value.type[0].typeColor, isChecked: viewStore.isChecked) {
+            viewStore.send(.checkedTherastal)
+        }
+        .padding(.leading)
+        .zIndex(0)
+    }
+    /// 레벨 입력
+    func levelTextField(viewStore: PowerStore) -> some View {
+        HStack {
+            Text("LV.")
+                .fontWeight(.heavy)
+            TextField("레벨", text: viewStore.binding(
+                get: \.level,
+                send: { .inputtedLevel($0) })
+            )
+            .multilineTextAlignment(.trailing)
+            .textFieldStyle(.roundedBorder)
+            .keyboardType(.numberPad)
+            .frame(width: 80)
+            .onChange(of: viewStore.level) { newValue in
+                viewStore.send(.inputtedLevel(newValue))
+            }
+        }
+        .zIndex(0)
+    }
+    /// 노력치 뷰
+    func effortsView(viewStore: PowerStore) -> some View {
+        NumericalCellView(
+            title: "노력치",
+            color: viewStore.value.type[0].typeColor,
+            arrange: (0...252),
+            value: viewStore.binding(
+                get: \.efforts,
+                send: { .changedEfforts($0) }
+            )
+        )
+    }
+    /// 노력치 뷰
+    func objectsView(viewStore: PowerStore) -> some View {
+        NumericalCellView(
+            title: "개체값",
+            color: viewStore.value.type[0].typeColor,
+            arrange: (0...31),
+            value: viewStore.binding(
+                get: \.object,
+                send: { .changedObjects($0) }
+            )
+        )
+    }
+    /// 랭크업 뷰
+    func rankUpView(viewStore: PowerStore) -> some View {
+        NumericalCellView(
+            title: "랭크업",
+            color: viewStore.value.type[0].typeColor,
+            arrange: (-6...6),
+            value: viewStore.binding(
+                get: \.rankUp,
+                send: { .changedRankUp($0) }
+            )
+        )
+    }
+    /// 성격 보정 뷰
+    func personalityView(viewStore: PowerStore) -> some View {
+        HStack {
+            ForEach([0.9, 1, 1.1], id: \.self) { value in
+                Button {
+                    
+                } label: {
+                    Text(String(format: "%.1f", value))
+                        .foregroundColor(.primary)
+                        .frame(maxWidth: .infinity)
+                }
+            }
+        }
+        .padding(10)
+        .borderSection(title: "성격 보정")
+        .frame(width: 150)
+    }
+    /// 배수 뷰
+    func multipleView(viewStore: PowerStore) -> some View {
+        TextField("", text: viewStore.binding(
+            get: \.multiple,
+            send: { .inputtedMultiple($0) })
+        )
+        .padding(10)
+        .borderSection(title: "배수")
+        .frame(width: 70)
+    }
+    /// 상태이상 피커
+    func statusPicker(viewStore: PowerStore) -> some View {
+        CustomPicker(
+            selected: viewStore.binding(
+                get: \.selectedStatus,
+                send: { .selectedStatus($0) }
+            ),
+            options: StatusFilter.allCases.map(\.rawValue),
+            color: viewStore.value.type[0].typeColor
+        )
+        .borderSection(title: "상태 이상")
     }
 }
 
 #Preview {
-    PowerView(stats:(attack:1,sAttack:2))
-}
-
-extension PowerView{
-    
-    var resultView:some View{
-        VStack{
-            HStack{
-                if error{
-                    Text("결정력 : ")
-                        .bold()
-                }
-                Text(value)
-                    .bold()
-                    .foregroundColor(error ? .green : .red)
-                Spacer()
-                Button {
-                    calculate()
-                } label: {
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width:60,height: 40)
-                        .foregroundColor(.secondary)
-                        .overlay {
-                            Text("계산")
-                                .foregroundColor(.white)
-                        }
-                }
-            }
-            Divider()
-        }
-        
-    }
-    var powerType:some View{
-        VStack(alignment: .leading) {
-            Text("50레벨 기준")
-            Toggle(isOn: $ac) {
-                Text(ac ? "특수" : "물리")
-            }
-        }
-    }
-    var raceValue:some View{
-        HStack{
-            Text("종족값")
-            Text(ac ? "\(stats.attack)" : "\(stats.sAttack)")
-                .bold()
-            Spacer()
-        }
-    }
-    var individualView:some View{
-        HStack{
-            Text("개체값")
-            VStack{
-                TextField("입력",text: $individual)
-                    .textContentType(.oneTimeCode)
-                    .keyboardType(.numberPad)
-                Divider()
-                    .background(Color.primary)
-            }
-            .offset(y:3)
-            
-            ForEach(IndividualFilter.allCases,id: \.self){ item in
-                Button {
-                    individual = "\(item)"
-                } label: {
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width: 30,height: 30)
-                        .foregroundColor(.secondary).opacity(0.3)
-                        .overlay {
-                            Text(item.rawValue)
-                                .foregroundColor(.primary)
-                        }
-                    
-                }
-            }
-        }
-        .padding(.vertical,5)
-    }
-    var effortView:some View{
-        HStack{
-            Text("노력치")
-            VStack{
-                TextField("입력",text: $effort)
-                    .textContentType(.oneTimeCode)
-                    .keyboardType(.numberPad)
-                Divider()
-                    .background(Color.primary)
-            }
-            .offset(y:3)
-            
-            ForEach(EffortFilter.allCases,id: \.self){ item in
-                Button {
-                    effort = "\(item.rawValue)"
-                } label: {
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width: 50,height: 30)
-                        .foregroundColor(.secondary).opacity(0.3)
-                        .overlay {
-                            Text("\(item.rawValue)")
-                                .foregroundColor(.primary)
-                        }
-                    
-                }
-            }
-        }.padding(.vertical,5)
-    }
-    var character:some View{
-        HStack{
-            Text("성격")
-            Spacer()
-            Picker("", selection: $char) {
-                ForEach(CharacterFilter.allCases,id: \.self){ item in
-                    Text(item.name)
-                }
-            }.accentColor(.primary)
-        }
-    }
-    
-    var rankFlow:some View{
-        HStack{
-            Text("랭크")
-            Spacer()
-            Picker("", selection: $rank) {
-                ForEach(RankFilter.allCases,id: \.self){ item in
-                    Text(item.name)
-                }
-            }.accentColor(.primary)
-        }
-    }
-    var skillPower:some View{
-        VStack(alignment: .leading){
-            HStack{
-                Text("기술위력")
-                VStack{
-                    TextField("입력",text: $skill)
-                        .textContentType(.oneTimeCode)
-                        .keyboardType(.numberPad)
-                    Divider()
-                        .background(Color.primary)
-                }
-                .offset(y:3)
-            }
-            Toggle(isOn: $adaptability) {
-                Text("적응력")
-            }
-            Toggle(isOn: $sameType) {
-                Text("자속기술")
-            }
-            Text("추가적으로 특성,도구,필드 기타로 인한 공격/특수공격 상승 하락 등을 설정해주세요!")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .frame(height: 80)
-            VStack{
-                HStack{
-                    TextField("입력",text: $option.0)
-                        .textContentType(.oneTimeCode)
-                        .keyboardType(.numberPad)
-                    Text(" . ")
-                    TextField("입력",text: $option.1)
-                        .textContentType(.oneTimeCode)
-                        .keyboardType(.numberPad)
-                    Text("배")
-                }
-                Divider()
-                    .background(Color.primary)
-            }
-        }
-    }
-    func calculate(){
-        guard 0...31 ~= Int(individual)!,
-              0...252 ~= Int(effort)!
-        else{
-            value = "개체값은 0~31, 노력치는 0~252사이만 입력할 수 있습니다!"
-            error = false
-            return
-        }
-        
-        let real = Int(((ac ? Double(stats.sAttack) : Double(stats.attack)) + (Double(individual)!/2) + (Double(effort)!/8) + 5) * char.value)
-        
-        var realAttck = Double(real) * rank.rawValue * Double(skill)! * (sameType ? 1.5 : 1.0)
-        
-        
-        if adaptability{
-            if sameType{
-                realAttck *= 2.0/1.5
-            }else{
-                value = "적응력인 특성이라면 자속기술체크를 해주세요!"
-                error = false
-            }
-        }
-        let o1 = Double(option.0)!
-        let o2 = Decimal(Double(option.1)!) / pow(10, Int(Double(option.1.count)))
-        let endValue = realAttck * (o1 + Double(truncating: o2 as NSNumber))
-        
-        value = String(endValue)
-        error = true
+    let value = PowerValue(type: ["드래곤", "비행"], power: 81, special_attack: 74)
+    let store = Store(initialState: PowerFeature.State(value: value)) { PowerFeature() }
+    ScrollView {
+        PowerView(store: store)
     }
 }
-
-
