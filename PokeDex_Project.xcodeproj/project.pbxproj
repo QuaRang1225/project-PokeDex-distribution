@@ -38,6 +38,8 @@
 		812E711A2E409D1900122931 /* PokemonValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E71192E409D1900122931 /* PokemonValue.swift */; };
 		812E711C2E40B81300122931 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E711B2E40B81300122931 /* Double+Extension.swift */; };
 		812E711E2E41E11E00122931 /* CompatibilityCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E711D2E41E11E00122931 /* CompatibilityCategory.swift */; };
+		812E71202E41F6B300122931 /* Font+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E711F2E41F6B300122931 /* Font+Extension.swift */; };
+		812E71222E42034A00122931 /* PokemonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E71212E42034A00122931 /* PokemonState.swift */; };
 		813643772E38E90D00612EA9 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643752E38E90D00612EA9 /* SplashView.swift */; };
 		8136437D2E38E91400612EA9 /* DefenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643792E38E91400612EA9 /* DefenseView.swift */; };
 		8136437E2E38E91400612EA9 /* PowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8136437A2E38E91400612EA9 /* PowerView.swift */; };
@@ -158,6 +160,8 @@
 		812E71192E409D1900122931 /* PokemonValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonValue.swift; sourceTree = "<group>"; };
 		812E711B2E40B81300122931 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		812E711D2E41E11E00122931 /* CompatibilityCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityCategory.swift; sourceTree = "<group>"; };
+		812E711F2E41F6B300122931 /* Font+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Extension.swift"; sourceTree = "<group>"; };
+		812E71212E42034A00122931 /* PokemonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonState.swift; sourceTree = "<group>"; };
 		813643752E38E90D00612EA9 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		813643792E38E91400612EA9 /* DefenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefenseView.swift; sourceTree = "<group>"; };
 		8136437A2E38E91400612EA9 /* PowerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerView.swift; sourceTree = "<group>"; };
@@ -445,6 +449,7 @@
 			children = (
 				813643982E3A0DC600612EA9 /* PokemonInfo.swift */,
 				812E71192E409D1900122931 /* PokemonValue.swift */,
+				812E71212E42034A00122931 /* PokemonState.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -615,6 +620,7 @@
 				8127AC912E315BBF0020D7B3 /* Optional+Extension.swift */,
 				8127AC932E315EE90020D7B3 /* Array+Extension.swift */,
 				812E711B2E40B81300122931 /* Double+Extension.swift */,
+				812E711F2E41F6B300122931 /* Font+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -986,6 +992,7 @@
 				8149E56A2E296B8000B78CB2 /* Dex.swift in Sources */,
 				8149E56B2E296B8000B78CB2 /* TextEntries.swift in Sources */,
 				8149E56C2E296B8000B78CB2 /* Pokemon.swift in Sources */,
+				812E71202E41F6B300122931 /* Font+Extension.swift in Sources */,
 				8149E56D2E296B8000B78CB2 /* PokemonList.swift in Sources */,
 				8149E56E2E296B8000B78CB2 /* RealmPokemon.swift in Sources */,
 				8149E56F2E296B8000B78CB2 /* Abilites.swift in Sources */,
@@ -997,6 +1004,7 @@
 				813643A62E3A3B8000612EA9 /* PowerFeature.swift in Sources */,
 				8127AC902E315A480020D7B3 /* Int+Extension.swift in Sources */,
 				8149E5732E296B8000B78CB2 /* PokemonDetailsClient.swift in Sources */,
+				812E71222E42034A00122931 /* PokemonState.swift in Sources */,
 				812E71102E40726800122931 /* AttackCategory.swift in Sources */,
 				812E711C2E40B81300122931 /* Double+Extension.swift in Sources */,
 				812E71112E40726800122931 /* PokemonAbility.swift in Sources */,
