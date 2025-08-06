@@ -11,34 +11,62 @@ import Foundation
 struct PokemonState: Equatable {
     let name: String                                // 이름
     let types: [String]                             // 타입
+    let pysical: Int                                // 물리
+    let special: Int                                // 특수
     var power: Int                                  // 위력
-    var type: String                                // 선택한 타입
-    var multiple: String                            // 효과
     var rankUp: String                              // 랭크업
     var isTherastal: Bool                           // 테라스탈 여부
-    var attackedMode: AttackCategory                // 물리/특공
-    var ability: String                             // 특성
-    var status: String                              // 상태이상
-    var weather: String                             // 날씨
-    var field: String                               // 필드
-    var item: String                                // 아이템
-    var battleModifier: [BattleModifierType: Bool]  // 기타
+    var type: TypeFilter                            // 선택한 타입
+    var compatibility: CompatibilityCondition       // 효과
+    var attackedMode: AttackCondition               // 물리/특공
+    var ability: AbilityCondition                   // 특성
+    var status: StatusCondition                     // 상태이상
+    var weather: WeatherCondition                   // 날씨
+    var field: FieldCondition                       // 필드
+    var item: ItemCondition                         // 아이템
+    var battleModifier: [BattleCondition: Bool]     // 기타
     var result: Double = 1.0
     
-    init(type: [String], name: String) {
+    /// 자속 여부
+    var isStab: Bool {
+        types.contains(type.rawValue)
+    }
+    
+    /// 자속 보정
+    var stab: Double {
+        isStab ? 1.5 : 1.0
+    }
+    
+    /// 테라스탈 여부
+    var isTherastalMutiple: Double {
+        if isStab {
+            isTherastal ? (4/3) : 1.0
+        } else {
+            isTherastal ? 1.5 : 1.0
+        }
+    }
+    
+    /// 추가 계산( 자속 x 테라스탈 x 기술위력 x 랭크업)
+    var addMutiple: Double {
+        stab * isTherastalMutiple * Double(power) * (Double(rankUp)?.calculateRankMultiplier ?? 0)
+    }
+    
+    init(type: [String], name: String, pysical: Int, special: Int) {
         self.name = name
-        self.power = 0
-        self.type = TypeFilter.normal.rawValue
+        self.pysical = pysical
+        self.special = special
         self.types = type
-        self.multiple = CompatibilityCategory.single.koreanName
+        self.power = 0
+        self.type = .normal
+        self.compatibility = .single
         self.rankUp = "\(0)"
         self.isTherastal = false
         self.attackedMode = .physical
-        self.ability = PokemonAbility.none.koreanName
-        self.status = StatusCondition.none.koreanName
-        self.weather = WeatherCondition.none.koreanName
-        self.field = TerrainCondition.none.koreanName
-        self.item = PokemonItem.none.koreanName
-        self.battleModifier = Dictionary(uniqueKeysWithValues: BattleModifierType.allCases.map { ($0, false)})
+        self.ability = .none
+        self.status = .none
+        self.weather = .none
+        self.field = .none
+        self.item = .none
+        self.battleModifier = Dictionary(uniqueKeysWithValues: BattleCondition.allCases.map { ($0, false)})
     }
 }
