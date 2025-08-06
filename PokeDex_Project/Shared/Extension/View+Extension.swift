@@ -46,4 +46,12 @@ extension View {
                     .stroke(Color.gray)
             )
     }
+    /// 키보드 내리기
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    /// 패드 여부
+    var isIpad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
 }

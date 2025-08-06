@@ -29,6 +29,9 @@ struct SearchBoardView: View {
                 Spacer()
                 searchButton(viewStore: viewStore)
             }
+            .onTapGesture {
+                hideKeyboard()
+            }
         }
     }
 }
