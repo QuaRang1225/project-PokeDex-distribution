@@ -8,7 +8,7 @@
 import Foundation
 
 /// 포켓몬 특성을 나타내는 열거형
-enum PokemonAbility: String, CaseIterable {
+enum AbilityCondition: String, CaseIterable, LosslessStringConvertible {
 
     // MARK: - Power Boosting Abilities
     case none = "없음"
@@ -85,6 +85,10 @@ enum PokemonAbility: String, CaseIterable {
     case orichalcumPulse = "진홍빛고동"
     case hadronEngine = "하드론엔진"
     
+    var description: String {
+        self.rawValue
+    }
+    
     /// 한글 특성 이름을 반환합니다.
     var koreanName: String {
         return self.rawValue
@@ -126,13 +130,13 @@ enum PokemonAbility: String, CaseIterable {
             // 물리 공격 2배
             return state
         case .steelworker:
-            if TypeFilter(rawValue: state.type) == .steel {
+            if state.type == .steel {
                 state.result *= 1.5
             }
             // 강철타입 기술 1.5배
             return state
         case .steelySpirit:
-            if TypeFilter(rawValue: state.type) == .steel {
+            if state.type == .steel {
                 state.result *= 1.5
             }
             // 강철타입 기술 1.5배
@@ -144,36 +148,36 @@ enum PokemonAbility: String, CaseIterable {
             // 접촉기술 1.3배
             return state
         case .toxicBoost:
-            if StatusCondition(rawValue: state.status) == .poison {
+            if state.status == .poison {
                 state.result *= 1.5
             }
             // 독 상태에 1.5배
             return state
         case .flareBoost:
-            if StatusCondition(rawValue: state.status) == .burn, state.attackedMode == .special {
+            if state.status == .burn, state.attackedMode == .special {
                 state.result *= 1.5
             }
             // 화상의 경우 특수공격 1.5배
             return state
         case .sandForce:
-            if WeatherCondition(rawValue: state.weather) == .sandstorm,
+            if state.weather == .sandstorm,
                [
                 TypeFilter.ground.rawValue,
                 TypeFilter.rock.rawValue,
                 TypeFilter.steel.rawValue
-               ].contains(state.type) {
+               ].contains(state.type.rawValue) {
                 state.result *= 1.3
             }
             // 모래바람 상태에서, 땅/바위/강철 위력 1.3배
             return state
         case .rockyPayload:
-            if TypeFilter(rawValue: state.type) == .rock {
+            if state.type == .rock {
                 state.result *= 1.5
             }
             // 바위타입 기술 위력 1.5배
             return state
         case .waterBubble:
-            if TypeFilter(rawValue: state.type) == .water {
+            if state.type == .water {
                 state.result *= 2
             }
             // 물타입 기술 위력 2배
@@ -191,13 +195,13 @@ enum PokemonAbility: String, CaseIterable {
             // 물기 기술 1.5배
             return state
         case .dragonsMaw:
-            if TypeFilter(rawValue: state.type) == .dragon {
+            if state.type == .dragon {
                 state.result *= 1.5
             }
             // 드래곤 기술 1.5배
             return state
         case .transistor:
-            if TypeFilter(rawValue: state.type) == .electric {
+            if state.type == .electric {
                 state.result *= 1.5
             }
             // 전기 기술 1.5배
@@ -216,9 +220,9 @@ enum PokemonAbility: String, CaseIterable {
             return state
         case .guts:
             if state.attackedMode == .physical {
-                if StatusCondition(rawValue: state.status) == .burn {
+                if state.status == .burn {
                     state.result *= 3
-                } else if StatusCondition(rawValue: state.status) != StatusCondition.none {
+                } else if state.status != .none {
                     state.result *= 1.5
                 }
             }
@@ -233,103 +237,99 @@ enum PokemonAbility: String, CaseIterable {
             // 공격 1.5배
             return state
         case .solarPower:
-            if WeatherCondition(rawValue: state.weather) == .sunny, state.attackedMode == .special {
+            if state.weather == .sunny, state.attackedMode == .special {
                 state.result *= 1.5
             }
             // 쾌청 시 특수공격 1.5배
             return state
         case .adaptability:
-            if state.types.contains(state.type) {
+            if state.types.contains(state.type.rawValue) {
                 state.result *= (4/3)
             }
             // 자속보정이 2배 들어감
             return state
         case .neuroforce:
-            if CompatibilityCategory(rawValue: state.multiple) == .double ||
-                CompatibilityCategory(rawValue: state.multiple) == .quadruple {
+            if state.compatibility == .double ||
+                state.compatibility == .quadruple {
                 state.result *= 1.2
             }
             // 효과가 뛰어날 경우 1.2배 증가
             return state
         case .blaze:
-            if TypeFilter(rawValue: state.type) == .fire {
+            if state.type == .fire {
                 state.result *= 1.5
             }
             // 불꽃 1.5배
             return state
         case .torrent:
-            if TypeFilter(rawValue: state.type) == .water {
+            if state.type == .water {
                 state.result *= 1.5
             }
             // 물 1.5배
             return state
         case .overgrow:
-            if TypeFilter(rawValue: state.type) == .grass {
+            if state.type == .grass {
                 state.result *= 1.5
             }
             // 풀 1.5배
             return state
         case .swarm:
-            if TypeFilter(rawValue: state.type) == .bug {
+            if state.type == .bug {
                 state.result *= 1.5
             }
             // 벌레 1.5배
             return state
         case .normalize:
-            if TypeFilter(rawValue: state.type) != .normal {
+            if state.type != .normal {
                 state.result *= 1.5
             }
             state.result *= 1.2
             // 모든 타입 1.5배 + 1.2배 추가
             return state
         case .aerilate:
-            if TypeFilter(rawValue: state.type) == .normal {
+            if state.type == .normal {
                 state.result *= 1.5
             }
-            if TypeFilter(rawValue: state.type) == .normal ||
-                TypeFilter(rawValue: state.type) == .flying {
+            if state.type == .normal || state.type == .flying {
                 state.result *= 1.2
             }
             // 노말 타입 -> 비행 1.5배 + 1.2배 추가
             return state
         case .galvanize:
-            if TypeFilter(rawValue: state.type) == .normal {
+            if state.type == .normal {
                 state.result *= 1.5
             }
-            if TypeFilter(rawValue: state.type) == .normal ||
-                TypeFilter(rawValue: state.type) == .electric {
+            if state.type == .normal || state.type == .electric {
                 state.result *= 1.2
             }
             // 노말 타입 -> 전기 1.5배 + 1.2배 추가
             return state
         case .refrigerate:
-            if TypeFilter(rawValue: state.type) == .normal {
+            if state.type == .normal {
                 state.result *= 1.5
             }
-            if TypeFilter(rawValue: state.type) == .normal ||
-                TypeFilter(rawValue: state.type) == .ice {
+            if state.type == .normal || state.type == .ice {
                 state.result *= 1.2
             }
             // 노말 타입 -> 얼음 1.5배 + 1.2배 추가
             return state
         case .pixilate:
-            if TypeFilter(rawValue: state.type) == .normal {
+            if state.type == .normal {
                 state.result *= 1.5
             }
-            if TypeFilter(rawValue: state.type) == .normal ||
-                TypeFilter(rawValue: state.type) == .fairy {
+            if state.type == .normal || state.type == .fairy {
                 state.result *= 1.2
             }
             // 노말 타입 -> 페어리 1.5배 + 1.2배 추가
             return state
         case .electromorphosis:
-            if TypeFilter(rawValue: state.type) == .electric {
+            if state.type == .electric {
                 state.result *= 2.0
             }
             // 전기타입 2배
             return state
         case .windPower:
-            if TypeFilter(rawValue: state.type) == .electric {
+            if state.type == .electric {
                 state.result *= 2.0
             }
             // 전기타입 2배
@@ -403,14 +403,13 @@ enum PokemonAbility: String, CaseIterable {
             // 급소 시 2.25배 증가
             return state
         case .tintedLens:
-            if CompatibilityCategory(rawValue: state.multiple) == .half ||
-                CompatibilityCategory(rawValue: state.multiple) == .halfOfhalf {
+            if state.compatibility == .half || state.compatibility == .halfOfhalf {
                 state.result *= 2
             }
             // 반감기는 2배가 됨 (0.5 -> 1, 0.25 -> 0.5)
             return state
         case .slowStart:
-            if PokemonAbility(rawValue: state.ability) == .slowStart, state.attackedMode == .physical {
+            if state.ability == .slowStart, state.attackedMode == .physical {
                 state.result *= 0.5
             }
             // 슬로스타트 공격력 0.5배
@@ -426,15 +425,13 @@ enum PokemonAbility: String, CaseIterable {
             // 공격 1.5배
             return state
         case .protosynthesis:
-            if PokemonItem(rawValue: state.item) == .boosterEnergy ||
-                WeatherCondition(rawValue: state.weather) == .sunny {
+            if state.item == .boosterEnergy || state.weather == .sunny {
                 state.result *= 1.3
             }
             // 부스트에너지를 지니고 있거나, 쾌청일 때 가장 높은 능력치 1.3배 증가
             return state
         case .quarkDrive:
-            if PokemonItem(rawValue: state.item) == .boosterEnergy ||
-                TerrainCondition(rawValue: state.field) == .electric {
+            if state.item == .boosterEnergy || state.field == .electric {
                 state.result *= 1.3
             }
             // 부스트에너지를 지니고 있거나, 일렉트릭 필드일 때 가장 높은 능력치 1.3배 증가
@@ -454,12 +451,8 @@ enum PokemonAbility: String, CaseIterable {
         }
     }
     
-    /// 원시값 -> case
-    init?(rawValue: String) {
-        if let match = PokemonAbility.allCases.first(where: { $0.rawValue == rawValue }) {
-            self = match
-        } else {
-            return nil
-        }
+    // 문자열 → 타입으로 변환
+    init?(_ description: String) {
+        self.init(rawValue: description)
     }
 }
