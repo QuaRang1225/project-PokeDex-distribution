@@ -66,7 +66,7 @@ private extension TabBarView {
                 viewStore.send(.didTapFloatingButton)
             } label: {
                 Image(systemName: "circle.grid.3x3")
-                    .font(.system(size: isIpad ? 24: 12, weight: .bold))
+                    .font(.system(size: 24, weight: .bold))
                     .foregroundStyle(isIpad ? .pink : .white)
                     .frame(width: 65, height: 65)
                     .background {
