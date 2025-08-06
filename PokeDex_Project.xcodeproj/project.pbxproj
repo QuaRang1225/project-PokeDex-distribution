@@ -42,10 +42,6 @@
 		813643772E38E90D00612EA9 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643752E38E90D00612EA9 /* SplashView.swift */; };
 		8136437D2E38E91400612EA9 /* DefenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643792E38E91400612EA9 /* DefenseView.swift */; };
 		8136437E2E38E91400612EA9 /* PowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8136437A2E38E91400612EA9 /* PowerView.swift */; };
-		813643862E38E96E00612EA9 /* CalculateFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643812E38E96E00612EA9 /* CalculateFilter.swift */; };
-		813643872E38E96E00612EA9 /* EffortFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643822E38E96E00612EA9 /* EffortFilter.swift */; };
-		813643882E38E96E00612EA9 /* IndividualFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643832E38E96E00612EA9 /* IndividualFilter.swift */; };
-		813643892E38E96E00612EA9 /* RankFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643842E38E96E00612EA9 /* RankFilter.swift */; };
 		8136438C2E38E97400612EA9 /* StatsFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8136438A2E38E97400612EA9 /* StatsFilter.swift */; };
 		813643922E38EAF400612EA9 /* MyPokemonListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643902E38EAF400612EA9 /* MyPokemonListCellView.swift */; };
 		813643942E39209800612EA9 /* CalculatorFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643932E39209800612EA9 /* CalculatorFeature.swift */; };
@@ -163,10 +159,6 @@
 		813643752E38E90D00612EA9 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		813643792E38E91400612EA9 /* DefenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefenseView.swift; sourceTree = "<group>"; };
 		8136437A2E38E91400612EA9 /* PowerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerView.swift; sourceTree = "<group>"; };
-		813643812E38E96E00612EA9 /* CalculateFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateFilter.swift; sourceTree = "<group>"; };
-		813643822E38E96E00612EA9 /* EffortFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffortFilter.swift; sourceTree = "<group>"; };
-		813643832E38E96E00612EA9 /* IndividualFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualFilter.swift; sourceTree = "<group>"; };
-		813643842E38E96E00612EA9 /* RankFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankFilter.swift; sourceTree = "<group>"; };
 		8136438A2E38E97400612EA9 /* StatsFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsFilter.swift; sourceTree = "<group>"; };
 		813643902E38EAF400612EA9 /* MyPokemonListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPokemonListCellView.swift; sourceTree = "<group>"; };
 		813643932E39209800612EA9 /* CalculatorFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorFeature.swift; sourceTree = "<group>"; };
@@ -787,10 +779,6 @@
 				8149E5C12E2B88D900B78CB2 /* TabFilter.swift */,
 				D639CE172BF4D6AC002E0B5D /* RegionFilter.swift */,
 				8136438A2E38E97400612EA9 /* StatsFilter.swift */,
-				813643812E38E96E00612EA9 /* CalculateFilter.swift */,
-				813643822E38E96E00612EA9 /* EffortFilter.swift */,
-				813643832E38E96E00612EA9 /* IndividualFilter.swift */,
-				813643842E38E96E00612EA9 /* RankFilter.swift */,
 				D639CE1B2BF702ED002E0B5D /* TypeFilter.swift */,
 			);
 			path = Filter;
@@ -1029,11 +1017,7 @@
 				8149E5902E296B8300B78CB2 /* MainFeature.swift in Sources */,
 				8149E5922E296B8300B78CB2 /* SearchBoardFeature.swift in Sources */,
 				8149E5932E296B8300B78CB2 /* Types.swift in Sources */,
-				813643862E38E96E00612EA9 /* CalculateFilter.swift in Sources */,
 				812E71162E4072B300122931 /* FieldCondition.swift in Sources */,
-				813643872E38E96E00612EA9 /* EffortFilter.swift in Sources */,
-				813643882E38E96E00612EA9 /* IndividualFilter.swift in Sources */,
-				813643892E38E96E00612EA9 /* RankFilter.swift in Sources */,
 				8149E5942E296B8300B78CB2 /* MainView.swift in Sources */,
 				8149E5A12E2B545800B78CB2 /* Config.swift in Sources */,
 				8149E5962E296B8300B78CB2 /* SearchBoardView.swift in Sources */,
