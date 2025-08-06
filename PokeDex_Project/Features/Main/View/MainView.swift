@@ -109,7 +109,11 @@ extension MainView {
             state: \.searchBoardState,
             action: \.searchBoardAction)
         )
-        .presentationDetents([.medium, .large])
+        .presentationDetents(
+            !isIpad
+            ? [.medium, .large]
+            : [.large]
+        )
         .presentationDragIndicator(.visible)
     }
     /// 포켓몬 상세 뷰
