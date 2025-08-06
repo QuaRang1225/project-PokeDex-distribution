@@ -6,255 +6,234 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
+/// 내구력 뷰
 struct DefenseView: View {
-    let stats:(hp:Int,defense:Int,sDefense:Int)
-    let statsName = ["HP","방어","특방"]
-    @State var individual = (hp:"\(31)",defense:"\(31)",sDefense:"\(31)")
-    @State var effort = (hp:"\(252)",defense:"\(252)",sDefense:"\(252)")
-    @State var character = (defense:CharacterFilter.none,sDefense:CharacterFilter.none)
-    @State var option = (df:"\(1)",db:"\(0)",bf:"\(1)",bb:"\(0)")
-    @State var value = (d:"",b:"")
-    @State var error = true
+    typealias DefenseStore = ViewStoreOf<DefenseFeature>
+    let store: StoreOf<DefenseFeature>
     
     var body: some View {
-        VStack(alignment: .leading) {
-            resultView
-            ScrollView(showsIndicators: false){
-                defense
-                individualView
-                effortView
-                characterView
-                skillPower
+        WithViewStore(store, observe: { $0 }) { viewStore in
+            VStack(alignment: .leading, spacing: 15) {
+                HStack {
+                    formOfAttack(viewStore: viewStore)
+                    Spacer()
+                    
+                    levelTextField(viewStore: viewStore)
+                }
+                HStack {
+                    hpLabel
+                    hp_realLabel(viewStore: viewStore)
+                }
+                hp_effortsView(viewStore: viewStore)
+                hp_objectsView(viewStore: viewStore)
+                Divider()
+                HStack {
+                    defenseLabel(viewStore: viewStore)
+                    defense_realLabel(viewStore: viewStore)
+                }
+                
+                defense_effortsView(viewStore: viewStore)
+                defense_objectsView(viewStore: viewStore)
+                
+                Divider()
+                personalityView(viewStore: viewStore)
+                rankUpView(viewStore: viewStore)
+                
+                durabilityLabel(viewStore: viewStore)
+            }
+            .padding()
+        }
+    }
+}
+
+// MARK: - 내구력 뷰 컴포넌트 정의
+extension DefenseView {
+    /// 물리/특수 선택 버튼
+    func formOfAttack(viewStore: DefenseStore) -> some View {
+        HStack {
+            ForEach(AttackCondition.allCases, id: \.rawValue) { filter in
+                Button {
+                    viewStore.send(.selectedDefense(filter))
+                } label: {
+                    Image(filter.rawValue)
+                        .resizable()
+                        .frame(width: 30, height: 25)
+                        .shadow(color: .black, radius: 1)
+                        .padding(5)
+                        .background {
+                            Circle()
+                                .foregroundStyle(
+                                    viewStore.defenseMode == filter
+                                    ? viewStore.pokemonState.types[0].typeColor
+                                    : .gray.opacity(0.5)
+                                )
+                        }
+                }
             }
         }
-        .padding(.horizontal)
+        .padding(.vertical, 10)
+        .zIndex(0)
+    }
+    var hpLabel: some View {
+        Text("체력")
+            .bold()
+            .font(.title3)
+    }
+    /// 체력 노력치 뷰
+    func hp_effortsView(viewStore: DefenseStore) -> some View {
+        NumericalCellView(
+            title: "노력치",
+            color: viewStore.pokemonState.types[0].typeColor,
+            arrange: (0...252),
+            value: viewStore.binding(
+                get: \.hp_efforts,
+                send: { .changedHPEfforts($0) }
+            )
+        )
+    }
+    /// 체력 개체값 뷰
+    func hp_objectsView(viewStore: DefenseStore) -> some View {
+        NumericalCellView(
+            title: "개체값",
+            color: viewStore.pokemonState.types[0].typeColor,
+            arrange: (0...31),
+            value: viewStore.binding(
+                get: \.hp_object,
+                send: { .changedHPObjects($0) }
+            )
+        )
+    }
+    func defenseLabel(viewStore: DefenseStore) -> some View {
+        Text(viewStore.defenseMode == .physical ? "방어" : "특방")
+            .bold()
+            .font(.title3)
+    }
+    /// 내구 노력치 뷰
+    func defense_effortsView(viewStore: DefenseStore) -> some View {
+        NumericalCellView(
+            title: "노력치",
+            color: viewStore.pokemonState.types[0].typeColor,
+            arrange: (0...252),
+            value: viewStore.binding(
+                get: \.defense_efforts,
+                send: { .changedDefenseEfforts($0) }
+            )
+        )
+    }
+    /// 내구 개체값 뷰
+    func defense_objectsView(viewStore: DefenseStore) -> some View {
+        NumericalCellView(
+            title: "개체값",
+            color: viewStore.pokemonState.types[0].typeColor,
+            arrange: (0...31),
+            value: viewStore.binding(
+                get: \.defense_object,
+                send: { .changedDefenseObjects($0) }
+            )
+        )
+    }
+    /// 레벨 입력
+    func levelTextField(viewStore: DefenseStore) -> some View {
+        HStack {
+            Text("LV.")
+                .fontWeight(.heavy)
+            TextField("레벨", text: viewStore.binding(
+                get: \.level,
+                send: { .inputtedLevel($0) })
+            )
+            .multilineTextAlignment(.trailing)
+            .textFieldStyle(.roundedBorder)
+            .keyboardType(.numberPad)
+            .frame(width: 80)
+            .onChange(of: viewStore.level) { newValue in
+                viewStore.send(.inputtedLevel(newValue))
+            }
+        }
+        .font(.device)
+    }
+    /// 랭크업 뷰
+    func rankUpView(viewStore: DefenseStore) -> some View {
+        NumericalCellView(
+            title: "랭크업",
+            color: viewStore.pokemonState.types[0].typeColor,
+            arrange: (-6...6),
+            value: viewStore.binding(
+                get: \.rankUp,
+                send: { .changedRankUp($0) }
+            )
+        )
+    }
+    /// 성격 보정 뷰
+    func personalityView(viewStore: DefenseStore) -> some View {
+        HStack {
+            ForEach([0.9, 1, 1.1], id: \.self) { value in
+                Button {
+                    viewStore.send(.changedPersonality(value))
+                } label: {
+                    Text(String(format: "%.1f", value))
+                        .foregroundColor(.primary)
+                        .fontWeight(viewStore.personality == value
+                                    ? .heavy
+                                    : .regular)
+                        .frame(maxWidth: .infinity)
+                }
+            }
+        }
+        .padding(15)
+        .padding(.vertical, UIScreen.main.bounds.width < 400 ? 2.5 : 0)
+        .borderSection(title: "성격 보정")
+        .font(.device)
+        .frame(maxWidth: .infinity)
+    }
+    /// 체력실수치 라벨
+    func hp_realLabel(viewStore: DefenseStore) -> some View {
+        HStack {
+            Spacer()
+            Text("\(viewStore.hp_real)")
+                .fontWeight(.heavy)
+                .padding(10)
+                .frame(maxWidth: 100)
+                .borderSection(title: "실수치")
+        }
+    }
+    /// 실수치 라벨
+    func defense_realLabel(viewStore: DefenseStore) -> some View {
+        HStack {
+            Spacer()
+            Text("\(viewStore.defense_real)")
+                .fontWeight(.heavy)
+                .padding(10)
+                .frame(maxWidth: 100)
+                .borderSection(title: "실수치")
+        }
+    }
+    /// 내구력 라벨
+    func durabilityLabel(viewStore: DefenseStore) -> some View {
+        Text("\(viewStore.defense)")
+            .font(.title3)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical)
+            .borderSection(title: "결정력")
+            .padding(.top,30)
     }
 }
 
 #Preview {
-    DefenseView(stats: (1,2,3))
+    let store = Store(
+        initialState: DefenseFeature.State(
+            pokemonState: PokemonDefenseState(
+                type: ["물", "페어리"],
+                name: "마릴리",
+                hp: 100,
+                pysical: 80,
+                special: 80
+            )
+        )) { DefenseFeature() }
+    ScrollView {
+        DefenseView(store: store)
+    }
 }
 
-extension DefenseView{
-    var resultView:some View{
-        VStack(alignment:.leading){
-            HStack{
-                if error{
-                    Text("결정력 : ")
-                        .bold()
-                }
-                VStack(alignment: .leading){
-                    Text(value.d)
-                    Text(value.b)
-                }
-                .bold()
-                .foregroundColor(error ? .green : .red)
-                Spacer()
-                Button {
-                    calculate()
-                } label: {
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width:60,height: 40)
-                        .foregroundColor(.secondary)
-                        .overlay {
-                            Text("계산")
-                                .foregroundColor(.white)
-                        }
-                }
-            }
-            Divider()
-        }
-        
-    }
-    var defense:some View{
-        VStack(alignment: .leading){
-            Text("50레벨 기준")
-                .padding(.bottom,5)
-            HStack(spacing: 10){
-                HStack{
-                    Text("HP")
-                    Text("\(stats.hp)").bold()
-                }
-                HStack{
-                    Text("방어")
-                    Text("\(stats.defense)").bold()
-                }
-                HStack{
-                    Text("특방")
-                    Text("\(stats.sDefense)").bold()
-                }
-                Spacer()
-            }
-        }
-        
-    }
-    var individualView:some View{
-        ForEach(statsName,id:\.self){ type in
-            HStack{
-                Text(type + " 개체값")
-                VStack{
-                    Group{
-                        switch type{
-                        case "HP":TextField("",text: $individual.hp)
-                        case "방어":TextField("",text: $individual.defense)
-                        case "특방":TextField("",text: $individual.sDefense)
-                        default:Text("")
-                        }
-                    }
-                    .textContentType(.oneTimeCode)
-                    .keyboardType(.numberPad)
-                    Divider()
-                        .background(Color.primary)
-                }
-                ForEach(IndividualFilter.allCases,id: \.self){ item in
-                    Button {
-                        switch type{
-                        case "HP": individual.hp = "\(item.num)"
-                        case "방어": individual.defense = "\(item.num)"
-                        case "특방": individual.sDefense = "\(item.num)"
-                        default: ()
-                        }
-                        
-                    } label: {
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(width: 30,height: 30)
-                            .foregroundColor(.secondary).opacity(0.3)
-                            .overlay {
-                                Text(item.rawValue)
-                                    .foregroundColor(.primary)
-                            }
-                    }
-                }
-            }
-        }
-    }
-    var effortView:some View{
-        ForEach(statsName,id:\.self){ type in
-            HStack{
-                Text(type + " 개체값")
-                VStack{
-                    Group{
-                        switch type{
-                        case "HP":TextField("",text: $effort.hp)
-                        case "방어":TextField("",text: $effort.defense)
-                        case "특방":TextField("",text: $effort.sDefense)
-                        default:Text("")
-                        }
-                    }
-                    .textContentType(.oneTimeCode)
-                    .keyboardType(.numberPad)
-                    Divider()
-                        .background(Color.primary)
-                }
-                ForEach(EffortFilter.allCases,id: \.self){ item in
-                    Button {
-                        switch type{
-                        case "HP": effort.hp = "\(item.rawValue)"
-                        case "방어": effort.defense = "\(item.rawValue)"
-                        case "특방": effort.sDefense = "\(item.rawValue)"
-                        default: ()
-                        }
-                        
-                    } label: {
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(width: 50,height: 30)
-                            .foregroundColor(.secondary).opacity(0.3)
-                            .overlay {
-                                Text("\(item.rawValue)")
-                                    .foregroundColor(.primary)
-                            }
-                    }
-                }
-            }
-        }
-    }
-    var characterView:some View{
-        
-        HStack{
-            Text("방어")
-            Spacer()
-            Picker("", selection: $character.defense) {
-                ForEach(CharacterFilter.allCases,id: \.self){ item in
-                    Text(item.name)
-                }
-            }
-            Text("특방")
-            Spacer()
-            Picker("", selection: $character.sDefense) {
-                ForEach(CharacterFilter.allCases,id: \.self){ item in
-                    Text(item.name)
-                }
-            }
-        }.accentColor(.primary)
-            .padding(.vertical)
-    }
-    var skillPower:some View{
-        VStack(alignment: .leading){
-            
-            Text("추가적으로 특성,도구,필드 기타로 인한 방어/특수방어 상승 하락 등을 설정해주세요!")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .frame(height: 80)
-            VStack(alignment: .leading){
-                Text("방어")
-                HStack{
-                    TextField("입력",text: $option.df)
-                        .textContentType(.oneTimeCode)
-                        .keyboardType(.numberPad)
-                    Text(" . ")
-                    TextField("입력",text: $option.db)
-                        .textContentType(.oneTimeCode)
-                        .keyboardType(.numberPad)
-                    Text("배")
-                }
-                Divider()
-                    .background(Color.primary)
-                Text("특수방어")
-                    .padding(.top)
-                HStack{
-                    TextField("입력",text: $option.bf)
-                        .textContentType(.oneTimeCode)
-                        .keyboardType(.numberPad)
-                    Text(" . ")
-                    TextField("입력",text: $option.bb)
-                        .textContentType(.oneTimeCode)
-                        .keyboardType(.numberPad)
-                    Text("배")
-                }
-                Divider()
-                    .background(Color.primary)
-            }
-        }
-    }
-    
-    func calculate(){
-        guard
-            0...31 ~= Int(individual.hp)!,
-            0...31 ~= Int(individual.defense)!,
-            0...31 ~= Int(individual.sDefense)!,
-            0...252 ~= Int(effort.hp)!,
-            0...252 ~= Int(effort.defense)!,
-            0...252 ~= Int(effort.sDefense)!
-        else{
-            value.d = "개체값은 0~31, 노력치는 0~252사이만 입력할 수 있습니다!"
-            error = false
-            return
-        }
-        let hpPoint = Int(Double(stats.hp) + (Double(individual.hp)!/2) + (Double(effort.hp)!/8) + 60.0)
-        let defPoint:Int = Int((Double(stats.defense) + (Double(individual.defense)!/2) + (Double(effort.defense)!/8) + 5) * character.defense.value)
-        let sdefPoint:Int = Int((Double(stats.sDefense) + (Double(individual.sDefense)!/2) + (Double(effort.sDefense)!/8) + 5) * character.sDefense.value)
-        
-        let df = Double(option.df)!
-        let db = Decimal(Double(option.db)!) / pow(10, Int(Double(option.db.count)))
-        let d = Double(hpPoint) * (Double(defPoint)/0.411) * (df + Double(truncating: db as NSNumber))
-        
-        let bf = Double(option.bf)!
-        let bb = Decimal(Double(option.bb)!) / pow(10, Int(Double(option.bb.count)))
-        let b = Double(hpPoint) * (Double(sdefPoint)/0.411) * (bf + Double(truncating: bb as NSNumber))
-        
-        value = ("방어 - \(String(format: "%.2f", d))","특수방어 -  \(String(format: "%.2f", b))")
-        error = true
-    }
-}
 
