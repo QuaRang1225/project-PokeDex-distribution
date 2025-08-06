@@ -31,21 +31,21 @@ struct PowerView: View {
                 rankUpView(viewStore: viewStore)
                 HStack {
                     personalityView(viewStore: viewStore)
-                    
-                    abilityPicker(viewStore: viewStore)
+                    statusPicker(viewStore: viewStore)
                     
                 }
                 HStack {
                     multipleView(viewStore: viewStore)
-                    statusPicker(viewStore: viewStore)
+                    realLabel(viewStore: viewStore)
                 }
                 Divider()
                     .padding(.vertical, 5)
                 HStack {
                     weatherPicker(viewStore: viewStore)
-                    fieldPicker(viewStore: viewStore)
+                    abilityPicker(viewStore: viewStore)
                 }
                 HStack {
+                    fieldPicker(viewStore: viewStore)
                     itemPicker(viewStore: viewStore)
                 }
                 otherOptionChckboxs(viewStore: viewStore)
@@ -152,7 +152,7 @@ private extension PowerView {
             )
         )
     }
-    /// 노력치 뷰
+    /// 개체값 뷰
     func objectsView(viewStore: PowerStore) -> some View {
         NumericalCellView(
             title: "개체값",
@@ -234,6 +234,7 @@ private extension PowerView {
             color: viewStore.pokemonState.types[0].typeColor
         )
         .borderSection(title: "특성")
+        .frame(width: 220)
     }
     /// 날씨 피커
     func weatherPicker(viewStore: PowerStore) -> some View {
@@ -258,6 +259,7 @@ private extension PowerView {
             color: viewStore.pokemonState.types[0].typeColor
         )
         .borderSection(title: "도구")
+        .frame(width: 200)
     }
     /// 필드 피커
     func fieldPicker(viewStore: PowerStore) -> some View {
@@ -270,6 +272,14 @@ private extension PowerView {
             color: viewStore.pokemonState.types[0].typeColor
         )
         .borderSection(title: "필드")
+    }
+    /// 실수치 라벨
+    func realLabel(viewStore: PowerStore) -> some View {
+        Text("\(viewStore.real)")
+            .fontWeight(.heavy)
+            .padding(10)
+            .frame(maxWidth: .infinity)
+            .borderSection(title: "실수치")
     }
     /// 옵션 선택 체크 박스
     func otherOptionChckboxs(viewStore: PowerStore) -> some View {
