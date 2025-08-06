@@ -19,13 +19,14 @@ struct PowerFeature: Reducer {
         var personality: Double = 1.0   // 성격
         var pokemonState: PokemonAttckState  // 상태
         
+        /// 실수치
+        var real: Int {
+            PowerFeature.calculateStat(state: self)
+        }
+        
         /// 결정력 = [실수치 x 포켓몬 상태] x [기술위력 x 자속 x 랭크업 x 테라스탈]
         var power: Int {
-            Int(
-                PowerFeature.calculatePower(state: self) *
-                Double(PowerFeature.calculateStat(state: self)) *
-                pokemonState.addMutiple
-            )
+            Int(pokemonState.addMutiple) * real * Int(PowerFeature.calculatePower(state: self))
         }
     }
     
