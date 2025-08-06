@@ -40,6 +40,9 @@ struct CalculateView: View {
             .onDidLoad {
                 viewStore.send(.viewDidLoad)
             }
+            .onTapGesture {
+                hideKeyboard()
+            }
         }
     }
 }
@@ -156,7 +159,7 @@ private extension CalculateView{
             state: \.defenseState,
             action: \.defenseAction
         )) { store in
-//            DefenseView(store: store)
+            DefenseView(store: store)
         }
     }
 }
