@@ -63,6 +63,7 @@ extension RegionListView {
                     .fontWeight(.semibold)
             }
             .foregroundStyle(.primary)
+            .padding(.vertical)
         }
     }
     /// 닫기 버튼
