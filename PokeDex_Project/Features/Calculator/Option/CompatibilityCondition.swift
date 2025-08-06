@@ -8,7 +8,8 @@
 import Foundation
 
 /// 상성 조건
-enum CompatibilityCategory: String, CaseIterable {
+enum CompatibilityCondition: String, CaseIterable, LosslessStringConvertible {
+    
     /// 4배
     case quadruple = "효과가 매우 굉장함 (x4)"
     /// 2배
@@ -25,6 +26,10 @@ enum CompatibilityCategory: String, CaseIterable {
     /// 한글 공격 종류 이름을 반환합니다.
     var koreanName: String {
         return self.rawValue
+    }
+    
+    var description: String {
+        self.rawValue
     }
     
     /// 곱수
@@ -68,12 +73,8 @@ enum CompatibilityCategory: String, CaseIterable {
         }
     }
     
-    /// 원시값 -> case
-    init?(rawValue: String) {
-        if let match = CompatibilityCategory.allCases.first(where: { $0.rawValue == rawValue }) {
-            self = match
-        } else {
-            return nil
-        }
+    // 문자열 → 타입으로 변환
+    init?(_ description: String) {
+        self.init(rawValue: description)
     }
 }
