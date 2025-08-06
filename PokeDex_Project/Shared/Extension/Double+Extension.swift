@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - Double
 extension Double {
     /// 랭크업 계산
     var calculateRankMultiplier: Double {
