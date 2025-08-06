@@ -8,7 +8,7 @@
 import Foundation
 
 /// 포켓몬 지닌물건(공격력 상승 아이템)을 나타내는 열거형
-enum PokemonItem: String, CaseIterable {
+enum ItemCondition: String, CaseIterable, LosslessStringConvertible {
     
     // MARK: - Type-Boosting Items (1.2x)
     case none = "없음"
@@ -71,6 +71,10 @@ enum PokemonItem: String, CaseIterable {
     case metronome4 = "메트로놈 (4회)"
     case metronome5 = "메트로놈 (5회)"
     
+    var description: String {
+        self.rawValue
+    }
+    
     /// 한글 아이템 이름을 반환합니다.
     var koreanName: String {
         return self.rawValue
@@ -94,109 +98,109 @@ enum PokemonItem: String, CaseIterable {
             // 특수공격 1.1배
             return state
         case .silkScarf:
-            if TypeFilter(rawValue: state.type) == .normal {
+            if state.type == .normal {
                 state.result *= 1.2
             }
             // 노말 1.2배
             return state
         case .charcoal:
-            if TypeFilter(rawValue: state.type) == .fire {
+            if state.type == .fire {
                 state.result *= 1.2
             }
             // 불꽃 1.2배
             return state
         case .mysticWater:
-            if TypeFilter(rawValue: state.type) == .water {
+            if state.type == .water {
                 state.result *= 1.2
             }
             // 물 1.2배
             return state
         case .miracleSeed:
-            if TypeFilter(rawValue: state.type) == .grass {
+            if state.type == .grass {
                 state.result *= 1.2
             }
             // 풀 1.2배
             return state
         case .magnet:
-            if TypeFilter(rawValue: state.type) == .electric {
+            if state.type == .electric {
                 state.result *= 1.2
             }
             // 전기 1.2배
             return state
         case .neverMeltIce:
-            if TypeFilter(rawValue: state.type) == .ice {
+            if state.type == .ice {
                 state.result *= 1.2
             }
             // 얼음 1.2배
             return state
         case .blackBelt:
-            if TypeFilter(rawValue: state.type) == .fighting {
+            if state.type == .fighting {
                 state.result *= 1.2
             }
             // 격투 1.2배
             return state
         case .poisonBarb:
-            if TypeFilter(rawValue: state.type) == .poison {
+            if state.type == .poison {
                 state.result *= 1.2
             }
             // 독 1.2배
             return state
         case .softSand:
-            if TypeFilter(rawValue: state.type) == .ground {
+            if state.type == .ground {
                 state.result *= 1.2
             }
             // 땅 1.2배
             return state
         case .sharpBeak:
-            if TypeFilter(rawValue: state.type) == .flying {
+            if state.type == .flying {
                 state.result *= 1.2
             }
             // 비행 1.2배
             return state
         case .twistedSpoon:
-            if TypeFilter(rawValue: state.type) == .psychic {
+            if state.type == .psychic {
                 state.result *= 1.2
             }
             // 에스파 1.2배
             return state
         case .silverPowder:
-            if TypeFilter(rawValue: state.type) == .bug {
+            if state.type == .bug {
                 state.result *= 1.2
             }
             // 벌레 1.2배
             return state
         case .hardStone:
-            if TypeFilter(rawValue: state.type) == .rock {
+            if state.type == .rock {
                 state.result *= 1.2
             }
             // 바위 1.2배
             return state
         case .spellTag:
-            if TypeFilter(rawValue: state.type) == .ghost {
+            if state.type == .ghost {
                 state.result *= 1.2
             }
             // 고스트 1.2배
             return state
         case .dragonFang:
-            if TypeFilter(rawValue: state.type) == .dragon {
+            if state.type == .dragon {
                 state.result *= 1.2
             }
             // 드래곤 1.2배
             return state
         case .blackGlasses:
-            if TypeFilter(rawValue: state.type) == .dark {
+            if state.type == .dark {
                 state.result *= 1.2
             }
             // 악 1.2배
             return state
         case .metalCoat:
-            if TypeFilter(rawValue: state.type) == .steel {
+            if state.type == .steel {
                 state.result *= 1.2
             }
             // 강철 1.2배
             return state
         case .fairyFeather:
-            if TypeFilter(rawValue: state.type) == .fairy {
+            if state.type == .fairy {
                 state.result *= 1.2
             }
             // 페어리 1.2배
@@ -211,8 +215,7 @@ enum PokemonItem: String, CaseIterable {
             return state
         case .soulDew:
             if (state.name.contains("라티오스") || state.name.contains("라티아스")),
-               (TypeFilter(rawValue: state.type) == .psychic
-             || TypeFilter(rawValue: state.type) == .dragon) {
+               (state.type == .psychic || state.type == .dragon) {
                 state.result *= 1.2
             }
             // 라티오스/라티아스 에스퍼/드래곤 기술 1.2배
@@ -225,37 +228,34 @@ enum PokemonItem: String, CaseIterable {
             return state
         case .adamantOrb:
             if state.name.contains("디아루가"),
-               (TypeFilter(rawValue: state.type) == .steel
-             || TypeFilter(rawValue: state.type) == .dragon) {
+               (state.type == .steel || state.type == .dragon) {
                 state.result *= 1.2
             }
             // 디아루가 강철/드래곤 기술 1.2배
             return state
         case .lustrousOrb:
             if state.name.contains("펄기아"),
-               (TypeFilter(rawValue: state.type) == .water
-             || TypeFilter(rawValue: state.type) == .dragon) {
+               (state.type == .water || state.type == .dragon) {
                 state.result *= 1.2
             }
             // 펄기아 물/드래곤 기술 1.2배
             return state
         case .griseousOrb:
             if state.name.contains("기라티나"),
-               (TypeFilter(rawValue: state.type) == .ghost
-             || TypeFilter(rawValue: state.type) == .dragon) {
+               (state.type == .ghost || state.type == .dragon) {
                 state.result *= 1.2
             }
             // 기타리나 고스트/드래곤 1.2배
             return state
         case .choiceBand:
             if state.attackedMode == .physical {
-                state.result *= 1.1
+                state.result *= 1.5
             }
             // 공격 1.5배
             return state
         case .choiceSpecs:
             if state.attackedMode == .special {
-                state.result *= 1.1
+                state.result *= 1.5
             }
             // 특공 1.5배
             return state
@@ -287,8 +287,7 @@ enum PokemonItem: String, CaseIterable {
             // 위력 1.3배
             return state
         case .expertBelt:
-            if CompatibilityCategory(rawValue: state.multiple) == .double ||
-                CompatibilityCategory(rawValue: state.multiple) == .quadruple {
+            if state.compatibility == .double || state.compatibility == .quadruple {
                 state.result *= 1.2
             }
             // 효과가 굉장한 기술 1.2배
@@ -316,12 +315,8 @@ enum PokemonItem: String, CaseIterable {
         }
     }
     
-    /// 원시값 -> case
-    init?(rawValue: String) {
-        if let match = PokemonItem.allCases.first(where: { $0.rawValue == rawValue }) {
-            self = match
-        } else {
-            return nil
-        }
+    // 문자열 → 타입으로 변환
+    init?(_ description: String) {
+        self.init(rawValue: description)
     }
 }

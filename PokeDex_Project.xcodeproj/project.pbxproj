@@ -28,16 +28,15 @@
 		812E71062E4071E500122931 /* CheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E71022E4071E500122931 /* CheckBox.swift */; };
 		812E71072E4071E500122931 /* CustomPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E71032E4071E500122931 /* CustomPicker.swift */; };
 		812E71082E4071E500122931 /* NumericalCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E71042E4071E500122931 /* NumericalCellView.swift */; };
-		812E71102E40726800122931 /* AttackCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E710A2E40726800122931 /* AttackCategory.swift */; };
-		812E71112E40726800122931 /* PokemonAbility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E710B2E40726800122931 /* PokemonAbility.swift */; };
-		812E71122E40726800122931 /* PokemonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E710C2E40726800122931 /* PokemonItem.swift */; };
+		812E71102E40726800122931 /* AttackCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E710A2E40726800122931 /* AttackCondition.swift */; };
+		812E71112E40726800122931 /* AbilityCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E710B2E40726800122931 /* AbilityCondition.swift */; };
+		812E71122E40726800122931 /* ItemCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E710C2E40726800122931 /* ItemCondition.swift */; };
 		812E71132E40726800122931 /* StatusCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E710D2E40726800122931 /* StatusCondition.swift */; };
 		812E71142E40726800122931 /* WeatherCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E710E2E40726800122931 /* WeatherCondition.swift */; };
-		812E71162E4072B300122931 /* TerrainCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E71152E4072B300122931 /* TerrainCondition.swift */; };
-		812E71182E40762900122931 /* BattleModifierType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E71172E40762900122931 /* BattleModifierType.swift */; };
-		812E711A2E409D1900122931 /* PokemonValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E71192E409D1900122931 /* PokemonValue.swift */; };
+		812E71162E4072B300122931 /* FieldCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E71152E4072B300122931 /* FieldCondition.swift */; };
+		812E71182E40762900122931 /* BattleCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E71172E40762900122931 /* BattleCondition.swift */; };
 		812E711C2E40B81300122931 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E711B2E40B81300122931 /* Double+Extension.swift */; };
-		812E711E2E41E11E00122931 /* CompatibilityCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E711D2E41E11E00122931 /* CompatibilityCategory.swift */; };
+		812E711E2E41E11E00122931 /* CompatibilityCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E711D2E41E11E00122931 /* CompatibilityCondition.swift */; };
 		812E71202E41F6B300122931 /* Font+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E711F2E41F6B300122931 /* Font+Extension.swift */; };
 		812E71222E42034A00122931 /* PokemonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E71212E42034A00122931 /* PokemonState.swift */; };
 		813643772E38E90D00612EA9 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813643752E38E90D00612EA9 /* SplashView.swift */; };
@@ -150,16 +149,15 @@
 		812E71022E4071E500122931 /* CheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBox.swift; sourceTree = "<group>"; };
 		812E71032E4071E500122931 /* CustomPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPicker.swift; sourceTree = "<group>"; };
 		812E71042E4071E500122931 /* NumericalCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericalCellView.swift; sourceTree = "<group>"; };
-		812E710A2E40726800122931 /* AttackCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttackCategory.swift; sourceTree = "<group>"; };
-		812E710B2E40726800122931 /* PokemonAbility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonAbility.swift; sourceTree = "<group>"; };
-		812E710C2E40726800122931 /* PokemonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonItem.swift; sourceTree = "<group>"; };
+		812E710A2E40726800122931 /* AttackCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttackCondition.swift; sourceTree = "<group>"; };
+		812E710B2E40726800122931 /* AbilityCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbilityCondition.swift; sourceTree = "<group>"; };
+		812E710C2E40726800122931 /* ItemCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCondition.swift; sourceTree = "<group>"; };
 		812E710D2E40726800122931 /* StatusCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCondition.swift; sourceTree = "<group>"; };
 		812E710E2E40726800122931 /* WeatherCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCondition.swift; sourceTree = "<group>"; };
-		812E71152E4072B300122931 /* TerrainCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainCondition.swift; sourceTree = "<group>"; };
-		812E71172E40762900122931 /* BattleModifierType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleModifierType.swift; sourceTree = "<group>"; };
-		812E71192E409D1900122931 /* PokemonValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonValue.swift; sourceTree = "<group>"; };
+		812E71152E4072B300122931 /* FieldCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldCondition.swift; sourceTree = "<group>"; };
+		812E71172E40762900122931 /* BattleCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleCondition.swift; sourceTree = "<group>"; };
 		812E711B2E40B81300122931 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
-		812E711D2E41E11E00122931 /* CompatibilityCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityCategory.swift; sourceTree = "<group>"; };
+		812E711D2E41E11E00122931 /* CompatibilityCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityCondition.swift; sourceTree = "<group>"; };
 		812E711F2E41F6B300122931 /* Font+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Extension.swift"; sourceTree = "<group>"; };
 		812E71212E42034A00122931 /* PokemonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonState.swift; sourceTree = "<group>"; };
 		813643752E38E90D00612EA9 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -389,14 +387,14 @@
 		812E710F2E40726800122931 /* Option */ = {
 			isa = PBXGroup;
 			children = (
-				812E710A2E40726800122931 /* AttackCategory.swift */,
-				812E711D2E41E11E00122931 /* CompatibilityCategory.swift */,
+				812E710A2E40726800122931 /* AttackCondition.swift */,
+				812E711D2E41E11E00122931 /* CompatibilityCondition.swift */,
 				812E710E2E40726800122931 /* WeatherCondition.swift */,
 				812E710D2E40726800122931 /* StatusCondition.swift */,
-				812E71152E4072B300122931 /* TerrainCondition.swift */,
-				812E710B2E40726800122931 /* PokemonAbility.swift */,
-				812E710C2E40726800122931 /* PokemonItem.swift */,
-				812E71172E40762900122931 /* BattleModifierType.swift */,
+				812E71152E4072B300122931 /* FieldCondition.swift */,
+				812E710B2E40726800122931 /* AbilityCondition.swift */,
+				812E710C2E40726800122931 /* ItemCondition.swift */,
+				812E71172E40762900122931 /* BattleCondition.swift */,
 			);
 			path = Option;
 			sourceTree = "<group>";
@@ -448,7 +446,6 @@
 			isa = PBXGroup;
 			children = (
 				813643982E3A0DC600612EA9 /* PokemonInfo.swift */,
-				812E71192E409D1900122931 /* PokemonValue.swift */,
 				812E71212E42034A00122931 /* PokemonState.swift */,
 			);
 			path = Model;
@@ -960,7 +957,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				812E711A2E409D1900122931 /* PokemonValue.swift in Sources */,
 				D639CE292BF77996002E0B5D /* TypesView.swift in Sources */,
 				8116819F2E37571D00E50958 /* EvolutionTreeFeature.swift in Sources */,
 				D679C10B2BFB410700223D6D /* EvolutionTreeNodeView.swift in Sources */,
@@ -1005,10 +1001,10 @@
 				8127AC902E315A480020D7B3 /* Int+Extension.swift in Sources */,
 				8149E5732E296B8000B78CB2 /* PokemonDetailsClient.swift in Sources */,
 				812E71222E42034A00122931 /* PokemonState.swift in Sources */,
-				812E71102E40726800122931 /* AttackCategory.swift in Sources */,
+				812E71102E40726800122931 /* AttackCondition.swift in Sources */,
 				812E711C2E40B81300122931 /* Double+Extension.swift in Sources */,
-				812E71112E40726800122931 /* PokemonAbility.swift in Sources */,
-				812E71122E40726800122931 /* PokemonItem.swift in Sources */,
+				812E71112E40726800122931 /* AbilityCondition.swift in Sources */,
+				812E71122E40726800122931 /* ItemCondition.swift in Sources */,
 				812E71132E40726800122931 /* StatusCondition.swift in Sources */,
 				812E71142E40726800122931 /* WeatherCondition.swift in Sources */,
 				8149E5742E296B8000B78CB2 /* PokemonListClient.swift in Sources */,
@@ -1016,8 +1012,8 @@
 				8149E5762E296B8000B78CB2 /* PokemonDetailsRouter.swift in Sources */,
 				8127AC852E2F84A00020D7B3 /* DidLoadModifier.swift in Sources */,
 				8136439A2E3A0DC600612EA9 /* PokemonInfo.swift in Sources */,
-				812E711E2E41E11E00122931 /* CompatibilityCategory.swift in Sources */,
-				812E71182E40762900122931 /* BattleModifierType.swift in Sources */,
+				812E711E2E41E11E00122931 /* CompatibilityCondition.swift in Sources */,
+				812E71182E40762900122931 /* BattleCondition.swift in Sources */,
 				8127AC862E2F84A00020D7B3 /* VisibleModifier.swift in Sources */,
 				813643922E38EAF400612EA9 /* MyPokemonListCellView.swift in Sources */,
 				8149E5772E296B8000B78CB2 /* PokemonListRouter.swift in Sources */,
@@ -1034,7 +1030,7 @@
 				8149E5922E296B8300B78CB2 /* SearchBoardFeature.swift in Sources */,
 				8149E5932E296B8300B78CB2 /* Types.swift in Sources */,
 				813643862E38E96E00612EA9 /* CalculateFilter.swift in Sources */,
-				812E71162E4072B300122931 /* TerrainCondition.swift in Sources */,
+				812E71162E4072B300122931 /* FieldCondition.swift in Sources */,
 				813643872E38E96E00612EA9 /* EffortFilter.swift in Sources */,
 				813643882E38E96E00612EA9 /* IndividualFilter.swift in Sources */,
 				813643892E38E96E00612EA9 /* RankFilter.swift in Sources */,

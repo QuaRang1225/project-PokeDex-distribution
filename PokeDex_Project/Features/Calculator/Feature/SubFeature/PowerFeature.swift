@@ -8,28 +8,46 @@
 import Foundation
 import ComposableArchitecture
 
+
 /// 공격 결정력 계산 Feature
 struct PowerFeature: Reducer {
     
     @ObservableState struct State: Equatable {
         var value: PokemonValue
-        var selectedPower: Int = 0
-        var selectedType: String = TypeFilter.normal.rawValue
-        var selectedAttack: AttackCategory = .physical
-        var selectedStatus: String = StatusCondition.none.koreanName
-        var isChecked: Bool = false
         var level: String = "\(1)"
         var efforts: String = "\(252)"
         var object: String = "\(31)"
-        var rankUp: String = "\(0)"
-        var multiple: String = "\(1)"
         var personality: Double = 1.0
-        var selectedAbility: String = PokemonAbility.none.koreanName
-        var selectedWeather: String = WeatherCondition.none.koreanName
-        var selectedItem: String = PokemonItem.none.koreanName
-        var selectedField: String = TerrainCondition.none.koreanName
-        var selectedCheckbox: [BattleModifierType: Bool] = Dictionary(uniqueKeysWithValues: BattleModifierType.allCases.map { ($0, false)})
-        var damange: Int = 0
+        var pokemonState: PokemonState
+        
+        var power: Int {
+            Int(
+                PowerFeature.calculatePower(state: self) *
+                Double(PowerFeature.calculateStat(state: self)) *
+                Double(pokemonState.power) *
+                stab * rankUp * isTherastal
+            )
+        }
+        /// 자속 여부
+        var isStab: Bool {
+            pokemonState.types.contains(pokemonState.type)
+        }
+        /// 자속 보정
+        var stab: Double {
+            isStab ? 1.5 : 1.0
+        }
+        /// 랭크업 여부
+        var rankUp: Double {
+            Double(pokemonState.rankUp)?.calculateRankMultiplier ?? 0
+        }
+        /// 테라스탈 여부
+        var isTherastal: Double {
+            if isStab {
+                pokemonState.isTherastal ? (4/3) : 1.0
+            } else {
+                pokemonState.isTherastal ? 1.5 : 1.0
+            }
+        }
     }
     
     @CasePathable enum Action: Equatable {
@@ -91,19 +109,19 @@ struct PowerFeature: Reducer {
     }
     
     private func updatePower(_ state: inout State, power: Int) -> Effect<Action> {
-        state.selectedPower = power
+        state.pokemonState.power = power
         return .none
     }
     private func updateType(_ state: inout State, type: String) -> Effect<Action> {
-        state.selectedType = type
+        state.pokemonState.type = type
         return .none
     }
     private func updateAttack(_ state: inout State, attack: AttackCategory) -> Effect<Action> {
-        state.selectedAttack = attack
+        state.pokemonState.attackedMode = attack
         return .none
     }
     private func updateTherastal(_ state: inout State) -> Effect<Action> {
-        state.isChecked.toggle()
+        state.pokemonState.isTherastal.toggle()
         return .none
     }
     private func updateLevel(_ state: inout State, level: String) -> Effect<Action> {
@@ -124,15 +142,15 @@ struct PowerFeature: Reducer {
         return .none
     }
     private func updateRankUp(_ state: inout State, rankUp: String) -> Effect<Action> {
-        state.rankUp = rankUp
+        state.pokemonState.rankUp = rankUp
         return .none
     }
     private func updateMultiple(_ state: inout State, multiple: String) -> Effect<Action> {
-        state.multiple = multiple
+        state.pokemonState.multiple = multiple
         return .none
     }
     private func updateStatus(_ state: inout State, status: String) -> Effect<Action> {
-        state.selectedStatus = status
+        state.pokemonState.status = status
         return .none
     }
     private func updatePersonality(_ state: inout State, personality: Double) -> Effect<Action> {
@@ -140,29 +158,84 @@ struct PowerFeature: Reducer {
         return .none
     }
     private func updateAbility(_ state: inout State, ability: String) -> Effect<Action> {
-        state.selectedAbility = ability
+        state.pokemonState.ability = ability
         return .none
     }
     private func updateWeather(_ state: inout State, weather: String) -> Effect<Action> {
-        state.selectedWeather = weather
+        state.pokemonState.weather = weather
         return .none
     }
     private func updateItem(_ state: inout State, tool: String) -> Effect<Action> {
-        state.selectedItem = tool
+        state.pokemonState.item = tool
         return .none
     }
     private func updateField(_ state: inout State, field: String) -> Effect<Action> {
-        state.selectedField = field
+        state.pokemonState.field = field
         return .none
     }
     private func updateOthers(_ state: inout State, other: BattleModifierType) -> Effect<Action> {
-        state.selectedCheckbox[other]?.toggle()
+        state.pokemonState.battleModifier[other]?.toggle()
         return .none
+    }
+    
+    
+}
+
+// MARK: - 전역 메서드
+extension PowerFeature {
+    /// 실수치 계산
+    static func calculateStat(state: PowerFeature.State) -> Int {
+        
+        let baseStat = Double(state.pokemonState.attackedMode == .physical ? state.value.pysical : state.value.special)    // 능력치
+        let iv = Double(state.object) ?? 0      // 개체값
+        let ev = Double(state.efforts) ?? 0     // 노력치
+        let personality = state.personality     // 성격보정
+        let stat = floor((baseStat + iv/2 + ev/8 + 5) * personality) // 실 수치
+        return Int(stat)
+    }
+    /// 결정력 계산
+    static func calculatePower(state: PowerFeature.State) -> Double {
+        var mutableState = state.pokemonState
+        
+        // 1. 배틀 모디파이어 적용
+        let activeModifiers = mutableState.battleModifier.filter { $0.value }.map { $0.key }
+        for modifier in activeModifiers {
+            mutableState = modifier.calculate(state: &mutableState)
+        }
+        
+        // 2. 날씨
+        if let weather = WeatherCondition(rawValue: mutableState.weather) {
+            mutableState = weather.calculate(state: &mutableState)
+        }
+        
+        // 3. 상성 배율
+        if let multiple = CompatibilityCategory(rawValue: mutableState.multiple) {
+            mutableState = multiple.calculate(state: &mutableState)
+        }
+        
+        // 4. 상태이상
+        if let status = StatusCondition(rawValue: mutableState.status) {
+            mutableState = status.calculate(state: &mutableState)
+        }
+        
+        // 5. 필드
+        if let field = TerrainCondition(rawValue: mutableState.field) {
+            mutableState = field.calculate(state: &mutableState)
+        }
+        
+        // 6. 아이템
+        if let item = PokemonItem(rawValue: mutableState.item) {
+            mutableState = item.calculate(state: &mutableState)
+        }
+        
+        // 7. 특성
+        if let ability = PokemonAbility(rawValue: mutableState.ability) {
+            mutableState = ability.calculate(state: &mutableState)
+        }
+        
+        return mutableState.result
     }
 }
 
-struct PokemonValue: Equatable {
-    let type: [String]
-    let pysical: Int
-    let special: Int
-}
+
+
