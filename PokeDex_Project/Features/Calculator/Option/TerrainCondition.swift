@@ -27,4 +27,45 @@ enum TerrainCondition: String, CaseIterable {
     var koreanName: String {
         return self.rawValue
     }
+    
+    /// 포켓몬 상태 계산
+    func calculate(state: inout PokemonState) -> PokemonState {
+        switch self {
+        case .none:
+            return state
+        case .grassy:
+            if TypeFilter(rawValue: state.type) == .grass {
+                state.result *= 1.3
+            }
+            // 풀타입 위력 1.5배 증가
+            return state
+        case .misty:
+            if TypeFilter(rawValue: state.type) == .dragon {
+                state.result /= 2
+            }
+            // 드래곤 타입 위력 절반
+            return state
+        case .psychic:
+            if TypeFilter(rawValue: state.type) == .psychic {
+                state.result *= 1.3
+            }
+            // 에스퍼 타입 위력 1.3배 증가
+            return state
+        case .electric:
+            if TypeFilter(rawValue: state.type) == .electric {
+                state.result *= 1.3
+            }
+            // 전기 타입 위력 1.3배 증가
+            return state
+        }
+        
+    }
+    /// 원시값 -> case
+    init?(rawValue: String) {
+        if let match = TerrainCondition.allCases.first(where: { $0.rawValue == rawValue }) {
+            self = match
+        } else {
+            return nil
+        }
+    }
 }
