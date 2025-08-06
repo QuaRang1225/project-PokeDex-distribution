@@ -27,4 +27,38 @@ enum WeatherCondition: String, CaseIterable {
     var koreanName: String {
         return self.rawValue
     }
+    
+    /// 포켓몬 상태 계산
+    func calculate(state: inout PokemonState) -> PokemonState {
+        switch self {
+        case .sunny:
+            if TypeFilter(rawValue: state.type) == .fire {
+                state.result *= 1.5
+            } else if TypeFilter(rawValue: state.type) == .water {
+                state.result /= 2.0
+            }
+            // 불꽅 타입 위력 1.5배 증가
+            // 물 타입 위력 0.5배로 감소
+            return state
+        case .rain:
+            if TypeFilter(rawValue: state.type) == .water {
+                state.result *= 1.5
+            } else if TypeFilter(rawValue: state.type) == .fire {
+                state.result /= 2.0
+            }
+            // 물타입 위력 1.5배 증가
+            // 불꽃 타입 위력 0.5배로 감소
+            return state
+        default: return state
+        }
+    }
+    
+    /// 원시값 -> case
+    init?(rawValue: String) {
+        if let match = WeatherCondition.allCases.first(where: { $0.rawValue == rawValue }) {
+            self = match
+        } else {
+            return nil
+        }
+    }
 }
