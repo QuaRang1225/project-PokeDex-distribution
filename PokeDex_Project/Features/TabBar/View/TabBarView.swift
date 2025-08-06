@@ -66,14 +66,23 @@ private extension TabBarView {
                 viewStore.send(.didTapFloatingButton)
             } label: {
                 Image(systemName: "circle.grid.3x3")
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundStyle(.white)
+                    .font(.system(size: isIpad ? 24: 12, weight: .bold))
+                    .foregroundStyle(isIpad ? .pink : .white)
                     .frame(width: 65, height: 65)
-                    .background(Color.pink)
+                    .background {
+                        if !isIpad {
+                            Color.pink
+                        }
+                    }
                     .clipShape(Circle())
-                    .shadow(radius: 4)
+                    .shadow(radius: isIpad ? 0 : 4)
             }
             .padding(.bottom, 10)
+            .frame(
+                maxWidth: isIpad ? .infinity : nil,
+                maxHeight: isIpad ? .infinity : nil,
+                alignment: isIpad ? .topTrailing : .center
+            )
         }
     }
     /// 지역리스트
