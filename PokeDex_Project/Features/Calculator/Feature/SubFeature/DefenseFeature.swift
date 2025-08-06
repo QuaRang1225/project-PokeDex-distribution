@@ -11,7 +11,7 @@ import ComposableArchitecture
 struct DefenseFeature: Reducer {
     
     @ObservableState struct State: Equatable {
-        var pokemonState: PokemonState
+        var pokemonState: PokemonDefenseState
     }
     
     @CasePathable enum Action: Equatable {
