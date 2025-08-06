@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// 포켓몬 상태
+/// 포켓몬 공격 상태
 struct PokemonAttckState: Equatable {
     let name: String                                // 이름
     let types: [String]                             // 타입
