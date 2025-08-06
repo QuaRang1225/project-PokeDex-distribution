@@ -7,7 +7,9 @@
 
 import Foundation
 
-enum TypeFilter: String, CaseIterable {
+/// 타입
+enum TypeFilter: String, CaseIterable, LosslessStringConvertible {
+    
     case bug = "벌레"
     case normal = "노말"
     case fairy = "페어리"
@@ -26,6 +28,15 @@ enum TypeFilter: String, CaseIterable {
     case rock = "바위"
     case steel = "강철"
     case water = "물"
+    
+    var description: String {
+        self.rawValue
+    }
+    
+    // 문자열 → 타입으로 변환
+    init?(_ description: String) {
+        self.init(rawValue: description)
+    }
 }
 
 // MARK: - 포켓몬에 따른 타입 필터
