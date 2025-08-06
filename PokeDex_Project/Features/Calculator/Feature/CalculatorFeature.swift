@@ -68,6 +68,7 @@ struct CalculatorFeature: Reducer {
             pokemonState: PokemonDefenseState(
                 type: state.pokemonInfo.types,
                 name: state.pokemonInfo.name,
+                hp: state.pokemonInfo.stats[0],
                 pysical: state.pokemonInfo.stats[2],
                 special: state.pokemonInfo.stats[4]
             )
