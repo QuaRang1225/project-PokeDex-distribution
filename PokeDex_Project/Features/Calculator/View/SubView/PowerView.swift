@@ -302,7 +302,7 @@ private extension PowerView {
 #Preview {
     let store = Store(
         initialState: PowerFeature.State(
-            pokemonState: PokemonState(
+            pokemonState: PokemonAttckState(
                 type: ["물", "페어리"],
                 name: "마릴리",
                 pysical: 50,

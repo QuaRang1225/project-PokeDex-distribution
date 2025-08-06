@@ -17,7 +17,7 @@ struct PowerFeature: Reducer {
         var efforts: String = "\(252)"  // 노력치
         var object: String = "\(31)"    // 개체값
         var personality: Double = 1.0   // 성격
-        var pokemonState: PokemonState  // 상태
+        var pokemonState: PokemonAttckState  // 상태
         
         /// 결정력 = [실수치 x 포켓몬 상태] x [기술위력 x 자속 x 랭크업 x 테라스탈]
         var power: Int {

@@ -51,7 +51,7 @@ enum CompatibilityCondition: String, CaseIterable, LosslessStringConvertible {
     }
     
     /// 포켓몬 상태 계산
-    func calculate(state: inout PokemonState) -> PokemonState {
+    func calculate(state: inout PokemonAttckState) -> PokemonAttckState {
         switch self {
         case .quadruple:
             state.result *= 4
