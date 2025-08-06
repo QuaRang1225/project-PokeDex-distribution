@@ -8,7 +8,7 @@
 import Foundation
 
 /// 전투 중 적용될 수 있는 다양한 보정 효과의 종류를 나타내는 열거형
-enum BattleModifierType: String, CaseIterable {
+enum BattleCondition: String, CaseIterable, LosslessStringConvertible {
     
     case criticalHit = "급소"     // 1.5
     case recoid = "반동기술"
@@ -32,6 +32,10 @@ enum BattleModifierType: String, CaseIterable {
     case auraBreak = "오라브레이크"   // 악/페어리 위력 0.7배
     case tabletsOfRuin = "재앙의목간"    // 공격 0.75배
     case vesselOfRuin = "재앙의그릇"  // 특공 0.75배
+    
+    var description: String {
+        self.rawValue
+    }
     
     /// 한글 보정 효과 이름을 반환합니다.
     var koreanName: String {
@@ -61,18 +65,17 @@ enum BattleModifierType: String, CaseIterable {
             }
             return state
         case .fairyAura:
-            if TypeFilter(rawValue: state.type) == .fairy {
+            if state.type == .fairy {
                 state.result *= 1.3
             }
             return state
         case .darkAura:
-            if TypeFilter(rawValue: state.type) == .dark {
+            if state.type == .dark {
                 state.result *= 1.3
             }
             return state
         case .auraBreak:
-            if TypeFilter(rawValue: state.type) == .fairy ||
-                TypeFilter(rawValue: state.type) == .dark {
+            if state.type == .fairy || state.type == .dark {
                 state.result *= 0.7
             }
             return state
@@ -91,11 +94,8 @@ enum BattleModifierType: String, CaseIterable {
         }
     }
     
-    init?(rawValue: String) {
-        if let match = BattleModifierType.allCases.first(where: { $0.rawValue == rawValue }) {
-            self = match
-        } else {
-            return nil
-        }
+    // 문자열 → 타입으로 변환
+    init?(_ description: String) {
+        self.init(rawValue: description)
     }
 }
