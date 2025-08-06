@@ -57,18 +57,17 @@ struct CalculatorFeature: Reducer {
     }
     private func initializeValue(_ state: inout State) -> Effect<Action> {
         state.powerState = PowerFeature.State(
-            value: PokemonValue(
+            pokemonState: PokemonState(
                 type: state.pokemonInfo.types,
+                name: state.pokemonInfo.name,
                 pysical: state.pokemonInfo.stats[1],
-                special: state.pokemonInfo.stats[2]
-            ), pokemonState: PokemonState(
-                type: state.pokemonInfo.types,
-                name: state.pokemonInfo.name
+                special: state.pokemonInfo.stats[3]
             )
         )
         state.defenseState = DefenseFeature.State(
-            value: PokemonValue(
+            pokemonState: PokemonState(
                 type: state.pokemonInfo.types,
+                name: state.pokemonInfo.name,
                 pysical: state.pokemonInfo.stats[2],
                 special: state.pokemonInfo.stats[4]
             )
