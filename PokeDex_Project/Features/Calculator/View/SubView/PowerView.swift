@@ -31,18 +31,22 @@ struct PowerView: View {
                 rankUpView(viewStore: viewStore)
                 HStack {
                     personalityView(viewStore: viewStore)
+                    
+                    abilityPicker(viewStore: viewStore)
+                    
+                }
+                HStack {
                     multipleView(viewStore: viewStore)
                     statusPicker(viewStore: viewStore)
                 }
-                .padding(.vertical)
                 Divider()
+                    .padding(.vertical, 5)
                 HStack {
-                    abilityPicker(viewStore: viewStore)
                     weatherPicker(viewStore: viewStore)
+                    fieldPicker(viewStore: viewStore)
                 }
                 HStack {
                     itemPicker(viewStore: viewStore)
-                    fieldPicker(viewStore: viewStore)
                 }
                 otherOptionChckboxs(viewStore: viewStore)
                 damageLabel(viewStore: viewStore)
@@ -58,11 +62,11 @@ private extension PowerView {
     func skillPowerPicker(viewStore: PowerStore) -> some View {
         CustomPicker(
             selected: viewStore.binding(
-                get: \.selectedPower,
+                get: \.pokemonState.power,
                 send: { .selectedPower($0) }
             ),
             options: Array(stride(from: 10, through: 250, by: 5).map{ "\($0)" }),
-            color: viewStore.value.type[0].typeColor
+            color: viewStore.pokemonState.types[0].typeColor
         )
         .borderSection(title: "기술 위력")
         .frame(maxWidth: .infinity)
@@ -71,11 +75,11 @@ private extension PowerView {
     func typePicker(viewStore: PowerStore) -> some View {
         CustomPicker(
             selected: viewStore.binding(
-                get: \.selectedType,
+                get: \.pokemonState.type,
                 send: { .selectedType($0) }
             ),
             options: TypeFilter.allCases.map(\.rawValue),
-            color: viewStore.value.type[0].typeColor
+            color: viewStore.pokemonState.types[0].typeColor
         )
         .borderSection(title: "타입")
         .frame(width: 120)
@@ -83,7 +87,7 @@ private extension PowerView {
     /// 물리/특수 선택 버튼
     func formOfAttack(viewStore: PowerStore) -> some View {
         HStack {
-            ForEach(AttackCategory.allCases, id: \.rawValue) { filter in
+            ForEach(AttackCondition.allCases, id: \.rawValue) { filter in
                 Button {
                     viewStore.send(.selectedAttack(filter))
                 } label: {
@@ -95,8 +99,8 @@ private extension PowerView {
                         .background {
                             Circle()
                                 .foregroundStyle(
-                                    viewStore.selectedAttack == filter
-                                    ? viewStore.value.type[0].typeColor
+                                    viewStore.pokemonState.attackedMode == filter
+                                    ? viewStore.pokemonState.types[0].typeColor
                                     : .gray.opacity(0.5)
                                 )
                         }
@@ -110,8 +114,8 @@ private extension PowerView {
     func therastalStatusCheckBox(viewStore: PowerStore) -> some View {
         CheckBox(
             label: "테라스탈",
-            color: viewStore.value.type[0].typeColor,
-            isChecked: viewStore.isChecked) {
+            color: viewStore.pokemonState.types[0].typeColor,
+            isChecked: viewStore.pokemonState.isTherastal) {
             viewStore.send(.checkedTherastal)
         }
         .padding(.leading)
@@ -134,13 +138,13 @@ private extension PowerView {
                 viewStore.send(.inputtedLevel(newValue))
             }
         }
-        .zIndex(0)
+        .font(.device)
     }
     /// 노력치 뷰
     func effortsView(viewStore: PowerStore) -> some View {
         NumericalCellView(
             title: "노력치",
-            color: viewStore.value.type[0].typeColor,
+            color: viewStore.pokemonState.types[0].typeColor,
             arrange: (0...252),
             value: viewStore.binding(
                 get: \.efforts,
@@ -152,7 +156,7 @@ private extension PowerView {
     func objectsView(viewStore: PowerStore) -> some View {
         NumericalCellView(
             title: "개체값",
-            color: viewStore.value.type[0].typeColor,
+            color: viewStore.pokemonState.types[0].typeColor,
             arrange: (0...31),
             value: viewStore.binding(
                 get: \.object,
@@ -164,10 +168,10 @@ private extension PowerView {
     func rankUpView(viewStore: PowerStore) -> some View {
         NumericalCellView(
             title: "랭크업",
-            color: viewStore.value.type[0].typeColor,
+            color: viewStore.pokemonState.types[0].typeColor,
             arrange: (-6...6),
             value: viewStore.binding(
-                get: \.rankUp,
+                get: \.pokemonState.rankUp,
                 send: { .changedRankUp($0) }
             )
         )
@@ -189,28 +193,33 @@ private extension PowerView {
             }
         }
         .padding(10)
+        .padding(.vertical, UIScreen.main.bounds.width < 400 ? 2.5 : 0)
         .borderSection(title: "성격 보정")
+        .font(.device)
         .frame(width: 150)
     }
     /// 배수 뷰
     func multipleView(viewStore: PowerStore) -> some View {
-        TextField("", text: viewStore.binding(
-            get: \.multiple,
-            send: { .inputtedMultiple($0) })
+        CustomPicker(
+            selected: viewStore.binding(
+                get: \.pokemonState.compatibility,
+                send: { .inputtedCompatibility($0) }
+            ),
+            options: CompatibilityCondition.allCases.map(\.rawValue),
+            color: viewStore.pokemonState.types[0].typeColor
         )
-        .padding(10)
-        .borderSection(title: "배수")
-        .frame(width: 70)
+        .borderSection(title: "효과")
+        .frame(width: 250)
     }
     /// 상태이상 피커
     func statusPicker(viewStore: PowerStore) -> some View {
         CustomPicker(
             selected: viewStore.binding(
-                get: \.selectedStatus,
+                get: \.pokemonState.status,
                 send: { .selectedStatus($0) }
             ),
             options: StatusCondition.allCases.map(\.rawValue),
-            color: viewStore.value.type[0].typeColor
+            color: viewStore.pokemonState.types[0].typeColor
         )
         .borderSection(title: "상태 이상")
     }
@@ -218,11 +227,11 @@ private extension PowerView {
     func abilityPicker(viewStore: PowerStore) -> some View {
         CustomPicker(
             selected: viewStore.binding(
-                get: \.selectedAbility,
+                get: \.pokemonState.ability,
                 send: { .selectedAbility($0) }
             ),
-            options: PokemonAbility.allCases.map(\.rawValue),
-            color: viewStore.value.type[0].typeColor
+            options: AbilityCondition.allCases.map(\.rawValue),
+            color: viewStore.pokemonState.types[0].typeColor
         )
         .borderSection(title: "특성")
     }
@@ -230,11 +239,11 @@ private extension PowerView {
     func weatherPicker(viewStore: PowerStore) -> some View {
         CustomPicker(
             selected: viewStore.binding(
-                get: \.selectedWeather,
+                get: \.pokemonState.weather,
                 send: { .selectedWeather($0) }
             ),
             options: WeatherCondition.allCases.map(\.rawValue),
-            color: viewStore.value.type[0].typeColor
+            color: viewStore.pokemonState.types[0].typeColor
         )
         .borderSection(title: "날씨")
     }
@@ -242,11 +251,11 @@ private extension PowerView {
     func itemPicker(viewStore: PowerStore) -> some View {
         CustomPicker(
             selected: viewStore.binding(
-                get: \.selectedItem,
+                get: \.pokemonState.item,
                 send: { .selectedItem($0) }
             ),
-            options: PokemonItem.allCases.map(\.rawValue),
-            color: viewStore.value.type[0].typeColor
+            options: ItemCondition.allCases.map(\.rawValue),
+            color: viewStore.pokemonState.types[0].typeColor
         )
         .borderSection(title: "도구")
     }
@@ -254,11 +263,11 @@ private extension PowerView {
     func fieldPicker(viewStore: PowerStore) -> some View {
         CustomPicker(
             selected: viewStore.binding(
-                get: \.selectedField,
+                get: \.pokemonState.field,
                 send: { .selectedField($0) }
             ),
-            options: TerrainCondition.allCases.map(\.rawValue),
-            color: viewStore.value.type[0].typeColor
+            options: FieldCondition.allCases.map(\.rawValue),
+            color: viewStore.pokemonState.types[0].typeColor
         )
         .borderSection(title: "필드")
     }
@@ -267,13 +276,13 @@ private extension PowerView {
         VStack {
             let columns = Array(repeating: GridItem(.flexible()), count: 3)
             LazyVGrid(columns: columns, alignment: .leading) {
-                ForEach(BattleModifierType.allCases, id: \.rawValue) { option in
-                    if let checkbox = viewStore.selectedCheckbox[option] {
+                ForEach(BattleCondition.allCases, id: \.rawValue) { option in
+                    if let checkbox = viewStore.pokemonState.battleModifier[option] {
                         CheckBox(
                             label: option.koreanName,
-                            color: viewStore.value.type[0].typeColor,
+                            color: viewStore.pokemonState.types[0].typeColor,
                             isChecked: checkbox) {
-                                viewStore.send(.checkedOhter(option))
+                                viewStore.send(.checkedBattleModifiers(option))
                             }
                     }
                 }
@@ -282,7 +291,7 @@ private extension PowerView {
     }
     /// 결정력 라벨
     func damageLabel(viewStore: PowerStore) -> some View {
-        Text("\(viewStore.damange)")
+        Text("\(viewStore.power)")
             .font(.title3)
             .frame(maxWidth: .infinity)
             .padding(.vertical)
@@ -291,8 +300,15 @@ private extension PowerView {
 }
 
 #Preview {
-    let value = PokemonValue(type: ["드래곤", "비행"], pysical: 81, special: 74)
-    let store = Store(initialState: PowerFeature.State(value: value)) { PowerFeature() }
+    let store = Store(
+        initialState: PowerFeature.State(
+            pokemonState: PokemonState(
+                type: ["물", "페어리"],
+                name: "마릴리",
+                pysical: 50,
+                special: 60
+            )
+        )) { PowerFeature() }
     ScrollView {
         PowerView(store: store)
     }
