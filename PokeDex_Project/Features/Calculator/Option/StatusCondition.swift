@@ -30,4 +30,26 @@ enum StatusCondition: String, CaseIterable {
     var koreanName: String {
         return self.rawValue
     }
+    
+    /// 포켓몬 상태 계산
+    func calculate(state: inout PokemonState) -> PokemonState {
+        switch self {
+        case .burn:
+            if state.attackedMode == .physical {
+                state.result /= 2
+            }
+            // 물리공격 절반 감소
+            return state
+        default: return state
+        }
+    }
+    
+    /// 원시값 -> case
+    init?(rawValue: String) {
+        if let match = StatusCondition.allCases.first(where: { $0.rawValue == rawValue }) {
+            self = match
+        } else {
+            return nil
+        }
+    }
 }
