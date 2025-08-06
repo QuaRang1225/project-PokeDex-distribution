@@ -13,13 +13,10 @@ enum FieldCondition: String, CaseIterable, LosslessStringConvertible {
     case none = "없음"
     /// 그래스필드
     case grassy = "그래스필드"
-    
     /// 미스트필드
     case misty = "미스트필드"
-    
     /// 사이코필드
     case psychic = "사이코필드"
-    
     /// 일렉트릭필드
     case electric = "일렉트릭필드"
     
