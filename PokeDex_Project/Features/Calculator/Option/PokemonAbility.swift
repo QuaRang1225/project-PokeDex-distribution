@@ -58,12 +58,9 @@ enum PokemonAbility: String, CaseIterable {
     case windPower = "풍력발전"
     case rivalrySameGender = "투쟁심(성별같음)"
     case rivalryDifferentGender = "투쟁심(성별다름)"
-    case mindsEye = "심안"
-    case scrappy = "배짱"
     case analytic = "애널라이즈"
     case sheerForce = "우격다짐"
     case stakeout = "잠복"
-    case flashFire = "타오르는불꽃"
     case parentalBond = "부자유친"
     case supremeOverlord1 = "총대장 (1마리 기절)"
     case supremeOverlord2 = "총대장 (2마리 기절)"
@@ -87,11 +84,382 @@ enum PokemonAbility: String, CaseIterable {
     case quarkDrive = "쿼크차지"
     case orichalcumPulse = "진홍빛고동"
     case hadronEngine = "하드론엔진"
-    case swordOfRuin = "재앙의검"
-    case beadsOfRuin = "재앙의구슬"
     
     /// 한글 특성 이름을 반환합니다.
     var koreanName: String {
         return self.rawValue
+    }
+    
+    /// 포켓몬 상태 계산
+    func calculate(state: inout PokemonState) -> PokemonState {
+        switch self {
+        case .none:
+            return state
+        case .reckless:
+            if let recoid = state.battleModifier[.recoid], recoid {
+                state.result *= 1.2
+            }
+            // 반동기술일 경우만 1.2배 증가
+            return state
+        case .ironFist:
+            if let punch = state.battleModifier[.punch], punch {
+                state.result *= 1.2
+            }
+            // 펀치기술일 경우만 1.2배 증가
+            return state
+        case .technician:
+            if state.power <= 60 {
+                state.result *= 1.5
+            }
+            // 위력 60 이하의 기술 1.5배 증가
+            return state
+        case .purePower:
+            if state.attackedMode == .physical {
+                state.result *= 2
+            }
+            // 물리 공격 2배
+            return state
+        case .hugePower:
+            if state.attackedMode == .physical {
+                state.result *= 2
+            }
+            // 물리 공격 2배
+            return state
+        case .steelworker:
+            if TypeFilter(rawValue: state.type) == .steel {
+                state.result *= 1.5
+            }
+            // 강철타입 기술 1.5배
+            return state
+        case .steelySpirit:
+            if TypeFilter(rawValue: state.type) == .steel {
+                state.result *= 1.5
+            }
+            // 강철타입 기술 1.5배
+            return state
+        case .toughClaws:
+            if let contact = state.battleModifier[.contact], contact {
+                state.result *= 1.3
+            }
+            // 접촉기술 1.3배
+            return state
+        case .toxicBoost:
+            if StatusCondition(rawValue: state.status) == .poison {
+                state.result *= 1.5
+            }
+            // 독 상태에 1.5배
+            return state
+        case .flareBoost:
+            if StatusCondition(rawValue: state.status) == .burn, state.attackedMode == .special {
+                state.result *= 1.5
+            }
+            // 화상의 경우 특수공격 1.5배
+            return state
+        case .sandForce:
+            if WeatherCondition(rawValue: state.weather) == .sandstorm,
+               [
+                TypeFilter.ground.rawValue,
+                TypeFilter.rock.rawValue,
+                TypeFilter.steel.rawValue
+               ].contains(state.type) {
+                state.result *= 1.3
+            }
+            // 모래바람 상태에서, 땅/바위/강철 위력 1.3배
+            return state
+        case .rockyPayload:
+            if TypeFilter(rawValue: state.type) == .rock {
+                state.result *= 1.5
+            }
+            // 바위타입 기술 위력 1.5배
+            return state
+        case .waterBubble:
+            if TypeFilter(rawValue: state.type) == .water {
+                state.result *= 2
+            }
+            // 물타입 기술 위력 2배
+            return state
+        case .sharpness:
+            if let cutting = state.battleModifier[.cutting], cutting {
+                state.result *= 1.5
+            }
+            // 베기 기술 1.5배
+            return state
+        case .strongJaw:
+            if let bitting = state.battleModifier[.bitting], bitting {
+                state.result *= 1.5
+            }
+            // 물기 기술 1.5배
+            return state
+        case .dragonsMaw:
+            if TypeFilter(rawValue: state.type) == .dragon {
+                state.result *= 1.5
+            }
+            // 드래곤 기술 1.5배
+            return state
+        case .transistor:
+            if TypeFilter(rawValue: state.type) == .electric {
+                state.result *= 1.5
+            }
+            // 전기 기술 1.5배
+            return state
+        case .punkRock:
+            if let sounding = state.battleModifier[.sounding], sounding {
+                state.result *= 1.3
+            }
+            // 소리 기술 1.3배
+            return state
+        case .megaLauncher:
+            if let wave = state.battleModifier[.wave], wave {
+                state.result *= 1.5
+            }
+            // 파동 기술 1.5배
+            return state
+        case .guts:
+            if state.attackedMode == .physical {
+                if StatusCondition(rawValue: state.status) == .burn {
+                    state.result *= 3
+                } else if StatusCondition(rawValue: state.status) != StatusCondition.none {
+                    state.result *= 1.5
+                }
+            }
+            // 화상의 경우 특수공격 1.5배
+            // 상태이상 시 공격 1.5배
+            // 화상의 절반 효과 받지 않음
+            return state
+        case .hustle:
+            if state.attackedMode == .physical {
+                state.result *= 1.5
+            }
+            // 공격 1.5배
+            return state
+        case .solarPower:
+            if WeatherCondition(rawValue: state.weather) == .sunny, state.attackedMode == .special {
+                state.result *= 1.5
+            }
+            // 쾌청 시 특수공격 1.5배
+            return state
+        case .adaptability:
+            if state.types.contains(state.type) {
+                state.result *= (4/3)
+            }
+            // 자속보정이 2배 들어감
+            return state
+        case .neuroforce:
+            if CompatibilityCategory(rawValue: state.multiple) == .double ||
+                CompatibilityCategory(rawValue: state.multiple) == .quadruple {
+                state.result *= 1.2
+            }
+            // 효과가 뛰어날 경우 1.2배 증가
+            return state
+        case .blaze:
+            if TypeFilter(rawValue: state.type) == .fire {
+                state.result *= 1.5
+            }
+            // 불꽃 1.5배
+            return state
+        case .torrent:
+            if TypeFilter(rawValue: state.type) == .water {
+                state.result *= 1.5
+            }
+            // 물 1.5배
+            return state
+        case .overgrow:
+            if TypeFilter(rawValue: state.type) == .grass {
+                state.result *= 1.5
+            }
+            // 풀 1.5배
+            return state
+        case .swarm:
+            if TypeFilter(rawValue: state.type) == .bug {
+                state.result *= 1.5
+            }
+            // 벌레 1.5배
+            return state
+        case .normalize:
+            if TypeFilter(rawValue: state.type) != .normal {
+                state.result *= 1.5
+            }
+            state.result *= 1.2
+            // 모든 타입 1.5배 + 1.2배 추가
+            return state
+        case .aerilate:
+            if TypeFilter(rawValue: state.type) == .normal {
+                state.result *= 1.5
+            }
+            if TypeFilter(rawValue: state.type) == .normal ||
+                TypeFilter(rawValue: state.type) == .flying {
+                state.result *= 1.2
+            }
+            // 노말 타입 -> 비행 1.5배 + 1.2배 추가
+            return state
+        case .galvanize:
+            if TypeFilter(rawValue: state.type) == .normal {
+                state.result *= 1.5
+            }
+            if TypeFilter(rawValue: state.type) == .normal ||
+                TypeFilter(rawValue: state.type) == .electric {
+                state.result *= 1.2
+            }
+            // 노말 타입 -> 전기 1.5배 + 1.2배 추가
+            return state
+        case .refrigerate:
+            if TypeFilter(rawValue: state.type) == .normal {
+                state.result *= 1.5
+            }
+            if TypeFilter(rawValue: state.type) == .normal ||
+                TypeFilter(rawValue: state.type) == .ice {
+                state.result *= 1.2
+            }
+            // 노말 타입 -> 얼음 1.5배 + 1.2배 추가
+            return state
+        case .pixilate:
+            if TypeFilter(rawValue: state.type) == .normal {
+                state.result *= 1.5
+            }
+            if TypeFilter(rawValue: state.type) == .normal ||
+                TypeFilter(rawValue: state.type) == .fairy {
+                state.result *= 1.2
+            }
+            // 노말 타입 -> 페어리 1.5배 + 1.2배 추가
+            return state
+        case .electromorphosis:
+            if TypeFilter(rawValue: state.type) == .electric {
+                state.result *= 2.0
+            }
+            // 전기타입 2배
+            return state
+        case .windPower:
+            if TypeFilter(rawValue: state.type) == .electric {
+                state.result *= 2.0
+            }
+            // 전기타입 2배
+            return state
+        case .rivalrySameGender:
+            state.result *= 1.25
+            // 기술 위력 1.25배
+            return state
+        case .rivalryDifferentGender:
+            state.result *= 0.75
+            // 기술 위력 0.75배
+            return state
+        case .analytic:
+            state.result *= 1.3
+            // 기술 위력 1.3배
+            return state
+        case .sheerForce:
+            if let sideEffect = state.battleModifier[.sideEffect], sideEffect {
+                state.result *= 1.3
+            }
+            // 추가효과 기술 1.3배
+            return state
+        case .stakeout:
+            if let change = state.battleModifier[.change], change {
+                state.result *= 1.3
+            }
+            // 교체/난입한 상대에게 2배
+            return state
+        case .parentalBond:
+            if state.attackedMode == .physical {
+                state.result *= 1.25
+            }
+            // 공격기술 1.25배
+            return state
+        case .supremeOverlord1:
+            state.result *= 1.1
+            // 공,특공 1.1배
+            return state
+        case .supremeOverlord2:
+            state.result *= 1.2
+            // 공,특공 1.2배
+            return state
+        case .supremeOverlord3:
+            state.result *= 1.3
+            // 공,특공 1.3배
+            return state
+        case .supremeOverlord4:
+            state.result *= 1.4
+            // 공,특공 1.4배
+            return state
+        case .supremeOverlord5:
+            state.result *= 1.5
+            // 공,특공 1.5배
+            return state
+        case .plus:
+            if let withMinus = state.battleModifier[.withMinus], withMinus, state.attackedMode == .special {
+                state.result *= 1.5
+            }
+            // 마이너스와 함께 있으면 특공 1.5배 상승
+            return state
+        case .minus:
+            if let withPlus = state.battleModifier[.withPlus], withPlus, state.attackedMode == .special {
+                state.result *= 1.5
+            }
+            // 플러스와 함꼐 있으면 특공 1.5배 상승
+            return state
+        case .sniper:
+            if let criticalHit = state.battleModifier[.criticalHit], criticalHit {
+                state.result *= 1.5
+            }
+            // 급소 시 2.25배 증가
+            return state
+        case .tintedLens:
+            if CompatibilityCategory(rawValue: state.multiple) == .half ||
+                CompatibilityCategory(rawValue: state.multiple) == .halfOfhalf {
+                state.result *= 2
+            }
+            // 반감기는 2배가 됨 (0.5 -> 1, 0.25 -> 0.5)
+            return state
+        case .slowStart:
+            if PokemonAbility(rawValue: state.ability) == .slowStart, state.attackedMode == .physical {
+                state.result *= 0.5
+            }
+            // 슬로스타트 공격력 0.5배
+            return state
+        case .defeatist:
+            state.result *= 0.5
+            // 공/특공 0.5배
+            return state
+        case .gorillaTactics:
+            if state.attackedMode == .physical {
+                state.result *= 1.5
+            }
+            // 공격 1.5배
+            return state
+        case .protosynthesis:
+            if PokemonItem(rawValue: state.item) == .boosterEnergy ||
+                WeatherCondition(rawValue: state.weather) == .sunny {
+                state.result *= 1.3
+            }
+            // 부스트에너지를 지니고 있거나, 쾌청일 때 가장 높은 능력치 1.3배 증가
+            return state
+        case .quarkDrive:
+            if PokemonItem(rawValue: state.item) == .boosterEnergy ||
+                TerrainCondition(rawValue: state.field) == .electric {
+                state.result *= 1.3
+            }
+            // 부스트에너지를 지니고 있거나, 일렉트릭 필드일 때 가장 높은 능력치 1.3배 증가
+            return state
+        case .orichalcumPulse:
+            if state.attackedMode == .physical {
+                state.result *= 1.5
+            }
+            // 공격 1.5배
+            return state
+        case .hadronEngine:
+            if state.attackedMode == .special {
+                state.result *= 1.5
+            }
+            // 특공 1.5배
+            return state
+        }
+    }
+    
+    /// 원시값 -> case
+    init?(rawValue: String) {
+        if let match = PokemonAbility.allCases.first(where: { $0.rawValue == rawValue }) {
+            self = match
+        } else {
+            return nil
+        }
     }
 }
