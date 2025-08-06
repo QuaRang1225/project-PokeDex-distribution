@@ -11,16 +11,15 @@ import Foundation
 struct PokemonDefenseState: Equatable {
     let name: String                               // 이름
     let types: [String]                            // 타입
+    let hp: Int                                    // 체력
     let pysical: Int                               // 방어
     let special: Int                               // 특방
-    var defenseMode: AttackCondition               // 방어/특방
-    var result: Double = 1.0
     
-    init(type: [String], name: String, pysical: Int, special: Int) {
+    init(type: [String], name: String, hp: Int, pysical: Int, special: Int) {
         self.name = name
+        self.hp = hp
         self.pysical = pysical
         self.special = special
         self.types = type
-        self.defenseMode = .physical
     }
 }
