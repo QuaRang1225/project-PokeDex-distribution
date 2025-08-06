@@ -10,24 +10,92 @@ import Foundation
 /// 전투 중 적용될 수 있는 다양한 보정 효과의 종류를 나타내는 열거형
 enum BattleModifierType: String, CaseIterable {
     
-    case criticalHit = "급소"
+    case criticalHit = "급소"     // 1.5
+    case recoid = "반동기술"
+    case punch = "펀치기술"
+    case contact = "접촉기술"
+    case cutting = "베기계열"
+    case bitting = "물기계열"
+    case sounding = "소리계열"
+    case wave = "파동계열"
+    case sideEffect = "추가효과기술"
+    case change = "상대교체"
     case charge = "충전"
-    case helpingHand = "도우미"
-    case battery = "배터리"
-    case powerSpot = "파워스폿"
-    case friendGuard = "프렌드가드"
-    case flowerGift = "플라워기프트"
-    case fairyAura = "페어리오라"
-    case darkAura = "다크오라"
-    case auraBreak = "오라브레이크"
-    case tabletsOfRuin = "재앙의목간"
-    case swordOfRuin = "재앙의검"
-    case vesselOfRuin = "재앙의그릇"
-    case beadsOfRuin = "재앙의구슬"
-    case steelySpirit = "강철정신"
+    case withMinus = "마이너스"
+    case withPlus = "플러스"
+    case helpingHand = "도우미"    // 위력 1.5배
+    case battery = "배터리"        // 위력 1.3배
+    case powerSpot = "파워스폿"     // 위력 1.3배
+    case flowerGift = "플라워기프트"  // 공격/특방 1.5배
+    case fairyAura = "페어리오라"    // 페어리 위력 1.3배
+    case darkAura = "다크오라"      // 악 위력 1.3배
+    case auraBreak = "오라브레이크"   // 악/페어리 위력 0.7배
+    case tabletsOfRuin = "재앙의목간"    // 공격 0.75배
+    case vesselOfRuin = "재앙의그릇"  // 특공 0.75배
     
     /// 한글 보정 효과 이름을 반환합니다.
     var koreanName: String {
         return self.rawValue
+    }
+    
+    /// 포켓몬 상태 계산
+    func calculate(state: inout PokemonState) -> PokemonState {
+        switch self {
+        case .criticalHit:
+            state.result *= 1.5
+            return state
+        case .helpingHand:
+            state.result *= 1.5
+            return state
+        case .battery:
+            if state.attackedMode == .special {
+                state.result *= 1.3
+            }
+            return state
+        case .powerSpot:
+            state.result *= 1.3
+            return state
+        case .flowerGift:
+            if state.attackedMode == .physical {
+                state.result *= 1.5
+            }
+            return state
+        case .fairyAura:
+            if TypeFilter(rawValue: state.type) == .fairy {
+                state.result *= 1.3
+            }
+            return state
+        case .darkAura:
+            if TypeFilter(rawValue: state.type) == .dark {
+                state.result *= 1.3
+            }
+            return state
+        case .auraBreak:
+            if TypeFilter(rawValue: state.type) == .fairy ||
+                TypeFilter(rawValue: state.type) == .dark {
+                state.result *= 0.7
+            }
+            return state
+        case .tabletsOfRuin:
+            if state.attackedMode == .physical {
+                state.result *= 0.75
+            }
+            return state
+        case .vesselOfRuin:
+            if state.attackedMode == .special {
+                state.result *= 0.75
+            }
+            return state
+        default:
+            return state
+        }
+    }
+    
+    init?(rawValue: String) {
+        if let match = BattleModifierType.allCases.first(where: { $0.rawValue == rawValue }) {
+            self = match
+        } else {
+            return nil
+        }
     }
 }
