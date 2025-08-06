@@ -27,6 +27,7 @@ struct CustomPicker<T: Hashable & LosslessStringConvertible>: View {
         } label: {
             HStack {
                 Text(selected.description)
+                    .font(.device)
                     .foregroundColor(.primary)
                 Spacer()
                 Image(systemName: "chevron.up.chevron.down")

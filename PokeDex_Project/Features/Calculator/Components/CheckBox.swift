@@ -20,6 +20,7 @@ struct CheckBox: View {
         } label: {
             Label {
                 Text(label)
+                    .font(.device)
                     .foregroundColor(.primary)
             } icon: {
                 Image(systemName: isChecked ? "checkmark.square.fill" : "square")

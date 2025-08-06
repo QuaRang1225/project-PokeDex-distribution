@@ -20,6 +20,7 @@ struct NumericalCellView : View {
                 .padding()
                 .keyboardType(.numberPad)
                 .borderSection(title: title)
+                .font(.device)
             Spacer()
             VStack {
                 Button {
@@ -65,6 +66,7 @@ private extension NumericalCellView {
                     .fontWeight(.heavy)
                     .foregroundStyle(.white)
                     .shadow(color: .black, radius: 1)
+                    .font(.device)
             }
             .foregroundStyle(color)
     }
