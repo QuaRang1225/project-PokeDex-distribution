@@ -50,8 +50,24 @@ extension View {
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
-    /// 패드 여부
+    /// 패드 여부 - 미니는 패드가 아닌 것으로 분류함
     var isIpad: Bool {
-        UIDevice.current.userInterfaceIdiom == .pad
+        guard UIDevice.current.userInterfaceIdiom == .pad else {
+            return false
+        }
+        
+        let nativeBounds = UIScreen.main.nativeBounds
+        let nativeWidth = nativeBounds.width
+        let nativeHeight = nativeBounds.height
+        
+        // iPad mini 4, 5: 1536 x 2048
+        // iPad mini 6: 1488 x 2266
+        if (nativeWidth == 1536 && nativeHeight == 2048) || (nativeWidth == 2048 && nativeHeight == 1536) {
+            return false // iPad mini 4, 5
+        } else if (nativeWidth == 1488 && nativeHeight == 2266) || (nativeWidth == 2266 && nativeHeight == 1488) {
+            return false // iPad mini 6
+        }
+
+        return true
     }
 }
