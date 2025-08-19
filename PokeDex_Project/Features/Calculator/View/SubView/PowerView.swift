@@ -63,7 +63,7 @@ private extension PowerView {
         CustomPicker(
             selected: viewStore.binding(
                 get: \.pokemonState.power,
-                send: { .selectedPower($0) }
+                send: { .view(.selectedPower($0)) }
             ),
             options: Array(stride(from: 10, through: 250, by: 5).map{ "\($0)" }),
             color: viewStore.pokemonState.types[0].typeColor
@@ -76,7 +76,7 @@ private extension PowerView {
         CustomPicker(
             selected: viewStore.binding(
                 get: \.pokemonState.type,
-                send: { .selectedType($0) }
+                send: { .view(.selectedType($0)) }
             ),
             options: TypeFilter.allCases.map(\.rawValue),
             color: viewStore.pokemonState.types[0].typeColor
@@ -89,7 +89,7 @@ private extension PowerView {
         HStack {
             ForEach(AttackCondition.allCases, id: \.rawValue) { filter in
                 Button {
-                    viewStore.send(.selectedAttack(filter))
+                    viewStore.send(.view(.selectedAttack(filter)))
                 } label: {
                     Image(filter.rawValue)
                         .resizable()
@@ -116,7 +116,7 @@ private extension PowerView {
             label: "테라스탈",
             color: viewStore.pokemonState.types[0].typeColor,
             isChecked: viewStore.pokemonState.isTherastal) {
-            viewStore.send(.checkedTherastal)
+                viewStore.send(.view(.checkedTherastal))
         }
         .padding(.leading)
         .zIndex(0)
@@ -128,14 +128,14 @@ private extension PowerView {
                 .fontWeight(.heavy)
             TextField("레벨", text: viewStore.binding(
                 get: \.level,
-                send: { .inputtedLevel($0) })
+                send: { .view(.inputtedLevel($0)) })
             )
             .multilineTextAlignment(.trailing)
             .textFieldStyle(.roundedBorder)
             .keyboardType(.numberPad)
             .frame(width: 80)
             .onChange(of: viewStore.level) { newValue in
-                viewStore.send(.inputtedLevel(newValue))
+                viewStore.send(.view(.inputtedLevel(newValue)))
             }
         }
         .font(.device)
@@ -148,7 +148,7 @@ private extension PowerView {
             arrange: (0...252),
             value: viewStore.binding(
                 get: \.efforts,
-                send: { .changedEfforts($0) }
+                send: { .view(.changedEfforts($0)) }
             )
         )
     }
@@ -160,7 +160,7 @@ private extension PowerView {
             arrange: (0...31),
             value: viewStore.binding(
                 get: \.object,
-                send: { .changedObjects($0) }
+                send: { .view(.changedObjects($0)) }
             )
         )
     }
@@ -172,7 +172,7 @@ private extension PowerView {
             arrange: (-6...6),
             value: viewStore.binding(
                 get: \.pokemonState.rankUp,
-                send: { .changedRankUp($0) }
+                send: { .view(.changedRankUp($0)) }
             )
         )
     }
@@ -181,7 +181,7 @@ private extension PowerView {
         HStack {
             ForEach([0.9, 1, 1.1], id: \.self) { value in
                 Button {
-                    viewStore.send(.changedPersonality(value))
+                    viewStore.send(.view(.changedPersonality(value)))
                 } label: {
                     Text(String(format: "%.1f", value))
                         .foregroundColor(.primary)
@@ -203,7 +203,7 @@ private extension PowerView {
         CustomPicker(
             selected: viewStore.binding(
                 get: \.pokemonState.compatibility,
-                send: { .inputtedCompatibility($0) }
+                send: { .view(.inputtedCompatibility($0)) }
             ),
             options: CompatibilityCondition.allCases.map(\.rawValue),
             color: viewStore.pokemonState.types[0].typeColor
@@ -216,7 +216,7 @@ private extension PowerView {
         CustomPicker(
             selected: viewStore.binding(
                 get: \.pokemonState.status,
-                send: { .selectedStatus($0) }
+                send: { .view(.selectedStatus($0)) }
             ),
             options: StatusCondition.allCases.map(\.rawValue),
             color: viewStore.pokemonState.types[0].typeColor
@@ -228,7 +228,7 @@ private extension PowerView {
         CustomPicker(
             selected: viewStore.binding(
                 get: \.pokemonState.ability,
-                send: { .selectedAbility($0) }
+                send: { .view(.selectedAbility($0)) }
             ),
             options: AbilityCondition.allCases.map(\.rawValue),
             color: viewStore.pokemonState.types[0].typeColor
@@ -241,7 +241,7 @@ private extension PowerView {
         CustomPicker(
             selected: viewStore.binding(
                 get: \.pokemonState.weather,
-                send: { .selectedWeather($0) }
+                send: { .view(.selectedWeather($0)) }
             ),
             options: WeatherCondition.allCases.map(\.rawValue),
             color: viewStore.pokemonState.types[0].typeColor
@@ -253,7 +253,7 @@ private extension PowerView {
         CustomPicker(
             selected: viewStore.binding(
                 get: \.pokemonState.item,
-                send: { .selectedItem($0) }
+                send: { .view(.selectedItem($0)) }
             ),
             options: ItemCondition.allCases.map(\.rawValue),
             color: viewStore.pokemonState.types[0].typeColor
@@ -266,7 +266,7 @@ private extension PowerView {
         CustomPicker(
             selected: viewStore.binding(
                 get: \.pokemonState.field,
-                send: { .selectedField($0) }
+                send: { .view(.selectedField($0)) }
             ),
             options: FieldCondition.allCases.map(\.rawValue),
             color: viewStore.pokemonState.types[0].typeColor
@@ -292,7 +292,7 @@ private extension PowerView {
                             label: option.koreanName,
                             color: viewStore.pokemonState.types[0].typeColor,
                             isChecked: checkbox) {
-                                viewStore.send(.checkedBattleModifiers(option))
+                                viewStore.send(.view(.checkedBattleModifiers(option)))
                             }
                     }
                 }
