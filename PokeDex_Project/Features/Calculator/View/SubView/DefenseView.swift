@@ -55,7 +55,7 @@ extension DefenseView {
         HStack {
             ForEach(AttackCondition.allCases, id: \.rawValue) { filter in
                 Button {
-                    viewStore.send(.selectedDefense(filter))
+                    viewStore.send(.view(.selectedDefense(filter)))
                 } label: {
                     Image(filter.rawValue)
                         .resizable()
@@ -89,7 +89,7 @@ extension DefenseView {
             arrange: (0...252),
             value: viewStore.binding(
                 get: \.hp_efforts,
-                send: { .changedHPEfforts($0) }
+                send: { .view(.changedHPEfforts($0)) }
             )
         )
     }
@@ -101,7 +101,7 @@ extension DefenseView {
             arrange: (0...31),
             value: viewStore.binding(
                 get: \.hp_object,
-                send: { .changedHPObjects($0) }
+                send: { .view(.changedHPObjects($0)) }
             )
         )
     }
@@ -118,7 +118,7 @@ extension DefenseView {
             arrange: (0...252),
             value: viewStore.binding(
                 get: \.defense_efforts,
-                send: { .changedDefenseEfforts($0) }
+                send: { .view(.changedDefenseEfforts($0)) }
             )
         )
     }
@@ -130,7 +130,7 @@ extension DefenseView {
             arrange: (0...31),
             value: viewStore.binding(
                 get: \.defense_object,
-                send: { .changedDefenseObjects($0) }
+                send: { .view(.changedDefenseObjects($0)) }
             )
         )
     }
@@ -141,14 +141,14 @@ extension DefenseView {
                 .fontWeight(.heavy)
             TextField("레벨", text: viewStore.binding(
                 get: \.level,
-                send: { .inputtedLevel($0) })
+                send: { .view(.inputtedLevel($0)) })
             )
             .multilineTextAlignment(.trailing)
             .textFieldStyle(.roundedBorder)
             .keyboardType(.numberPad)
             .frame(width: 80)
             .onChange(of: viewStore.level) { newValue in
-                viewStore.send(.inputtedLevel(newValue))
+                viewStore.send(.view(.inputtedLevel(newValue)))
             }
         }
         .font(.device)
@@ -161,7 +161,7 @@ extension DefenseView {
             arrange: (-6...6),
             value: viewStore.binding(
                 get: \.rankUp,
-                send: { .changedRankUp($0) }
+                send: { .view(.changedRankUp($0)) }
             )
         )
     }
@@ -170,7 +170,7 @@ extension DefenseView {
         HStack {
             ForEach([0.9, 1, 1.1], id: \.self) { value in
                 Button {
-                    viewStore.send(.changedPersonality(value))
+                    viewStore.send(.view(.changedPersonality(value)))
                 } label: {
                     Text(String(format: "%.1f", value))
                         .foregroundColor(.primary)
