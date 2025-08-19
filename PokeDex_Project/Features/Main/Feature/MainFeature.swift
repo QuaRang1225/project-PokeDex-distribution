@@ -52,7 +52,7 @@ struct MainFeature: Reducer {
         case lastPokemonReached                                                     // 스크롤이 마지막에 다다랐을 때
     }
     /// 상위에서 접근할 Feature 액션
-    @CasePathable enum ParentAction: Equatable {
+    @CasePathable enum DelegateAction: Equatable {
         case selectedRegion(region: String)                                         // 지역 선택
     }
     /// 하위 Feature 액션
@@ -69,7 +69,7 @@ struct MainFeature: Reducer {
         case view(ViewAction)
         case childView(ChildViewAction)
         case inside(InsideAction)
-        case parent(ParentAction)
+        case delegate(DelegateAction)
         case child(ChildAction)
         case cell(CellAction)
     }
@@ -110,8 +110,8 @@ struct MainFeature: Reducer {
                     return lastPokemonReached(&state)
                 }
 
-            case let .parent(parentAction):
-                switch parentAction {
+            case let .delegate(delegateAction):
+                switch delegateAction {
                 case let .selectedRegion(region):
                     return fetchPokemons(&state, query: PokemonsQuery(region: region))
                 }
@@ -126,9 +126,6 @@ struct MainFeature: Reducer {
 
             case let .cell(.pokemonCellFeature(.element(id, .delegate(.didTapCell)))):
                 return movePokemonDetailsView(&state, id: id)
-
-            default:
-                return .none
             }
         }
         .forEach(\.pokemonCellStates, action: \.cell.pokemonCellFeature) {
