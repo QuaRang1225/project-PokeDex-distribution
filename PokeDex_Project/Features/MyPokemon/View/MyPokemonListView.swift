@@ -34,12 +34,12 @@ struct MyPokemonListView: View {
                 }
             }
             .onAppear {
-                viewStore.send(.viewDidLoad)
+                viewStore.send(.view(.viewDidLoad))
             }
             .navigationDestination(
                 item: viewStore.binding(
                     get: \.pokemonDetailState,
-                    send: { _ in .dismissPokemonDetail } // nil로 바꿀 때 액션 전달
+                    send: { _ in .childView(.dismissPokemonDetail) } // nil로 바꿀 때 액션 전달
                 )
             ) { id in
                 pokemonDetailsView
@@ -59,7 +59,7 @@ private extension MyPokemonListView {
     /// 전체 삭제 버튼
     func removeAllButton(viewStore: MyPokemonListStore) -> some View {
         Button {
-            viewStore.send(.removeAllPokemon)
+            viewStore.send(.view(.removeAllPokemon))
         } label: {
             Label {
                 Text("전체삭제")
@@ -75,16 +75,16 @@ private extension MyPokemonListView {
         List{
             ForEach(viewStore.pokemons,id: \.self){ pokemon in
                 Button {
-                    viewStore.send(.didTappedPokemonCell(pokemon.num))
+                    viewStore.send(.view(.didTappedPokemonCell(pokemon.num)))
                 } label: {
                     MyPokemonListCellView(pokemon: pokemon)
                 }
             }
             .onMove { fromOffset, toOffset in
-                viewStore.send(.movePokemon(fromOffset, toOffset))
+                viewStore.send(.view(.movePokemon(fromOffset, toOffset)))
             }
             .onDelete { offsets in
-                viewStore.send(.removePokemon(offsets))
+                viewStore.send(.view(.removePokemon(offsets)))
             }
         }
         .listStyle(.inset)
@@ -93,7 +93,7 @@ private extension MyPokemonListView {
     /// 포켓몬 상세 뷰
     private var pokemonDetailsView: some View {
         IfLetStore(
-            store.scope(state: \.pokemonDetailState, action: \.pokemonDetailsAction)
+            store.scope(state: \.pokemonDetailState, action: \.child.pokemonDetailsAction)
         ) { store in
             PokemonDetailsView(store: store)
                 .navigationBarBackButtonHidden(true)
