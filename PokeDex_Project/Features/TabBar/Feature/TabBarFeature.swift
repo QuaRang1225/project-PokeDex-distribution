@@ -76,7 +76,7 @@ extension TabBarFeature {
         func selectedRegion() -> Effect<Action> {
             let region = state.regionListState.region.rawValue        // 지역 리스트 피쳐의 state 값 가져옴
             state.showRegionList = false
-            return .send(.mainAction(.delegate(.selectedRegion(region: region))))
+            return .send(.mainAction(.parent(.selectedRegion(region: region))))
         }
         
         /// 지역리스트 뷰 닫기 이벤트

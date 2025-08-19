@@ -35,64 +35,106 @@ struct MainFeature: Reducer {
         var pokemonDetailsState: PokemonDetailsFeature.State? = nil                     // 포켓몬 상세 뷰 상태
     }
     
-    @CasePathable enum Action: Equatable {
+    /// 사용자 액션
+    @CasePathable enum ViewAction: Equatable {
         case viewDidLoad                                                            // 뷰 로드 후
-        case recievedPokemons(result: PokemonResult, isAppend: Bool)                // 데이터 요청 후
         case didTappedSearchButton                                                  // 검색 버튼 터치
-        case scrollUpList
-        case lastPokemonReached
-        case delegate(Delegate)                                                     // 상위 Feature에서 구현할 액션
-        
-        // 하위 Feature 액션 정의
+        case scrollUpList                                                           // 리스트 스크롤 업
+    }
+    /// 하위뷰 사용자 액션
+    @CasePathable enum ChildViewAction: Equatable {
+        case dismissSearchView                                                      // 검색화면 닫기
+        case dismissPokemonDetail                                                   // 상세화면 닫기
+    }
+    /// 내부 액션
+    @CasePathable enum InsideAction: Equatable {
+        case recievedPokemons(result: PokemonResult, isAppend: Bool)                // 데이터 요청 후
+        case lastPokemonReached                                                     // 스크롤이 마지막에 다다랐을 때
+    }
+    /// 상위에서 접근할 Feature 액션
+    @CasePathable enum ParentAction: Equatable {
+        case selectedRegion(region: String)                                         // 지역 선택
+    }
+    /// 하위 Feature 액션
+    @CasePathable enum ChildAction: Equatable {
         case searchBoardAction(action: SearchBoardFeature.Action)                   // 검색보드 액션
         case pokemonDetailsAction(action: PokemonDetailsFeature.Action)             // 포켓몬 상세 뷰 액션
-        
-        // 포켓몬 선택 관련 액션 정의
+    }
+    /// 셀 액션
+    @CasePathable enum CellAction: Equatable {
         case pokemonCellFeature(IdentifiedActionOf<PokemonCellFeature>)             // 포켓몬 셀 상태, 액션 정의
-        case dismissSearchView// 상세화면 열기
-        case dismissPokemonDetail                                                   // 상세화면 닫기
-        
-        enum Delegate: Equatable {
-            case selectedRegion(region: String)                                     // 지역 선택
-        }
+    }
+    /// 액션 정의
+    @CasePathable enum Action: Equatable {
+        case view(ViewAction)
+        case childView(ChildViewAction)
+        case inside(InsideAction)
+        case parent(ParentAction)
+        case child(ChildAction)
+        case cell(CellAction)
     }
     
     @Dependency(\.pokemonListClient) var pokemonListClient
     
     var body: some ReducerOf<Self> {
         // 하위 이벤트 연결
-        Scope(state: \.searchBoardState, action: \.searchBoardAction) { SearchBoardFeature() }
+        Scope(state: \.searchBoardState, action: \.child.searchBoardAction) {
+            SearchBoardFeature()
+        }
         
         Reduce { state, action in
             switch action {
-            case .viewDidLoad:
-                return fetchPokemons(&state)
-            case let .recievedPokemons(result, isAppend):
-                return setPokemons(&state, result: result, isAppend: isAppend)
-            case .didTappedSearchButton:
-                return showSearchBoard(&state)
-            case let .searchBoardAction(action):
-                return executeSearchBoardFeature(&state, action: action)
-            case .scrollUpList:
-                return fetchNextPokemons(&state)
-            case .lastPokemonReached:
-                return lastPokemonReached(&state)
-            case let .delegate(.selectedRegion(region)):
-                return fetchPokemons(&state, query: PokemonsQuery(region: region))
-            case let .pokemonCellFeature(.element(id, .delegate(.didTapCell))):
+            case let .view(viewAction):
+                switch viewAction {
+                case .viewDidLoad:
+                    return fetchPokemons(&state)
+                case .didTappedSearchButton:
+                    return showSearchBoard(&state)
+                case .scrollUpList:
+                    return fetchNextPokemons(&state)
+                }
+
+            case let .childView(childViewAction):
+                switch childViewAction {
+                case .dismissSearchView:
+                    return dismissSearchBoard(&state)
+                case .dismissPokemonDetail:
+                    return dismissPokemonDetailsView(&state)
+                }
+
+            case let .inside(insideAction):
+                switch insideAction {
+                case let .recievedPokemons(result, isAppend):
+                    return setPokemons(&state, result: result, isAppend: isAppend)
+                case .lastPokemonReached:
+                    return lastPokemonReached(&state)
+                }
+
+            case let .parent(parentAction):
+                switch parentAction {
+                case let .selectedRegion(region):
+                    return fetchPokemons(&state, query: PokemonsQuery(region: region))
+                }
+
+            case let .child(childAction):
+                switch childAction {
+                case let .searchBoardAction(action):
+                    return executeSearchBoardFeature(&state, action: action)
+                case let .pokemonDetailsAction(action):
+                    return executePokemonDetailFeature(&state, action: action)
+                }
+
+            case let .cell(.pokemonCellFeature(.element(id, .delegate(.didTapCell)))):
                 return movePokemonDetailsView(&state, id: id)
-            case .dismissPokemonDetail:
-                return dismissPokemonDetailsView(&state)
-            case .dismissSearchView:
-                return dismissSearchBoard(&state)
-            case let .pokemonDetailsAction(action):
-                return executePokemonDetailFeature(&state, action: action)
+
+            default:
+                return .none
             }
         }
-        .forEach(\.pokemonCellStates, action: \.pokemonCellFeature) {
+        .forEach(\.pokemonCellStates, action: \.cell.pokemonCellFeature) {
             PokemonCellFeature()
         }
-        .ifLet(\.pokemonDetailsState, action: \.pokemonDetailsAction) {
+        .ifLet(\.pokemonDetailsState, action: \.child.pokemonDetailsAction) {
             PokemonDetailsFeature()
         }
     }
@@ -106,9 +148,9 @@ struct MainFeature: Reducer {
         return .run { send in
             do {
                 let pokemons = try await pokemonListClient.fetchPokemons(query.page, query.region, query.types, query.query)
-                await send(.recievedPokemons(result: .success(pokemons), isAppend: false))
+                await send(.inside(.recievedPokemons(result: .success(pokemons), isAppend: false)))
             } catch let error as NetworkError {
-                await send(.recievedPokemons(result: .failure(error), isAppend: false))
+                await send(.inside(.recievedPokemons(result: .failure(error), isAppend: false)))
             }
         }
     }
@@ -147,7 +189,7 @@ struct MainFeature: Reducer {
               let totalPage = state.pokemons?.totalPages,
               currentPage < totalPage else {
             // 아닐 경우 마지막이라는 이벤트 방출
-            return .send(.lastPokemonReached)
+            return .send(.inside(.lastPokemonReached))
         }
         state.currentQuery.page += 1
         state.pokemons?.currentPage += 1
@@ -156,9 +198,9 @@ struct MainFeature: Reducer {
         return .run { send in
             do {
                 let pokemons = try await pokemonListClient.fetchPokemons(query.page, query.region, query.types, query.query)
-                await send(.recievedPokemons(result: .success(pokemons), isAppend: true))
+                await send(.inside(.recievedPokemons(result: .success(pokemons), isAppend: true)))
             } catch let error as NetworkError {
-                await send(.recievedPokemons(result: .failure(error), isAppend: true))
+                await send(.inside(.recievedPokemons(result: .failure(error), isAppend: true)))
             }
         }
     }
