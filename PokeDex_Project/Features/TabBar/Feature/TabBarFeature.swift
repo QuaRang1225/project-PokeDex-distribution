@@ -20,30 +20,43 @@ struct TabBarFeature: Reducer {
         var mainState = MainFeature.State()
         var myPokemonListState = MyPokemonListFeature.State()
     }
-    
-    @CasePathable enum Action: Equatable {
-        case selectTab(tab: TabFilter)
+    /// 사용자 액션
+    @CasePathable enum ViewAction: Equatable {
+        case selectTab(tab: TabFilter)                              // 탭바 선택
         case didTapFloatingButton                                   // 플로팅 버튼 액션 추가
-        
-        case regionListAction(RegionListFeature.Action)             // 하위 Feature 액션
-        case mainAction(MainFeature.Action)
-        case myPokemonListAction(MyPokemonListFeature.Action)
+    }
+    /// 하위 Feature 액션
+    @CasePathable enum ChildAction: Equatable {
+        case regionListAction(RegionListFeature.Action)             // 지역리스트 Feature 액션
+        case mainAction(MainFeature.Action)                         // 메인 Feature 액션
+        case myPokemonListAction(MyPokemonListFeature.Action)       //
+    }
+    /// 액션 정의
+    @CasePathable enum Action: Equatable {
+        case view(ViewAction)
+        case child(ChildAction)
     }
     
     var body: some ReducerOf<Self> {
-        Scope(state: \.mainState, action: \.mainAction) { MainFeature() }
-        Scope(state: \.myPokemonListState, action: \.myPokemonListAction) { MyPokemonListFeature() }
-        Scope(state: \.regionListState, action: \.regionListAction) { RegionListFeature() }
+        Scope(state: \.mainState, action: \.child.mainAction) { MainFeature() }
+        Scope(state: \.myPokemonListState, action: \.child.myPokemonListAction) { MyPokemonListFeature() }
+        Scope(state: \.regionListState, action: \.child.regionListAction) { RegionListFeature() }
 
         Reduce { state, action in
             switch action {
-            case let .selectTab(tab):
-                return setTab(&state, tab: tab)
-            case .didTapFloatingButton:
-                return didTapFloatingButton(&state)
-            case let .regionListAction(action):
-                return executeRegionListFeature(&state, action: action)
-            default: return .none
+            case let .view(viewAction):
+                switch viewAction {
+                case let .selectTab(tab):
+                    return setTab(&state, tab: tab)
+                case .didTapFloatingButton:
+                    return didTapFloatingButton(&state)
+                }
+            case let .child(childAction):
+                switch childAction {
+                case let .regionListAction(action):
+                    return executeRegionListFeature(&state, action: action)
+                default: return .none
+                }
             }
         }
     }
@@ -76,7 +89,7 @@ extension TabBarFeature {
         func selectedRegion() -> Effect<Action> {
             let region = state.regionListState.region.rawValue        // 지역 리스트 피쳐의 state 값 가져옴
             state.showRegionList = false
-            return .send(.mainAction(.parent(.selectedRegion(region: region))))
+            return .send(.child(.mainAction(.parent(.selectedRegion(region: region)))))
         }
         
         /// 지역리스트 뷰 닫기 이벤트

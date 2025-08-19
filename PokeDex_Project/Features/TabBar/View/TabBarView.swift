@@ -18,7 +18,7 @@ struct TabBarView: View {
             ZStack(alignment: .bottom) { 
                 TabView(selection: viewStore.binding(
                     get: \.selectedTab,
-                    send: TabBarFeature.Action.selectTab
+                    send: { .view(.selectTab(tab: $0)) }
                 )) {
                     mainView
                     myPokemonListView
@@ -37,7 +37,7 @@ private extension TabBarView {
         MainView(
             store: store.scope(
                 state: \.mainState,
-                action: \.mainAction
+                action: \.child.mainAction
             )
         )
         .tabItem {
@@ -50,7 +50,7 @@ private extension TabBarView {
         MyPokemonListView(
             store: store.scope(
                 state: \.myPokemonListState,
-                action: \.myPokemonListAction
+                action: \.child.myPokemonListAction
             )
         )
         .tabItem {
@@ -63,7 +63,7 @@ private extension TabBarView {
     func floatingButton(viewStore: TabBarStore) -> some View {
         if viewStore.state.selectedTab == .home {
             Button {
-                viewStore.send(.didTapFloatingButton)
+                viewStore.send(.view(.didTapFloatingButton))
             } label: {
                 Image(systemName: "circle.grid.3x3")
                     .font(.system(size: 24, weight: .bold))
@@ -89,7 +89,12 @@ private extension TabBarView {
     @ViewBuilder
     func regionListView(viewStore: TabBarStore) -> some View {
         if viewStore.state.showRegionList {
-            RegionListView(store: store.scope(state: \.regionListState, action: \.regionListAction))
+            RegionListView(
+                store: store.scope(
+                    state: \.regionListState,
+                    action: \.child.regionListAction
+                )
+            )
         }
     }
 }
