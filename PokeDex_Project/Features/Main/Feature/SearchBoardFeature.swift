@@ -16,30 +16,37 @@ struct SearchBoardFeature: Reducer {
         var types: [String] = []
         var isAllTypesSelected: Bool = false
     }
-    
-    @CasePathable enum Action: Equatable {
+    /// 사용자 액션
+    @CasePathable enum ViewAction: Equatable {
         case didTappedResetButton                           // 초기화
         case didTappedTypeButton(_ type: String)            // 타입 삭제
         case didTappedTypeListCell(_ type: String)          // 타입 추가
-        case didChangeQuery(String)                         // 쿼리 업데이트
-        case delegate(Delegate)                             // delegate
-        
-        enum Delegate: Equatable {
-            case didTappedSearchButton                      // 검색
-        }
+        case didChangeQuery(_ query: String)                // 쿼리 업데이트
+    }
+    /// 상위에서 접근할 Feature 액션
+    @CasePathable enum DelegateAction: Equatable {
+        case didTappedSearchButton                          // 검색
+    }
+    /// 액션 정의
+    @CasePathable enum Action: Equatable {
+        case view(ViewAction)
+        case delegate(DelegateAction)
     }
     
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .didTappedResetButton:
-                return reset(&state)
-            case let .didTappedTypeButton(type):
-                return deleteType(&state, type: type)
-            case let .didTappedTypeListCell(type):
-                return addType(&state, type: type)
-            case let .didChangeQuery(query):
-                return changeQuery(&state, query: query)
+            case let .view(viewAction):
+                switch viewAction {
+                case .didTappedResetButton:
+                    return reset(&state)
+                case let .didTappedTypeButton(type):
+                    return deleteType(&state, type: type)
+                case let .didTappedTypeListCell(type):
+                    return addType(&state, type: type)
+                case let .didChangeQuery(query):
+                    return changeQuery(&state, query: query)
+                }
             default:
                 return .none
             }

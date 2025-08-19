@@ -48,7 +48,7 @@ extension SearchBoardView {
     /// 초기화 버튼
     private func resetButton(viewStore: SearchBoardStore) -> some View {
         Button {
-            viewStore.send(.didTappedResetButton)
+            viewStore.send(.view(.didTappedResetButton))
         } label: {
             Label(
                 title: { Text("초기화") },
@@ -63,7 +63,7 @@ extension SearchBoardView {
         SearchBar(
             text: viewStore.binding(
                 get: \.query,
-                send: { .didChangeQuery($0) }
+                send: { .view(.didChangeQuery($0)) }
             )
         )
     }
@@ -77,7 +77,7 @@ extension SearchBoardView {
             Spacer()
             ForEach(viewStore.state.types, id: \.self) { type in
                 Button {
-                    viewStore.send(.didTappedTypeButton(type))
+                    viewStore.send(.view(.didTappedTypeButton(type)))
                 } label: {
                     TypesView(type: type, width: width, height: 25, font: .body)
                 }
@@ -93,7 +93,7 @@ extension SearchBoardView {
         LazyVGrid(columns: columns) {
             ForEach(TypeFilter.allCases, id: \.self) { type in
                 Button {
-                    viewStore.send(.didTappedTypeListCell(type.rawValue))
+                    viewStore.send(.view(.didTappedTypeListCell(type.rawValue)))
                 } label: {
                     TypesView(type: type.rawValue, height: 25, font: .body)
                 }
