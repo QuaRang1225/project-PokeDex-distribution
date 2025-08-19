@@ -38,7 +38,7 @@ struct CalculateView: View {
                 }
             }
             .onDidLoad {
-                viewStore.send(.viewDidLoad)
+                viewStore.send(.view(.viewDidLoad))
             }
             .onTapGesture {
                 hideKeyboard()
@@ -121,13 +121,13 @@ private extension CalculateView{
     func modeHandlerView(viewStore: CalculatorStore) -> some View {
         HStack {
             Button {
-                viewStore.send(.selectedMode(.power))
+                viewStore.send(.view(.selectedMode(.power)))
             } label: {
                 Text("공격")
                     .frame(maxWidth: .infinity)
             }
             Button {
-                viewStore.send(.selectedMode(.defense))
+                viewStore.send(.view(.selectedMode(.defense)))
             } label: {
                 Text("방어")
                     .frame(maxWidth: .infinity)
@@ -148,7 +148,7 @@ private extension CalculateView{
     func powerView() -> some View {
         IfLetStore(store.scope(
             state: \.powerState,
-            action: \.powerAction
+            action: \.child.powerAction
         )) { store in
             PowerView(store: store)
         }
@@ -157,7 +157,7 @@ private extension CalculateView{
     func defenseView() -> some View {
         IfLetStore(store.scope(
             state: \.defenseState,
-            action: \.defenseAction
+            action: \.child.defenseAction
         )) { store in
             DefenseView(store: store)
         }
