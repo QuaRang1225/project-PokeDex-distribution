@@ -76,11 +76,12 @@ extension MainView {
         .padding(.trailing)
     }
     /// 리스트 뷰
+    @ViewBuilder
     private func pokemonListView(viewStore: MainStore) -> some View {
         
         let columns = Array(repeating: GridItem(.flexible()), count: 3)
         
-        return ScrollView(.vertical, showsIndicators: true) {
+        ScrollView(.vertical, showsIndicators: true) {
             LazyVGrid(columns: columns) {
                 ForEach(
                     store.scope(
@@ -93,7 +94,7 @@ extension MainView {
                         if viewStore.isLastPokemonReached,
                             viewStore.pokemonCellStates.last?.id == cellViewStore.id {
                             ProgressView()
-                                .onVisible {
+                                .onAppear {
                                     viewStore.send(.view(.scrollUpList))
                                 }
                         }
