@@ -56,7 +56,7 @@ extension RegionListView {
     func regionListView(viewStore: RegionListStore) -> some View {
         ForEach(RegionFilter.allCases, id: \.self) { region in
             Button {
-                viewStore.send(.didTapRegion(region))
+                viewStore.send(.view(.didTapRegion(region)))
             } label: {
                 Text(region.rawValue)
                     .font(.title3)
@@ -69,7 +69,7 @@ extension RegionListView {
     /// 닫기 버튼
     func dismissButton(viewStore: RegionListStore) -> some View {
         Button {
-            viewStore.send(.didTappedDismissButton)
+            viewStore.send(.view(.didTappedDismissButton))
         } label: {
             Image(systemName: "xmark")
                 .font(.title2)

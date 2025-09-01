@@ -29,8 +29,8 @@ struct PowerFeature: Reducer {
             Int(pokemonState.addMutiple) * real * Int(PowerFeature.calculatePower(state: self))
         }
     }
-    
-    @CasePathable enum Action: Equatable {
+    /// 사용자 액션
+    @CasePathable enum ViewAction: Equatable {
         case selectedPower(_ power: Int)                                        // 위력 선택
         case inputtedLevel(_ level: String)                                     // 레벨 선택
         case changedEfforts(_ efforts: String)                                  // 노력치 선택
@@ -46,44 +46,50 @@ struct PowerFeature: Reducer {
         case selectedItem(_ item: ItemCondition)                                // 아이템 선택
         case selectedField(_ field: FieldCondition)                             // 필드 선택
         case checkedBattleModifiers(_ other: BattleCondition)                   // 배들상태 선택
-        case checkedTherastal
+        case checkedTherastal                                                   // 테라스탈 여부 선택
     }
-    
+    /// 액션 정의
+    @CasePathable enum Action: Equatable {
+        case view(ViewAction)
+    }
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case let .selectedPower(power):
-                return updatePower(&state, power: power)
-            case let .selectedType(type):
-                return updateType(&state, type: type)
-            case let .inputtedLevel(level):
-                return updateLevel(&state, level: level)
-            case .checkedTherastal:
-                return updateTherastal(&state)
-            case let .selectedAttack(attack):
-                return updateAttack(&state, attack: attack)
-            case let .changedEfforts(effort):
-                return updateEffort(&state, effort: effort)
-            case let .changedObjects(object):
-                return updateObject(&state, object: object)
-            case let .changedRankUp(rankUp):
-                return updateRankUp(&state, rankUp: rankUp)
-            case let .inputtedCompatibility(compatibility):
-                return updateCompatibility(&state, compatibility: compatibility)
-            case let .selectedStatus(status):
-                return updateStatus(&state, status: status)
-            case let .changedPersonality(personality):
-                return updatePersonality(&state, personality: personality)
-            case let .selectedAbility(ability):
-                return updateAbility(&state, ability: ability)
-            case let .selectedWeather(weather):
-                return updateWeather(&state, weather: weather)
-            case let .selectedItem(item):
-                return updateItem(&state, item: item)
-            case let .selectedField(field):
-                return updateField(&state, field: field)
-            case let .checkedBattleModifiers(other):
-                return updateBattleModifiers(&state, other: other)
+            case let .view(viewAction):
+                switch viewAction {
+                case let .selectedPower(power):
+                    return updatePower(&state, power: power)
+                case let .selectedType(type):
+                    return updateType(&state, type: type)
+                case let .inputtedLevel(level):
+                    return updateLevel(&state, level: level)
+                case .checkedTherastal:
+                    return updateTherastal(&state)
+                case let .selectedAttack(attack):
+                    return updateAttack(&state, attack: attack)
+                case let .changedEfforts(effort):
+                    return updateEffort(&state, effort: effort)
+                case let .changedObjects(object):
+                    return updateObject(&state, object: object)
+                case let .changedRankUp(rankUp):
+                    return updateRankUp(&state, rankUp: rankUp)
+                case let .inputtedCompatibility(compatibility):
+                    return updateCompatibility(&state, compatibility: compatibility)
+                case let .selectedStatus(status):
+                    return updateStatus(&state, status: status)
+                case let .changedPersonality(personality):
+                    return updatePersonality(&state, personality: personality)
+                case let .selectedAbility(ability):
+                    return updateAbility(&state, ability: ability)
+                case let .selectedWeather(weather):
+                    return updateWeather(&state, weather: weather)
+                case let .selectedItem(item):
+                    return updateItem(&state, item: item)
+                case let .selectedField(field):
+                    return updateField(&state, field: field)
+                case let .checkedBattleModifiers(other):
+                    return updateBattleModifiers(&state, other: other)
+                }
             }
         }
     }

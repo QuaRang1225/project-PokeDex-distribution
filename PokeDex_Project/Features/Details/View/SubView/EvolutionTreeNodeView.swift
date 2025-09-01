@@ -23,7 +23,7 @@ struct EvolutionTreeNodeView: View {
                 nextPokemon(viewStore: viewStore)
             }
             .onDidLoad {
-                viewStore.send(.viewDidLoad)
+                viewStore.send(.view(.viewDidLoad))
             }
         }
     }
@@ -34,7 +34,7 @@ extension EvolutionTreeNodeView {
     /// 이미지 버튼
     private func imageButton(viewStore: EvolutionTreeStore) -> some View {
         Button {
-            viewStore.send(.didTappedEvolutionTo)
+            viewStore.send(.view(.didTappedEvolutionTo))
         } label: {
             VStack {
                 HStack {
@@ -68,7 +68,7 @@ extension EvolutionTreeNodeView {
         let columns = Array(repeating: GridItem(.flexible()), count: 3)
         HStack(alignment: .top) {
             ForEachStore(
-                store.scope(state: \.children, action: \.children)
+                store.scope(state: \.children, action: \.delegate.children)
             ) { childStore in
                 EvolutionTreeNodeView(store: childStore)
             }

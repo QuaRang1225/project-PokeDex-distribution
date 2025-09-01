@@ -33,12 +33,12 @@ struct MainView: View {
                 }
             }
             .onDidLoad {
-                viewStore.send(.viewDidLoad)
+                viewStore.send(.view(.viewDidLoad))
             }
             .sheet(
                 isPresented: viewStore.binding(
                     get: \.showSearchBoard,
-                    send: { _ in .dismissSearchView }
+                    send: { _ in .childView(.dismissSearchView) }
                 )
             ) {
                 searchBoadView
@@ -46,7 +46,7 @@ struct MainView: View {
             .navigationDestination(
                 item: viewStore.binding(
                     get: \.pokemonDetailsState,
-                    send: { _ in .dismissPokemonDetail } // nil로 바꿀 때 액션 전달
+                    send: { _ in .childView(.dismissPokemonDetail) } // nil로 바꿀 때 액션 전달
                 )
             ) { id in
                 pokemonDetailsView
@@ -67,7 +67,7 @@ extension MainView {
     /// 검색 버튼
     private func searchButton(viewStore: MainStore) -> some View {
         Button {
-            viewStore.send(.didTappedSearchButton)
+            viewStore.send(.view(.didTappedSearchButton))
         } label: {
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 17))
@@ -76,16 +76,17 @@ extension MainView {
         .padding(.trailing)
     }
     /// 리스트 뷰
+    @ViewBuilder
     private func pokemonListView(viewStore: MainStore) -> some View {
         
         let columns = Array(repeating: GridItem(.flexible()), count: 3)
         
-        return ScrollView(.vertical, showsIndicators: true) {
+        ScrollView(.vertical, showsIndicators: true) {
             LazyVGrid(columns: columns) {
                 ForEach(
                     store.scope(
                         state: \.pokemonCellStates,
-                        action: \.pokemonCellFeature
+                        action: \.cell.pokemonCellFeature
                     )
                 ) { cellStore in
                     WithViewStore(cellStore, observe: { $0 }) { cellViewStore in
@@ -93,8 +94,8 @@ extension MainView {
                         if viewStore.isLastPokemonReached,
                             viewStore.pokemonCellStates.last?.id == cellViewStore.id {
                             ProgressView()
-                                .onVisible {
-                                    viewStore.send(.scrollUpList)
+                                .onAppear {
+                                    viewStore.send(.view(.scrollUpList))
                                 }
                         }
                     }
@@ -107,7 +108,7 @@ extension MainView {
     private var searchBoadView: some View {
         SearchBoardView(store: store.scope(
             state: \.searchBoardState,
-            action: \.searchBoardAction)
+            action: \.child.searchBoardAction)
         )
         .presentationDetents(
             !isIpad
@@ -119,7 +120,7 @@ extension MainView {
     /// 포켓몬 상세 뷰
     private var pokemonDetailsView: some View {
         IfLetStore(
-            store.scope(state: \.pokemonDetailsState, action: \.pokemonDetailsAction)
+            store.scope(state: \.pokemonDetailsState, action: \.child.pokemonDetailsAction)
         ) { store in
             PokemonDetailsView(store: store)
                 .navigationBarBackButtonHidden(true)

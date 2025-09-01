@@ -30,26 +30,42 @@ struct PokemonDetailsFeature: Reducer {
         var evoltionTreeState: EvolutionTreeFeature.State? = nil
         @Presents var calculatorState: CalculatorFeature.State? = nil
     }
-    
-    @CasePathable enum Action: Equatable {
+    /// 사용자 액션
+    @CasePathable enum ViewAction: Equatable {
         case viewDidLoad                                                            // 뷰 로드 시
-        case setPokemonDetails(_ result: Result<PokemonDetails, NetworkError>)      // 포켓몬 상세 정보 세팅
         case didTappedVarietyCell(_ variety: Varieties)                             // 다른 모습 셀 터치 시
         case didTappedBackButton                                                    // 뒤로 가기 버튼 터치 시
-        case didTappedNext
-        case didTappedPrevious
-        case didTappedEvolution(_ id: Int)
-        case didTappedCalculatorButton
+        case didTappedNext                                                          // 다음 포켓몬 버튼 터치
+        case didTappedPrevious                                                      // 이전 포켓몬 버튼 터치
+        case didTappedEvolution(_ id: Int)                                          // 진화트리에서 특정 포켓몬 터치
+        case didTappedCalculatorButton                                              // 계산기 이동 버튼
+        case didTappedHeartButton                                                   // 북마크 버튼
+    }
+    /// 하위뷰 사용자 액션
+    @CasePathable enum ChildViewAction: Equatable {
+        case dismissCalculatorView                                                  // 계산기 화면 닫기
+    }
+    /// 내부 액션
+    @CasePathable enum InsideAction: Equatable {
+        case setPokemonDetails(_ result: Result<PokemonDetails, NetworkError>)      // 포켓몬 상세 정보 세팅
+        case setBookmark(_ isBookmarked: Bool)                                      // 북마크 상태 저장
+    }
+    /// 상위에서 접근할 Feature 액션
+    @CasePathable enum DelegateAction: Equatable {
+        case dismissView                                                            // 뷰 닫는 이벤트
+    }
+    /// 하위 Feature 액션
+    @CasePathable enum ChildAction: Equatable {
         case evoltionTreeAction(_ action: EvolutionTreeFeature.Action)
         case calculatorAction(_ action: PresentationAction<CalculatorFeature.Action>)
-        case didTappedHeartButton
-        case setBookmark(_ isBookmarked: Bool)                                      // 북마크 상태 저장
-        case dismissCalculatorView                                                            
-        case delegate(_ delegate: Delegate)                                         // delegate
-        
-        enum Delegate: Equatable {
-            case dismissView                                                        // 뷰 닫는 이벤트
-        }
+    }
+    /// 액션 정의
+    @CasePathable enum Action: Equatable {
+        case view(ViewAction)
+        case childView(ChildViewAction)
+        case inside(InsideAction)
+        case delegate(DelegateAction)
+        case child(ChildAction)
     }
     
     @Dependency(\.pokemonDetailsClient) var pokemonDetailsClient
@@ -58,37 +74,46 @@ struct PokemonDetailsFeature: Reducer {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .viewDidLoad:
-                return fetchPokemonDetails(&state, id: state.id)
-            case let .setPokemonDetails(result):
-                return setPokemonDetails(&state, result: result)
-            case let .didTappedVarietyCell(variety):
-                return updataVariety(&state, variety: variety)
-            case .didTappedBackButton:
-                return dismissView(&state)
-            case .didTappedNext:
-                return fetchNextPokemon(&state, id: state.id)
-            case .didTappedPrevious:
-                return fetchPreviousPokemon(&state, id: state.id)
-            case let .didTappedEvolution(id):
-                return fetchPokemonDetails(&state, id: id)
-            case let .evoltionTreeAction(action):
-                return executeEvolutionTreeAction(&state, action: action)
-            case .didTappedHeartButton:
-                return toggleHeart(&state)
-            case let .setBookmark(isBookmark):
-                return setBookmark(&state, isBookmarked: isBookmark)
-            case let .calculatorAction(action):
-                return executeCalculatorAction(&state, action: action)
-            case .didTappedCalculatorButton:
-                return moveCalculatorView(&state)
+            case let .view(viewAction):
+                switch viewAction {
+                case .viewDidLoad:
+                    return fetchPokemonDetails(&state, id: state.id)
+                case let .didTappedVarietyCell(variety):
+                    return updataVariety(&state, variety: variety)
+                case .didTappedBackButton:
+                    return dismissView(&state)
+                case .didTappedNext:
+                    return fetchNextPokemon(&state, id: state.id)
+                case .didTappedPrevious:
+                    return fetchPreviousPokemon(&state, id: state.id)
+                case let .didTappedEvolution(id):
+                    return fetchPokemonDetails(&state, id: id)
+                case .didTappedHeartButton:
+                    return toggleHeart(&state)
+                case .didTappedCalculatorButton:
+                    return moveCalculatorView(&state)
+                }
+            case let .inside(insideAction):
+                switch insideAction {
+                case let .setPokemonDetails(result):
+                    return setPokemonDetails(&state, result: result)
+                case let .setBookmark(isBookmark):
+                    return setBookmark(&state, isBookmarked: isBookmark)
+                }
+            case let .child(childAction):
+                switch childAction {
+                case let .evoltionTreeAction(action):
+                    return executeEvolutionTreeAction(&state, action: action)
+                case let .calculatorAction(action):
+                    return executeCalculatorAction(&state, action: action)
+                }
             default: return .none
             }
         }
-        .ifLet(\.evoltionTreeState, action: \.evoltionTreeAction) {
+        .ifLet(\.evoltionTreeState, action: \.child.evoltionTreeAction) {
             EvolutionTreeFeature()
         }
-        .ifLet(\.$calculatorState, action: \.calculatorAction) {
+        .ifLet(\.$calculatorState, action: \.child.calculatorAction) {
             CalculatorFeature()
         }
     }
@@ -105,7 +130,7 @@ struct PokemonDetailsFeature: Reducer {
                 guard let fetchedEvolutionTree = pokemon.evolutionTree,
                       let fetchedVarieties = pokemon.varieties
                 else {
-                    return await send(.setPokemonDetails(.failure(NetworkError.decodingFailed)))
+                    return await send(.inside(.setPokemonDetails(.failure(NetworkError.decodingFailed))))
                 }
                 
                 // 진화 트리 및 리전 폼 요청
@@ -117,9 +142,9 @@ struct PokemonDetailsFeature: Reducer {
                 // 전체 화면에 필요한 상세 정보 하나로 묶음
                 let details = try await PokemonDetails(pokemon: pokemon, varieties: sortedVarieties, evolution: evolution)
                 
-                return await send(.setPokemonDetails(.success(details)))
+                return await send(.inside(.setPokemonDetails(.success(details))))
             } catch let error as NetworkError{
-                return await send(.setPokemonDetails(.failure(error)))
+                return await send(.inside(.setPokemonDetails(.failure(error))))
             }
         }
     }
@@ -206,7 +231,7 @@ struct PokemonDetailsFeature: Reducer {
         let id = state.pokemon?.id ?? 0
         return .run { send in
             let isBookmarked = try await realmClient.readIsBookmarked(id)
-            await send(.setBookmark(isBookmarked))
+            await send(.inside(.setBookmark(isBookmarked)))
         }
     }
     /// 북마크 상태 저장

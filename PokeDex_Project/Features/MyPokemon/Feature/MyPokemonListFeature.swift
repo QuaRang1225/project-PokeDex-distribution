@@ -18,16 +18,32 @@ struct MyPokemonListFeature: Reducer {
         
         var pokemonDetailState: PokemonDetailsFeature.State? = nil                      // 포켓몬 상세 뷰 상태
     }
-    
-    @CasePathable enum Action: Equatable {
+    /// 사용자 액션
+    @CasePathable enum ViewAction: Equatable {
         case viewDidLoad                                                                // 뷰 등장
         case removePokemon(_ offsets: IndexSet)                                         // 내 포켓몬 삭제
         case removeAllPokemon                                                           // 모든 포켓몬 삭제
         case movePokemon(_ fromOffsets: IndexSet, _ toOffset: Int)                      // 내 포켓몬 이동
+        case didTappedPokemonCell(_ id: Int)                                            // 셀 터치 시
+    }
+    /// 하위뷰 사용자 액션
+    @CasePathable enum ChildViewAction: Equatable {
+        case dismissPokemonDetail                                                       // 포켓몬 상세 화면 닫기
+    }
+    /// 내부 액션
+    @CasePathable enum InsideAction: Equatable {
         case setPokemons(_ pokemons: [RealmPokemon])                                    // 내 포켓몬 세팅
-        case didTappedPokemonCell(_ id: Int)
-        case dismissPokemonDetail
+    }
+    /// 하위 Feature 액션
+    @CasePathable enum ChildAction: Equatable {
         case pokemonDetailsAction(action: PokemonDetailsFeature.Action)                 // 포켓몬 상세 뷰 액션
+    }
+    /// 액션 정의
+    @CasePathable enum Action: Equatable {
+        case view(ViewAction)
+        case childView(ChildViewAction)
+        case inside(InsideAction)
+        case child(ChildAction)
     }
     
     @Dependency(\.realmClient) var realmClient
@@ -35,25 +51,33 @@ struct MyPokemonListFeature: Reducer {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .viewDidLoad:
-                return fetchPokemons(&state)
-            case let .setPokemons(pokemons):
-                return setPokemons(&state, pokemons: pokemons)
-            case let .removePokemon(offsets):
-                return removePokemon(&state, offsets: offsets)
-            case .removeAllPokemon:
-                return removeAll(&state)
-            case let .movePokemon(fromOffsets, toOffset):
-                return movePokemon(&state, fromOffsets: fromOffsets, toOffset: toOffset)
-            case let .pokemonDetailsAction(action):
-                return executePokemonDetailFeature(&state, action: action)
-            case let .didTappedPokemonCell(id):
-                return movePokemonDetailsView(&state, id: id)
-            case .dismissPokemonDetail:
-                return .none
+            case let .view(viewActiom):
+                switch viewActiom {
+                case .viewDidLoad:
+                    return fetchPokemons(&state)
+                case let .removePokemon(offsets):
+                    return removePokemon(&state, offsets: offsets)
+                case .removeAllPokemon:
+                    return removeAll(&state)
+                case let .movePokemon(fromOffsets, toOffset):
+                    return movePokemon(&state, fromOffsets: fromOffsets, toOffset: toOffset)
+                case let .didTappedPokemonCell(id):
+                    return movePokemonDetailsView(&state, id: id)
+                }
+            case let .inside(insideAction):
+                switch insideAction {
+                case let .setPokemons(pokemons):
+                    return setPokemons(&state, pokemons: pokemons)
+                }
+            case let .child(childAction):
+                switch childAction {
+                case let .pokemonDetailsAction(action):
+                    return executePokemonDetailFeature(&state, action: action)
+                }
+            default: return .none
             }
         }
-        .ifLet(\.pokemonDetailState, action: \.pokemonDetailsAction) {
+        .ifLet(\.pokemonDetailState, action: \.child.pokemonDetailsAction) {
             PokemonDetailsFeature()
         }
     }
@@ -63,7 +87,7 @@ struct MyPokemonListFeature: Reducer {
         return .run { send in
             do {
                 let pokemons = try await realmClient.fetchPokemons()
-                await send(.setPokemons(pokemons))
+                await send(.inside(.setPokemons(pokemons)))
             } catch let error as RealmError {
                 print(error.errorMessage)
             }
@@ -86,7 +110,7 @@ struct MyPokemonListFeature: Reducer {
         return .run { send in
             do {
                 try await realmClient.deletePokemon(deleteToNum)
-                await send(.setPokemons(pokemons))
+                await send(.inside(.setPokemons(pokemons)))
             } catch let error as RealmError {
                 print(error.errorMessage)
             }
@@ -97,7 +121,7 @@ struct MyPokemonListFeature: Reducer {
         return .run { send in
             do {
                 try await realmClient.deleteAllPokemons()
-                await send(.setPokemons([]))
+                await send(.inside(.setPokemons([])))
             } catch let error as RealmError {
                 print(error.errorMessage)
             }

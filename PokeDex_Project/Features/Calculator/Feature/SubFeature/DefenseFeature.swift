@@ -34,8 +34,8 @@ struct DefenseFeature: Reducer {
             Int(Double(hp_real * defense_real) / 0.411)
         }
     }
-    
-    @CasePathable enum Action: Equatable {
+    /// 사용자 액션
+    @CasePathable enum ViewAction: Equatable {
         case inputtedLevel(_ level: String)                                         // 레벨 선택
         case changedRankUp(_ rankUp: String)                                        // 랭크업 선택
         case changedHPEfforts(_ efforts: String)                                    // 체력 노력치 선택
@@ -45,26 +45,33 @@ struct DefenseFeature: Reducer {
         case changedPersonality(_ personality: Double)                              // 성격 선택
         case selectedDefense(_ defense: AttackCondition)                            // 물리/특수 선택
     }
+    /// 액션 정의
+    @CasePathable enum Action: Equatable {
+        case view(ViewAction)
+    }
     
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case let .inputtedLevel(level):
-                return updateLevel(&state, level: level)
-            case let .changedRankUp(rankUp):
-                return updateRankUp(&state, rankUp: rankUp)
-            case let .changedHPEfforts(hp_effort):
-                return updateHPEffort(&state, effort: hp_effort)
-            case let .changedHPObjects(hp_object):
-                return updateHPObject(&state, object: hp_object)
-            case let.changedDefenseEfforts(defense_effort):
-                return updateDefenseEffort(&state, effort: defense_effort)
-            case let .changedDefenseObjects(defense_object):
-                return updateDefenseObject(&state, object: defense_object)
-            case let .changedPersonality(personality):
-                return updatePersonality(&state, personality: personality)
-            case let .selectedDefense(defense):
-                return updateDefense(&state, defense: defense)
+            case let .view(viewAction):
+                switch viewAction {
+                case let .inputtedLevel(level):
+                    return updateLevel(&state, level: level)
+                case let .changedRankUp(rankUp):
+                    return updateRankUp(&state, rankUp: rankUp)
+                case let .changedHPEfforts(hp_effort):
+                    return updateHPEffort(&state, effort: hp_effort)
+                case let .changedHPObjects(hp_object):
+                    return updateHPObject(&state, object: hp_object)
+                case let.changedDefenseEfforts(defense_effort):
+                    return updateDefenseEffort(&state, effort: defense_effort)
+                case let .changedDefenseObjects(defense_object):
+                    return updateDefenseObject(&state, object: defense_object)
+                case let .changedPersonality(personality):
+                    return updatePersonality(&state, personality: personality)
+                case let .selectedDefense(defense):
+                    return updateDefense(&state, defense: defense)
+                }
             }
         }
     }

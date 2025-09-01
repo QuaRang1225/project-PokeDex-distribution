@@ -53,12 +53,12 @@ struct PokemonDetailsView: View {
                 }
             }
             .onDidLoad {
-                viewStore.send(.viewDidLoad)
+                viewStore.send(.view(.viewDidLoad))
             }
             .navigationDestination(
                 store: store.scope(
                     state: \.$calculatorState,
-                    action: \.calculatorAction
+                    action: \.child.calculatorAction
                 )
             ) { calculatorStore in
                 calculatorView(calculatorStore: calculatorStore)
@@ -72,7 +72,7 @@ extension PokemonDetailsView {
     /// 헤더 뷰
     private func dismissButton(viewStore: PokemonDetailsStore) -> some View {
         Button {
-            viewStore.send(.didTappedBackButton)
+            viewStore.send(.view(.didTappedBackButton))
         } label: {
             HStack(spacing: 0) {
                 Image(systemName: "chevron.left")
@@ -93,7 +93,7 @@ extension PokemonDetailsView {
     /// 하트 버튼
     private func heartButton(viewStore: PokemonDetailsStore) -> some View {
         Button {
-            viewStore.send(.didTappedHeartButton)
+            viewStore.send(.view(.didTappedHeartButton))
         } label: {
             Image(systemName: viewStore.state.isBookmarked ? "heart.fill" : "heart")
         }
@@ -131,7 +131,7 @@ extension PokemonDetailsView {
     /// 이전 포켓몬 이동 버튼
     private func previousPokemonButton(viewStore: PokemonDetailsStore) -> some View {
         Button {
-            viewStore.send(.didTappedPrevious)
+            viewStore.send(.view(.didTappedPrevious))
         } label: {
             Image(systemName: "chevron.backward.circle.fill")
                 .font(.title)
@@ -141,7 +141,7 @@ extension PokemonDetailsView {
     /// 다음 포켓몬 이동 버튼
     private func nextPokemonButton(viewStore: PokemonDetailsStore) -> some View {
         Button {
-            viewStore.send(.didTappedNext)
+            viewStore.send(.view(.didTappedNext))
         } label: {
             Image(systemName: "chevron.right.circle.fill")
                 .font(.title)
@@ -168,7 +168,7 @@ extension PokemonDetailsView {
                     HStack {
                         ForEach(viewStore.state.varieties, id: \.id) { variety in
                             Button {
-                                viewStore.send(.didTappedVarietyCell(variety))
+                                viewStore.send(.view(.didTappedVarietyCell(variety)))
                             } label: {
                                 VStack {
                                     KFImage(URL(string: variety.form.images.first ?? ""))
@@ -246,7 +246,7 @@ extension PokemonDetailsView {
     /// 계산기 버튼
     private func calculatorButton(viewStore: PokemonDetailsStore) -> some View {
         Button {
-            viewStore.send(.didTappedCalculatorButton)
+            viewStore.send(.view(.didTappedCalculatorButton))
         } label: {
             Text("종족값 계산")
                 .shadow(radius: 1)
@@ -277,7 +277,7 @@ extension PokemonDetailsView {
                 .padding(.top)
             IfLetStore(store.scope(
                 state: \.evoltionTreeState,
-                action: \.evoltionTreeAction)
+                action: \.child.evoltionTreeAction)
             ) { store in
                 EvolutionTreeNodeView(store: store)
             }

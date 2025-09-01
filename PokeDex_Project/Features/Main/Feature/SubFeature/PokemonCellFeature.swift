@@ -15,13 +15,13 @@ struct PokemonCellFeature: Reducer {
         var id: Pokemon.ID { pokemon.base?.num ?? 0 }
         var pokemon: Pokemon
     }
-    
-    enum Action: Equatable {
-        case delegate(Delegate)
-        
-        enum Delegate: Equatable {
-            case didTapCell
-        }
+    /// 상위에서 접근할 Feature 액션
+    @CasePathable enum DelegateAction: Equatable {
+        case didTapCell             // 셀 터치 시
+    }
+    /// 액션 정의
+    @CasePathable enum Action: Equatable {
+        case delegate(DelegateAction)
     }
     
     var body: some ReducerOf<Self> {
