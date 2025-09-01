@@ -35,7 +35,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8123986329F2865C00B7D560"
+               BlueprintIdentifier = "811AA75A2E65777600E24BB0"
                BuildableName = "PokeDex_ProjectTests.xctest"
                BlueprintName = "PokeDex_ProjectTests"
                ReferencedContainer = "container:PokeDex_Project.xcodeproj">
